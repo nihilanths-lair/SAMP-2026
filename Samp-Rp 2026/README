@@ -96,3 +96,29 @@ sets the game mode name. The second is the number of times it will
 repeat.
 		You can use gamemode0 to specify the first gamemode, 
 gamemode1 to specify the second, etc.
+
+*==* new *==*
+.vscode/tasks.json
+
+[tasks.json]
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build-normal",
+      "type": "shell",
+      "command": "${workspaceRoot}/pawno 3.10.10/pawncc.exe",
+      "args": ["${file}", "-Dgamemodes", "-;+", "-(+", "-d3"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "isBackground": false,
+      "presentation": {
+        "reveal": "silent",
+        "panel": "dedicated"
+      },
+      "problemMatcher": "$pawncc"
+    }
+  ]
+}
