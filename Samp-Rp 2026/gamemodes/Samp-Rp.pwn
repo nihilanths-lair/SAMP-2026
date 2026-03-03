@@ -27,17 +27,9 @@ AntiDeAMX2()
 #include  <mxINI>
 //==========================================
 
-#if defined MAX_PLAYERS
-#undef MAX_PLAYERS
-#define MAX_PLAYERS 100
-#else
-#define MAX_PLAYERS 100
-#endif
-
 #define SCM SendClientMessage
 new format_string[128];
 #define SendMes(%0,%1,%2,%3)    format(format_string, sizeof(format_string),%2,%3) && SCM(%0, %1, format_string)
-
 
 #define     MainMenu            "[1] Настройки\n[2] Статистика персонажа\n[3] Команды сервера\n{FFFF00}[4] Задать вопрос по игре\n{FFFFFF}[5] Репорт\n[6] Смена пароля\n[7] Очистить чат\n[8] Правила\n[9] Слив денег\n[10] Безопасность\n[11] Смена ника\n[12] Донат\n[13] Бонусы"
 
