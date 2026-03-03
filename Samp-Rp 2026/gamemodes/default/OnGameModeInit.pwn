@@ -1,9 +1,9 @@
 public OnGameModeInit()
 {
-	SendRconCommand("hostname "HostName"");
+	SendRconCommand("hostname Entropy-Rp | Server: "NumberServer"");
 	SendRconCommand("gamemodetext RolePlay");
 	SendRconCommand("language Russian");
-	//SetGameModeText(""Mode"");
+    SendRconCommand("weburl meltrune.com");
 	
 	new rand1 = random(2)+1;
 	new rand2 = random(2)+1;

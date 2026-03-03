@@ -37,10 +37,9 @@ new QUERY[4096];
 new DATABASE;
 //==========================================
 
-#define  NumberServer  "0"
 #define  FullServName  "Entropy RolePlay"
 #define  NameServer    "Entropy-Rp"
-#define  HostName 	   "Entropy-Rp | Server: "NumberServer""
+#define  NumberServer  "0"
 
 enum MYSQL_SETTINGS
 {
