@@ -37,13 +37,10 @@ new QUERY[4096];
 new DATABASE;
 //==========================================
 
-// Настройки мода
 #define  NumberServer  "0"
-#define  FullServName  "Samp Role Play"
-#define  NameServer    "Samp-Rp"
-#define  NameSite 	   "hos7.ru"
-#define  HostName 	   "Samp-Rp.Ru | Server: "NumberServer""
-#define  Mode 		   "Samp-Rp.Ru Russia"
+#define  FullServName  "Entropy RolePlay"
+#define  NameServer    "Entropy-Rp"
+#define  HostName 	   "Entropy-Rp | Server: "NumberServer""
 
 enum MYSQL_SETTINGS
 {
@@ -710,7 +707,7 @@ new KeysOffer[MAX_PLAYERS];
 new KeysPrice[MAX_PLAYERS];
 new KeysGram[MAX_PLAYERS];
 new FreezePlayer[MAX_PLAYERS];
-new Pizdorvanka[MAX_PLAYERS];
+new Rvanka[MAX_PLAYERS];
 stock SetPlayerToFacePlayer(playerid, targetid)
 {
         new
@@ -4122,7 +4119,7 @@ stock ResetNew(playerid)
 	recognition[playerid] = 0;
 	IsSmoking[playerid] = 0;
 	for(new i; i < 11; i++) vidachagun[i][playerid] = 0;
-	Pizdorvanka[playerid] = 0;
+	Rvanka[playerid] = 0;
 	dostup[playerid] = 0;
 	rabotaon[playerid] = 0;
 	FreezePlayer[playerid] = 1;
@@ -5365,16 +5362,16 @@ stock AntiCheats()
 {
 	foreach(playerid)
 	{
-		/******************************** Античит на пиздорванку *******************************/
+		/******************************** Античит на рванку *******************************/
 		new Float:xw, Float:yw, Float:zw;
 		GetPlayerVelocity(playerid,xw,yw,zw);
 		if(xw > 2.0 || yw > 2.0)
 		{
-			Pizdorvanka[playerid]++;
-			if(Pizdorvanka[playerid] >= 3)
+			Rvanka[playerid]++;
+			if(Rvanka[playerid] >= 3)
 			{
 				CheatKick(playerid,007);
-				Pizdorvanka[playerid] = 0;
+				Rvanka[playerid] = 0;
 			}
 		}
 		//
@@ -6199,13 +6196,15 @@ publics: Fresh()
 	}
 	if(hour == 00 && minute == 00 && second == 00)
 	{
-		/*mysql_function_query(DATABASE,"UPDATE `"TABLE_ACCOUNTS"` SET pChas = '0',pMin = '0',pOnlineLid = '00:00'",false,"","");
+		/*
+        mysql_function_query(DATABASE,"UPDATE `"TABLE_ACCOUNTS"` SET pChas = '0',pMin = '0',pOnlineLid = '00:00'",false,"","");
 		foreach(i)
 		{
 			PTEMP[i][pChas] = 0;
 			PTEMP[i][pMin] = 0;
 			strmid(PTEMP[i][pOnlineLid],"00:00", 0, strlen("00:00"), 10);
-		}*/
+		}
+        */
 	}
 	if(paint_info[1] == 0)
 	{
@@ -6232,8 +6231,7 @@ publics: Fresh()
 }
 stock LeaderList(playerid)
 {
-	new msg[] = "[0] Гражданский\n[1] LSPD\n[2] FBI\n[3] ARMY SF\n[4] MEDIC SF\n[5] LCN\n[6] YAKUZA\n[7] MAYOR\n[8] CASINO CALIGULA\n[9] SFN\n[10] SFPD\n[11] INSTRUCTOR\n[12] BALLAS\n[13] VAGOS\n[14] RUS MAFIA\n[15] GROVE\n[16] LSN\n[17] AZTEC\n[18] RIFA\n[19] LVA\n[20] LVN\n[21] LVPD\n[22] MEDIC LS\n[23-32] BIKERS\n[23] MEDIC LV";
-	ShowPlayerDialogEx(playerid,22813,DIALOG_STYLE_MSGBOX, "Ид фаркций",msg, "Закрыть", "");
+	ShowPlayerDialogEx(playerid, 22813, DIALOG_STYLE_MSGBOX, "ID FRACTION", "[0] Гражданский\n[1] LSPD\n[2] FBI\n[3] ARMY SF\n[4] MEDIC SF\n[5] LCN\n[6] YAKUZA\n[7] MAYOR\n[8] CASINO CALIGULA\n[9] SFN\n[10] SFPD\n[11] INSTRUCTOR\n[12] BALLAS\n[13] VAGOS\n[14] RUS MAFIA\n[15] GROVE\n[16] LSN\n[17] AZTEC\n[18] RIFA\n[19] LVA\n[20] LVN\n[21] LVPD\n[22] MEDIC LS\n[23-32] BIKERS\n[23] MEDIC LV", "Закрыть", "");
 }
 stock kShowStats(playerid,targetid)
 {
@@ -26493,7 +26491,7 @@ stock ShowHelpDialog(playerid, dialog)
 			strcat(string,"Чтобы напечатать сообщение нажмите клавишу \"F6\" или \"T\"(на латинеце).\n");
 			strcat(string,"Так же с помощью чата используются все команды сервера, к примеру \"/mm\".\n\n\n");
 			strcat(string,"Используйте \"/mm\" для просмотра команд...\n");
-			strcat(string,"Более подробное описание вы найдете на нашем сайте "NameSite"");
+			strcat(string,"Более подробное описание вы найдете на нашем сайте meltrune.com");
 			return ShowPlayerDialogEx(playerid, 1467, 0,"Общение",string,"Далее","Меню");
 		}
 	case 2:

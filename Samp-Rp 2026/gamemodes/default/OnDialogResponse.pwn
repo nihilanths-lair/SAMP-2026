@@ -11787,7 +11787,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					return true;
 				}
 			case 10: ShowPlayerDialogEx(playerid,9943,DIALOG_STYLE_INPUT, "Заявка на смену ника", "Напишите новый ник (по форме Имя_Фамилия)", "Отправить", "Назад");
-			case 11: ShowPlayerDialogEx(playerid, 69, DIALOG_STYLE_MSGBOX, "Приобритение виртов", "Подробности на сайте "NameSite"/Донат", "Закрыть", "");
+			case 11: ShowPlayerDialogEx(playerid, 69, DIALOG_STYLE_MSGBOX, "Приобретение виртов", "Подробности на сайте meltrune.com/Донат", "Закрыть", "");
 			case 12:
 				{
 					if(booston == 0) return SCM(playerid,-1," Бонусы отключены");

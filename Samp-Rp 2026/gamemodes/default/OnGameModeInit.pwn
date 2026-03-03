@@ -1,8 +1,10 @@
 public OnGameModeInit()
 {
 	SendRconCommand("hostname "HostName"");
+	SendRconCommand("gamemodetext RolePlay");
 	SendRconCommand("language Russian");
-	SetGameModeText(""Mode"");
+	//SetGameModeText(""Mode"");
+	
 	new rand1 = random(2)+1;
 	new rand2 = random(2)+1;
 	new rand3 = random(2)+1;
@@ -151,7 +153,7 @@ public OnGameModeInit()
 	TextDrawColor(BoxPanel, 943208449);
 	TextDrawSetOutline(BoxPanel, 0);
 	//****//
-	URL = TextDrawCreate(520.000000, 8.000000, ""NameSite"");
+	URL = TextDrawCreate(520.000000, 8.000000, "meltrune.com");
 	TextDrawFont(URL, 0);
 	TextDrawColor(URL, 0x4755B2AA);
 	TextDrawLetterSize(URL, 0.3600, 1.400000);
