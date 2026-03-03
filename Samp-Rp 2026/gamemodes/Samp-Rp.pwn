@@ -3325,7 +3325,6 @@ stock BuyHouse(h)
 	}
 	return true;
 }
-main() { }
 stock Vehicleforeach(vehicleid)
 {
 	foreach(i)
@@ -3431,47 +3430,8 @@ publics: MyHttpResponse2(index, response_code, data[])
         SCM(index, COLOR_GREY, " Произошла ошибка в отправке!");
     }
 }
-public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)
-{
-	if(PTEMP[playerid][pLogin] == 0) return true;
-	if(PTEMP[playerid][pAdmin] < 3 || dostup[playerid] == 0) return true;
-    SetPVarFloat(playerid,"ATPX",fX);
-    SetPVarFloat(playerid,"ATPY",fY);
-    SetPVarFloat(playerid,"ATPZ",fZ);
-	return true;
-}
-public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)
-{
-	if(SERVERTEST) SendMes(playerid,COLOR_BLUE,"PLAYERID - %i, VEHICLEID - %i, ISPASSENGER - %i",playerid,vehicleid,ispassenger);
-	SetPVarInt(playerid, "NoAB", 1);
-	SetPVarInt(playerid, "GunCheckTime", 2);
-	SetPlayerArmedWeapon(playerid,0);
-	SetPVarInt(playerid,"not_engine",0);
-	SetPVarInt(playerid,"not_engine_",0);
-	if(usemats[playerid] > 0)
-	{
-		if(usemats[playerid] == 1) armmatsf += 250;
-		if(usemats[playerid] == 2) lsamatbi += 250;
-		if(usemats[playerid] == 3) armmatbi += 250;
-		usemats[playerid] = 0;
-		RemovePlayerAttachedObject(playerid, 1);
-		SCM(playerid, COLOR_LIGHTRED," Вы уронили ящик");
-		SetPlayerSpecialAction (playerid, SPECIAL_ACTION_NONE);
-	}
-	if(GetPVarInt(playerid, "matovoz_rob"))
-	{
-        MatHaul[RobbingBiker[robCar]-gunscar[0]][mLoad] += 250;
-        format(string, sizeof(string), "Кол-во груза\n%i", MatHaul[RobbingBiker[robCar]-gunscar[0]][mLoad]);
-        UpdateDynamic3DTextLabelText(Rob3DText, 0xEDEA9FAA, string);
-		RemovePlayerAttachedObject(playerid, 1);
-		SCM(playerid, COLOR_LIGHTRED," Вы уронили ящик");
-		SetPlayerSpecialAction (playerid, SPECIAL_ACTION_NONE);
-	}
-	if(!ispassenger) vehicleidtp[playerid] = vehicleid;
-	Refueling[playerid] = 0;
-	SetPVarInt(playerid, "EnterVehTime", GetTickCount() + 250);
-	return true;
-}
+#include "..\gamemodes\default\OnPlayerClickMap.pwn"
+#include "..\gamemodes\default\OnPlayerEnterVehicle.pwn"
 publics: IsAMedic(playerid)
 {
 	if(!IsPlayerConnected(playerid)) return false;
@@ -4296,66 +4256,7 @@ stock ResetNew(playerid)
 	AdminVehicle[playerid][color1] = 0;
 	AdminVehicle[playerid][color2] = 0;
 }
-
-publics: OnPlayerWeaponShot(playerid, weaponid, hittype, hitid, Float:fX, Float:fY, Float:fZ)
-{
-	TimeNumberShotTarget[playerid]++;
-	TimeNumberShot[playerid]++;
-	if(weaponid != 38)
-	{
-		if((gettime() - shotTime[playerid]) < 1)
-		{
-			shot[playerid]+=1;
-		}
-		else
-		{
-			shot[playerid]=0;
-		}
-		if(shot[playerid] > 10)
-		{
-			if(PTEMP[playerid][pAdmin] > 2) return true;
-			format(string, 90, " <Warning> %s[%i]: Возможно чит на оружие", PTEMP[playerid][pName], playerid);
-			ABroadCast(COLOR_REDD,string,2);
-			//CheatKick(playerid,1111);
-		}
-		shotTime[playerid] = gettime();
-	}
-	//
-	/*new Float:armour;
-	GetPlayerArmour(playerid, armour);
-	if(armour <= 0)
-	{
-		if(weaponid == 24) PTEMP[hitid][pHP]-=40;//DesertEagle
-	    if(weaponid == 23) PTEMP[hitid][pHP]-=10;//SilencedColt
-	    if(weaponid == 31) PTEMP[hitid][pHP]-=15;//M4
-	    if(weaponid == 30) PTEMP[hitid][pHP]-=15;//AK
-	    if(weaponid == 29) PTEMP[hitid][pHP]-=18;//MP5
-	    if(weaponid == 34) PTEMP[hitid][pHP]-=50;//SniperRifle
-	    if(weaponid == 25) PTEMP[hitid][pHP]-=25;//PumpShotgun
-    }
-    else
-    {
-    	if(weaponid == 24) armour-=40;//DesertEagle
-	    if(weaponid == 23) armour-=10;//SilencedColt
-	    if(weaponid == 31) armour-=15;//M4
-	    if(weaponid == 30) armour-=15;//AK
-	    if(weaponid == 29) armour-=18;//MP5
-	    if(weaponid == 34) armour-=50;//SniperRifle
-	    if(weaponid == 25) armour-=25;//PumpShotgun
-	    SetPlayerArmourAC(hitid, armour);
-    }
-	//
-	if(PTEMP[hitid][pHP] <= 0) SetPlayerHealthAC(hitid, PTEMP[hitid][pHP]);*/
-	if(hittype == 1)
-	{
-		SERIU[playerid][SShout][0]++;
-		SERIU[playerid][SShout][1]++;
-		SERIU[playerid][SShout][2]++;
-		SERIU[playerid][SShout][3]++;
-	}
-	if(hittype == BULLET_HIT_TYPE_PLAYER && AGM[hitid]) return 0;
-	return true;
-}
+#include "..\gamemodes\default\OnPlayerWeaponShot.pwn"
 #include "..\gamemodes\default\OnPlayerConnect.pwn"
 CMD:onlyoneip(playerid, params[])
 {
@@ -4664,340 +4565,7 @@ stock GetGunsDialog(playerid)
 	"Взять", "Отмена");
 }
 #include "..\gamemodes\default\OnDialogResponse.pwn"
-public OnPlayerDisconnect(playerid, reason)
-{
-    if(robscdtimer[playerid] != -1)
-	{
-		KillTimer(robscdtimer[playerid]);
-		robscdtimer[playerid] = -1;
-	}
-	if(LabelOn[playerid] == 1) Delete3DTextLabel(LabelRecognition[playerid]), LabelOn[playerid] = 0;
-	if(PTEMP[playerid][pLogin] == 1) strmid(ExitInfo[playerid][ExitIP],PTEMP[playerid][pIp], 0, strlen(PTEMP[playerid][pIp]), 32), ExitInfo[playerid][ExitTime] = GetTickCount();
-	if(GetPVarInt(playerid,"h_stall")) UpdateDynamic3DTextLabelText(StallInfo[GetPVarInt(playerid,"h_stall")][stText], 0xFF8C37FF,"Не работает");
-	if(GetPVarInt(playerid,"took_faggio")) DestroyVehicle(GetPVarInt(playerid,"took_faggio"));
-
-	if(PlayerCuffed[playerid] >= 1) {
-	    PTEMP[playerid][pMestoJail] = 1;
-	    PTEMP[playerid][pJailTime] = 3600;
-	}
-
-	if(cuffto[playerid] != 9999)
-	{
-		TogglePlayerControllable(cuffto[playerid], 1);
-		SetPlayerSpecialAction(cuffto[playerid],SPECIAL_ACTION_NONE);
-		RemovePlayerAttachedObject(cuffto[playerid],0);
-		PlayerCuffed[cuffto[playerid]] = 0;
-		PlayerCuffedTime[cuffto[playerid]] = 0;
-		cuffto[playerid] = 9999;
-	}
-	if(GetPVarInt(playerid,"farm_id"))
-	{
-		DisablePlayerCheckpoint(playerid);
-		RemovePlayerAttachedObject(playerid,3);
-		DeletePVar(playerid,"farm_id");
-		DeletePVar(playerid,"farm_status");
-		DeletePVar(playerid,"farm_rank");
-		DeletePVar(playerid,"farm_zp");
-	}
-	if(race_info[1] > 1 && GetPVarInt(playerid,"gonka") != 0)
-	{
-		SetPlayerInterior(playerid,3);
-		SetPlayerPos(playerid,831.7769,6.8750,1004.1797);
-		SetPlayerFacingAngle(playerid,108.1610);
-		DestroyVehicle(RaceInfo[GetPVarInt(playerid,"gonka")-1][rCar]);
-		DeletePVar(playerid,"gonka");
-		SCM(playerid,COLOR_LIGHTRED,"Вы были дисквалифицированы!");
-	}
-	if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER && GetPVarInt(playerid,"TaxiDuty"))
-	{
-		Delete3DTextLabel(JobText3D[GetPVarInt(playerid,"rentcar_job")]);
-		DeletePVar(playerid,"TaxiDuty");
-	}
-	if(GetPlayerState(playerid) == PLAYER_STATE_PASSENGER)
-	{
-		foreach(i)
-		{
-			if(IsPlayerInVehicle(i, GetPlayerVehicleID(playerid)) && GetPlayerState(i) == 2 && GetPVarInt(i,"TaxiDuty") > 0)
-			{
-				if(GetPVarInt(i,"Taxi_")-1 == playerid)
-				{
-					SCM(i, COLOR_BLUE, " Пассажир вышел из вашего Такси. Деньги будут зачислены во время зарплаты");
-					if(GetPVarInt(i,"PayDayCashJob") > gettime()) {}
-					else
-					{
-						new taxizp = 200+random(200);
-						PTEMP[i][pPayCheck] += taxizp*PTEMP[i][ptaxilvl];
-						if(PTEMP[i][pPayCheck] > 4000+(PTEMP[i][ptaxilvl]*1000)) PTEMP[i][pPayCheck] = 4000+(PTEMP[i][ptaxilvl]*1000);
-					}
-					DeletePVar(i,"Taxi_");
-					for(new id; id < GetMaxPlayers(); id++)
-					{
-						if(IsPlayerInVehicle(id, GetPlayerVehicleID(playerid)) && id != i && id != playerid)
-						{
-							format(string, 128, " Довезите пассажира %s и государство заплатит вам",PTEMP[id][pName]);
-							SCM(i, COLOR_BLUE, string);
-							SetPVarInt(i,"Taxi_",id+1);
-							break;
-						}
-					}
-				}
-			}
-		}
-	}
-	if(GetPVarInt(playerid,"w_id"))
-	{
-		new null = -1, x = GetPVarInt(playerid,"w_id");
-		for(new x_ = 9; x_ >= 0; x_--) if(strcmp(WorkshopList[x_][x][wlName],PTEMP[playerid][pName],true) == 0 && strlen(WorkshopList[x_][x][wlName])) null = x_;
-		if(null != -1)
-		{
-			for(new x_ = null; x_ < 9; x++)
-			{
-				WorkshopList[x_][x][wlID] = WorkshopList[x_+1][x][wlID];
-				strmid(WorkshopList[x_][x][wlName],WorkshopList[x_+1][x][wlName],0,strlen(WorkshopList[x_][x][wlName]), MAX_PLAYER_NAME);
-				WorkshopList[x_+1][x][wlID] = -1;
-				strmid(WorkshopList[x_+1][x][wlName],"", 0, strlen(""), 5);
-			}
-			if(null == 0 && strlen(WorkshopList[0][x][wlName]))
-			{
-				DisablePlayerCheckpoint(playerid);
-				SCM(WorkshopList[0][x][wlID],COLOR_BLUE,"Подошла ваша очередь. У вас есть 2 минуты что бы прибыть к гаражу!");
-				SetPVarInt(WorkshopList[0][x][wlID],"w_time", gettime() + 120);
-				SetPlayerCheckpoint(WorkshopList[0][x][wlID],WorkshopInfo[x][wMenu][0],WorkshopInfo[x][wMenu][1],WorkshopInfo[x][wMenu][2], 10.0);
-			}
-			DeletePVar(playerid,"w_time");
-			DeletePVar(playerid,"w_id");
-		}
-	}
-	if(GetPVarInt(playerid,"InWorkshop") > 0)
-	{
-		DeletePVar(playerid,"cost");
-		DeletePVar(playerid,"prods");
-		DeletePVar(playerid,"detals");
-		DeletePVar(playerid,"color0");
-		DeletePVar(playerid,"color1");
-		DeletePVar(playerid,"w_id");
-		DeletePVar(GetPVarInt(playerid,"mechanic"),"installation");
-		SetPlayerVirtualWorld(GetPVarInt(playerid,"mechanic"),0);
-		t_SetPlayerPos(GetPVarInt(playerid,"mechanic"),WorkshopInfo[GetPVarInt(playerid,"InWorkshop")][wMenu][0],WorkshopInfo[GetPVarInt(playerid,"InWorkshop")][wMenu][1],WorkshopInfo[GetPVarInt(playerid,"InWorkshop")][wMenu][2]);
-		SCM(GetPVarInt(playerid,"mechanic"),COLOR_LIGHTRED," Заказчик вышел из игры!");
-		DeletePVar(GetPVarInt(playerid,"mechanic"),"installation_");
-		DeletePVar(playerid,"mechanic");
-		DeletePVar(playerid,"InWorkshop");
-	}
-	if(GetPVarInt(playerid,"Workshop") > 0)
-	{
-		if(GetPVarInt(GetPVarInt(playerid,"installation_"),"InWorkshop") > 0)
-		{
-			DeletePVar(GetPVarInt(playerid,"installation_"),"cost");
-			DeletePVar(GetPVarInt(playerid,"installation_"),"prods");
-			DeletePVar(GetPVarInt(playerid,"installation_"),"detals");
-			DeletePVar(GetPVarInt(playerid,"installation_"),"color0");
-			DeletePVar(GetPVarInt(playerid,"installation_"),"color1");
-			DeletePVar(GetPVarInt(playerid,"installation_"),"w_id");
-			SetPlayerVirtualWorld(GetPVarInt(playerid,"installation_"),0);
-			if(!IsPlayerInAnyVehicle(GetPVarInt(playerid,"installation_")))
-			{
-				t_SetPlayerPos(GetPVarInt(playerid,"installation_"),WorkshopInfo[GetPVarInt(playerid,"Workshop")][wMenu][0],WorkshopInfo[GetPVarInt(playerid,"Workshop")][wMenu][1],WorkshopInfo[GetPVarInt(playerid,"Workshop")][wMenu][2]);
-				SetVehiclePos(house_car[GetPVarInt(playerid,"installation_")],WorkshopInfo[GetPVarInt(playerid,"Workshop")][wMenu][0],WorkshopInfo[GetPVarInt(playerid,"Workshop")][wMenu][1],WorkshopInfo[GetPVarInt(playerid,"Workshop")][wMenu][2]);
-				PutPlayerInVehicleEx(GetPVarInt(playerid,"installation_"),house_car[GetPVarInt(playerid,"installation_")],0);
-				SetPlayerVirtualWorld(GetPVarInt(playerid,"installation_"),0);
-			}
-			else
-			{
-				if(GetPVarInt(playerid,"Workshop") == 1) SetVehiclePos(GetPlayerVehicleID(GetPVarInt(playerid,"installation_")),WorkshopInfo[GetPVarInt(playerid,"Workshop")][wMenu][0],WorkshopInfo[GetPVarInt(playerid,"Workshop")][wMenu][1],WorkshopInfo[GetPVarInt(playerid,"Workshop")][wMenu][2]);
-				SetVehicleVirtualWorld(GetPlayerVehicleID(GetPVarInt(playerid,"installation_")),0);
-			}
-			SCM(GetPVarInt(playerid,"installation_"),COLOR_LIGHTRED,"Механик вышел из игры!");
-			DeletePVar(GetPVarInt(playerid,"installation_"),"mechanic");
-			DeletePVar(GetPVarInt(playerid,"installation_"),"InWorkshop");
-		}
-		DeletePVar(playerid,"installation");
-		DeletePVar(playerid,"installation_");
-		DeletePVar(playerid,"Workshop");
-		PTEMP[playerid][pPayCheck]+=GetPVarInt(playerid,"Workshop_");
-		WorkshopInfo[GetPVarInt(playerid,"Workshop")][wBank]-=GetPVarInt(playerid,"Workshop_");
-		DeletePVar(playerid,"Workshop_");
-		DeletePVar(playerid,"Workshop__");
-	}
-	if(GetPVarInt(playerid, "RStol"))
-	{
-		if(RouletPlay[GetPVarInt(playerid,"RStol")] == false) PTEMP[playerid][pCash]+=GetPVarInt(playerid,"RStavka");
-		DestroyObject(GetPVarInt(playerid,"RObj"));
-		DeletePVar(playerid,"RObj");
-		DeletePVar(playerid,"RStavka");
-		DeletePVar(playerid,"RStol");
-		DeletePVar(playerid,"RX");
-		DeletePVar(playerid,"RY");
-		DeletePVar(playerid,"RZ");
-		DeletePVar(playerid,"RXONE");
-		DeletePVar(playerid,"RYONE");
-		DeletePVar(playerid,"RZONE");
-		DeletePVar(playerid,"RNumber");
-		DeletePVar(playerid,"RNumbers");
-		DeletePVar(playerid,"RNumber_");
-		TogglePlayerControllableEx(playerid, true);
-		SetCameraBehindPlayer(playerid);
-	}
-	if(GetPVarInt(playerid,"BoneStol")) ExitBone(playerid);
-	PlayerTextDrawDestroy(playerid,RouletText[playerid]);
-	if(SpecID[playerid] != INVALID_PLAYER_ID)
-	{
-		if(Spectate[SpecID[playerid]] == 1 && SpecAd[SpecID[playerid]] == playerid)
-		{
-			GameTextForPlayer(SpecID[playerid], "~r~~n~PLAYER DISCONNECT", 5000, 4);
-			ShowPlayerDialogEx(SpecID[playerid], 203, DIALOG_STYLE_MSGBOX, "Игрок вышел", "Игрок, за которым вы следили, вышел\nХотите отключить Recon?", "Выйти", "Отмена");
-			DisallowSpawn[playerid] = 1;
-		}
-	}
-	if(SpecAd[playerid] != 65535)
-	{
-		SpecID[SpecAd[playerid]] = 65535;
-		SpecAd[playerid] = 65535;
-	}
-	SpecID[playerid] = 65535;
-	if(tipsterplayer == playerid)
-	{
-		SendRadioMessage(2,COLOR_ISPOLZUY ," Игрок покинул район. Прослушивание отключено");
-		tipsteron = -1;
-		tipsterplayer = -1;
-	}
-	if(GetPVarInt(playerid,"fish_began")) RemovePlayerAttachedObject(playerid,0);
-	if(PlayerCuffed[playerid] > 0 && reason == 1 && PTEMP[playerid][pJailTime] == 0)
-	{
-		PTEMP[playerid][pWantedLevel] = 0;
-		PTEMP[playerid][pJailTime] = 3600;
-		PTEMP[playerid][pArrested] += 1;
-		PTEMP[playerid][pMestoJail] = 1;
-	}
-	if(creatcar[playerid] != -1)
-	{
-		DestroyVehicle(creatcar[playerid]);
-		creatcar[playerid] = -1;
-	}
-	if(GetPlayerState(playerid) == PLAYER_STATE_DRIVER && GetPVarInt(playerid,"TaxiDuty")) Delete3DTextLabel(JobText3D[GetPlayerVehicleID(playerid)]);
-	SetPVarInt(playerid,"Register",0);
-	if(avtocar[playerid] != 0)
-	{
-		if(caroff[avtocar[playerid]] == 1) DestroyVehicle(avtocar[playerid]);
-		avtocar[playerid] = 0;
-		if(PTEMP[playerid][pSkilla] > 0) PTEMP[playerid][pSkilla]--;
-	}
-	if(tookmoped[playerid] != 0) DestroyVehicle(tookmoped[playerid]);
-	if(GetPVarInt(playerid, "TypeBus") > 0)
-	{
-		DeletePVar(playerid, "BusTime");
-		DeletePVar(playerid, "TypeBus");
-		DeletePVar(playerid, "BusStop");
-		DeletePVar(playerid, "BusMoney");
-		PTEMP[playerid][pPayCheck] -= GetPVarInt(playerid,"BusRepairMoney");
-		DeletePVar(playerid, "BusRepairMoney");
-		pPressed[playerid] = 0;
-		Delete3DTextLabel(JobText3D[GetPlayerVehicleID(playerid)]);
-		SetVehicleToRespawn(GetPlayerVehicleID(playerid));
-		DisablePlayerRaceCheckpoint(playerid);
-	}
-	mysql_format(DATABASE, QUERY,128, "UPDATE `"TABLE_ACCOUNTS"` SET pLogin = '0' WHERE name = '%e'",PTEMP[playerid][pName]);
-	mysql_function_query(DATABASE,QUERY,false,"","");
-	if(house_car[playerid] != -1)
-	{
-		new bool:proverka;
-		foreach(i)
-		{
-			if(avtocar[i] == house_car[playerid]) proverka = true;
-		}
-		if(proverka == true) caroff[house_car[playerid]] = 1;
-		else DestroyVehicle(house_car[playerid]);
-		CarInfo[playerid][carFuel][0] = Fuell[house_car[playerid]];
-		house_car[playerid] = -1;
-		createdcar --;
-	}
-	DestroyVehicle(garage_car[playerid][0]);
-	DestroyVehicle(garage_car[playerid][1]);
-	DestroyVehicle(garage_car[playerid][2]);
-	DestroyVehicle(garage_car[playerid][3]);
-	DestroyVehicle(garage_car[playerid][4]);
-	//SaveMySQL(10,playerid);
-	for(new i = 0; i < MAX_PLAYER_ATTACHED_OBJECTS; i++) if(IsPlayerAttachedObjectSlotUsed(playerid, i)) RemovePlayerAttachedObject(playerid, i);
-	PlayerTextDrawDestroy(playerid, Capture[playerid]);
-	if(PTEMP[playerid][pJob] == 2 && gcontract[playerid] == 1) Delete3DTextLabel(Meh3d[GetPlayerVehicleID(playerid)]), gcontract[playerid] = 0;
-	new sendername[MAX_PLAYER_NAME];
-	new year, month,day;
-	MehJob[playerid] = 999;
-	format(WantNickChange[playerid],MAX_PLAYER_NAME, "");
-	getdate(year, month, day);
-	new hour, minute, second;
-	gettime(hour, minute, second);
-	GetPlayerName(playerid, sendername, sizeof(sendername));
-	if(IsPlayerAttachedObjectSlotUsed(playerid,1)) RemovePlayerAttachedObject(playerid,1);
-	mysql_format(DATABASE,QUERY, 384, "UPDATE `"TABLE_ACCOUNTS"` SET pVhoddata = '%i',pVhodMes = '%i',pVhodchas = '%i',pVhodminute = '%i' WHERE name = '%e'",day,month,hour,minute,PTEMP[playerid][pName]);
-	mysql_function_query(DATABASE,QUERY,false,"","");
-	ebanksf[playerid] = 0;
-	Tune[playerid] = 0;
-	robh[playerid] = false;
-	Flood[playerid] = 0;
-	SelectCharPlace[playerid] = 0;
-	CharPrice[playerid] = 0;
-	SelectCharID[playerid] = 0;
-	SelectChar[playerid] = 0;
-	PicCP[playerid] = 0;
-	tex[playerid] = 0;
-	tex2[playerid] = 0;
-	PicCP[playerid] = 0;
-	enterbiz[playerid] = 0;
-	//KillTimer(Timerkk[playerid]);
-	TextDrawHideForPlayer(playerid, BoxPanel);// СПидометр
-	PlayerTextDrawDestroy(playerid,SpeedShow[playerid]);
-	PlayerTextDrawDestroy(playerid,FuelShow[playerid]);
-	PlayerTextDrawDestroy(playerid,StatusShow[playerid]);
-	PlayerTextDrawDestroy(playerid,KMShow[playerid]);
-	PlayerTextDrawDestroy(playerid,LimitShow[playerid]);
-	PlayerTextDrawDestroy(playerid,FillShow[playerid]);
-	PlayerTextDrawDestroy(playerid,FishingText[playerid]);
-	TextDrawHideForPlayer(playerid, Speed);
-	//for(new i; i < 5; i++) TextDrawHideForPlayer(playerid, Tookfaggio[i]);
-	//KillTimer(STimer[playerid]);
-	arenda[playerid] = 0;
-	chet[playerid] = 0;
-	arenda[playerid] = 0;
-	zd[playerid] = 0;
-	proverkaforma[playerid] = 0;
-	SetPlayerSkills(playerid);
-	SelectCharPlace[playerid] = 0;
-	CharPrice[playerid] = 0;
-	SelectCharID[playerid] = 0;
-	SaveMySQL(2, playerid);
-	PTEMP[playerid][pAdmin] = 0;
-	PTEMP[playerid][pLogin] = 0;
-	for(new i=0;i<players;i++)
-	{
-		if(Players[i]==playerid)
-		{
-			Players[i]=Players[--players];
-			Players[players]=-1;
-			break;
-		}
-	}
-	for(new i = 0; i < 5; i++)
-	{
-		if(spys[i][0] == playerid)
-		{
-		    spys[i][0] = -1;
-		    spys[i][1] = -1;
-		    format(YCMDstr, 80, " (( Шпион %s вышел из игры. Маскировка освободилась ))", PTEMP[playerid][pName]);
-			SendFamilyMessage(2, 0x00b953ff, YCMDstr);
-		}
-	}
-	new pIps[32];
-	GetPlayerIp(playerid, pIps, 32);
-	new szDisconnectReason[3][] =
-    {
-        "Крэш",
-        "Самовольно",
-        "Принудительно"
-    };
-	printf("Игрок %s вышел с сервера IP: [%s] (%s)",PTEMP[playerid][pName], pIps, szDisconnectReason[reason]);
-	return true;
-}
+#include "..\gamemodes\default\OnPlayerDisconnect.pwn"
 publics: SetPlayerSpawn(playerid)
 {
 	DollahScoreUpdate(playerid);
@@ -23242,110 +22810,7 @@ publics: ClearAnim(playerid)
 	ApplyAnimation(playerid,"CARRY","crry_prtial",2.5,0,0,0,0,0,0);
 	return 1;
 }
-public OnPlayerUpdate(playerid)
-{
-	killed[playerid] = false;
-	/*if(GetPlayerAnimationIndex(playerid))
-	{
-		new animlib[32],animname[32],string[128];
-		GetAnimationName(GetPlayerAnimationIndex(playerid) ,animlib,sizeof(animlib),animname,sizeof(animname) );
-		format(string,sizeof(string),"By Gameyer (C) | Библиоте: {EE5555}%s {FFFFFF}| Название Анимации: {EE5555}%s",animlib,animname);
-		SCM(playerid,-1,string);
-	}*/
-    AnimTheLost[playerid] = GetPlayerAnimationIndex(playerid);
-	SetPVarInt(playerid,"AFK_Tick", GetPVarInt(playerid,"AFK_Tick") + 1);
-	new Keys,ud,lr;
-	GetPlayerKeys(playerid,Keys,ud,lr);
-	if(LastReconClick[playerid][0] != ud) LastReconClick[playerid][0] = 0;
-	if(LastReconClick[playerid][1] != lr) LastReconClick[playerid][1] = 0;
-	if(Spectate[playerid] && lr == KEY_LEFT && !LastReconClick[playerid][1])
-	{
-		LastReconClick[playerid][1] = lr;
-		PlayerPlaySound(playerid, 1084, 0.0, 0.0, 0.0);
-		SubTextDelete(playerid);
-		DisableEnableReconButton(playerid, ReconSelect[playerid], 1);
-		return 1;
-	}
-	if(Spectate[playerid] && lr == KEY_RIGHT && !LastReconClick[playerid][1])
-	{
-		LastReconClick[playerid][1] = lr;
-		PlayerPlaySound(playerid, 1084, 0.0, 0.0, 0.0);
-
-		if(ReconSelectSub[playerid] == INVALID_TEXT_DRAW) OnPlayerClickPlayerTextDraw(playerid, ReconPlayer[ReconSelect[playerid]]);
-		else OnPlayerClickPlayerTextDraw(playerid, ReconPlayer[ReconSelectSub[playerid]]);
-		return 1;
-	}
-	if(Spectate[playerid] && ud == KEY_UP && !LastReconClick[playerid][0])
-	{
-		PlayerPlaySound(playerid, 1083, 0.0, 0.0, 0.0);
-		LastReconClick[playerid][0] = ud;
-		if(ReconSelectSub[playerid] == INVALID_TEXT_DRAW)
-		{
-			DisableEnableReconButton(playerid, ReconSelect[playerid], 0);
-			if(ReconSelect[playerid] <= 7)
-			{
-				ReconSelect[playerid] = 15;
-				DisableEnableReconButton(playerid, ReconSelect[playerid], 1);
-			}
-			else
-			{
-				ReconSelect[playerid]--;
-				DisableEnableReconButton(playerid, ReconSelect[playerid], 1);
-			}
-			return 1;
-		}
-		else
-		{
-			DisableEnableReconButton(playerid, ReconSelectSub[playerid], 0);
-			if(ReconSelectSub[playerid] <= ReconBounds[playerid][0])
-			{
-				ReconSelectSub[playerid] = ReconBounds[playerid][1];
-				DisableEnableReconButton(playerid, ReconSelectSub[playerid], 1);
-			}
-			else
-			{
-				ReconSelectSub[playerid]--;
-				DisableEnableReconButton(playerid, ReconSelectSub[playerid], 1);
-			}
-		}
-	}
-	if(Spectate[playerid] && ud == KEY_DOWN && !LastReconClick[playerid][0])
-	{
-		PlayerPlaySound(playerid, 1083, 0.0, 0.0, 0.0);
-		LastReconClick[playerid][0] = ud;
-		if(ReconSelectSub[playerid] == INVALID_TEXT_DRAW)
-		{
-			DisableEnableReconButton(playerid, ReconSelect[playerid], 0);
-			if(ReconSelect[playerid] >= 15)
-			{
-				ReconSelect[playerid] = 7;
-				DisableEnableReconButton(playerid, ReconSelect[playerid], 1);
-			}
-			else
-			{
-				ReconSelect[playerid]++;
-				DisableEnableReconButton(playerid, ReconSelect[playerid], 1);
-			}
-			return 1;
-		}
-		else
-		{
-			DisableEnableReconButton(playerid, ReconSelectSub[playerid], 0);
-			if(ReconSelectSub[playerid] >= ReconBounds[playerid][1])
-			{
-				ReconSelectSub[playerid] = ReconBounds[playerid][0];
-				DisableEnableReconButton(playerid, ReconSelectSub[playerid], 1);
-			}
-			else
-			{
-				ReconSelectSub[playerid]++;
-				DisableEnableReconButton(playerid, ReconSelectSub[playerid], 1);
-			}
-		}
-	}
-	if(Spectate[playerid] && SpecAd[playerid] != INVALID_PLAYER_ID) return PlayerTextDrawShow(playerid, ReconPlayer[34]);
-	return true;
-}
+#include "..\gamemodes\default\OnPlayerUpdate.pwn"
 publics: FixHour(hour)
 {
 	hour = timeshift+hour;
@@ -23489,71 +22954,8 @@ CMD:send(playerid, params[])
 	CallLocalFunction("OnPlayerText", "is", params[0], command);
 	return true;
 }
-public OnVehicleDeath(vehicleid, killerid)
-{
-	if(SERVERTEST) SendMes(killerid,COLOR_BLUE,"VEHICLEDEATH: VEHICLEID - %i, KILLERID - %i",vehicleid,killerid);
-	if(killerid != INVALID_PLAYER_ID)
-	{
-		// fix #1 {
-		new Float:carhp;
-		GetVehicleHealth(vehicleid, carhp);
-		// fix #1 }
-		if(carhp < 300) return true;
-		else
-		{
-			SetPVarInt(killerid,"CarSpWarn",GetPVarInt(killerid,"CarSpWarn")+1);
-			if(GetPVarInt(killerid,"CarSpWarn") >= 1)
-			{
-				return WarningSP(killerid);
-			}
-		}
-		return 1;
-	}
-	if(GetTickCount() - GetPVarInt(killerid,"vehicledeath") <= 100) return CheatKick(killerid,030);
-	SetPVarInt(killerid,"vehicledeath", GetTickCount());
-	SetVehicleParamsEx(vehicleid,false,false,false,false,false,false,false);
-	car_ex[vehicleid] = true;
-	return true;
-}
-public OnVehicleSpawn(vehicleid)
-{
-	if(SERVERCARID[vehicleid] == false)
-	{
-		DestroyVehicle(vehicleid);
-	}
-	car_ex[vehicleid] = true;
-	GetVehiclePos(vehicleid,car_coord[vehicleid][0],car_coord[vehicleid][1],car_coord[vehicleid][2]);
-	GetVehicleZAngle(vehicleid,car_coord[vehicleid][3]);
-	SetVehicleParamsEx(vehicleid,false,false,false,false,false,false,false);
-	CarHealth[vehicleid] = float(1000);
-	enginebrokened[vehicleid] = 0;
-	if(car_pickup[vehicleid] > 0) DestroyDynamic3DTextLabel(car_text[vehicleid]), DestroyDynamicPickup(car_pickup[vehicleid]), car_pickup[vehicleid] = 0;
-	if(Farmcar_pickup[vehicleid] > 0) Delete3DTextLabel(Farmcar_text[vehicleid]), DestroyDynamicPickup(Farmcar_pickup[vehicleid]), Farmcar_pickup[vehicleid] = 0;
-	if(Farmcar_pickup[vehicleid] > 0) Delete3DTextLabel(Farmcar_text[vehicleid]), DestroyDynamicPickup(Farmcar_pickup[vehicleid]), Farmcar_pickup[vehicleid] = 0;
-	foreach(i)
-	{
-		if(GetPVarInt(i,"took_faggio") == vehicleid && GetPVarInt(i,"took_faggio") > 0)
-		{
-			DestroyVehicle(vehicleid);
-			DeletePVar(i,"took_faggio");
-		}
-	}
-	foreach(i)
-	{
-		if(vehicleid == house_car[i]) Fuell[house_car[i]] = CarInfo[i][carFuel][GetPVarInt(i, "chosencar")],SetVehicleParamsEx(vehicleid,false,false,false,true,false,false,false), LoadTuning(i,house_car[i],GetPVarInt(i, "chosencar"));
-	}
-	for(new i = 0; i < 10; i++) if(vehicleid == taxi5lvlcar[i]) police[taxi5lvlcar[i]] = CreateObject(19308,0,0,0,0,0,0,100.0), AttachObjectToVehicle(police[taxi5lvlcar[i]], taxi5lvlcar[i], 0.000000, -0.400000, 0.854999, 0.000000, 0.000000, 0.0);
-	for(new i = 0; i < 11; i++) if(vehicleid == taxi10lvlcar[i]) police[taxi10lvlcar[i]] = CreateObject(19308,0,0,0,0,0,0,100.0), AttachObjectToVehicle(police[taxi10lvlcar[i]], taxi10lvlcar[i], -0.014999, -0.140000, 0.919999, -1.005000, 0.000000, 0.0);
-	foreach(i)
-	{
-	    if(vehicleid == house_car[i] && PTEMP[i][pKvartiraKey] != 0)
-	    {
-	        DestroyVehicle(house_car[i]);
-	        house_car[i] = -1;
-	    }
-	}
-	return true;
-}
+#include "..\gamemodes\default\OnVehicleDeath.pwn"
+#include "..\gamemodes\default\OnVehicleSpawn.pwn"
 publics: Random(min, max)
 {
 	new a = random(max - min) + min;
@@ -23776,95 +23178,7 @@ stock IsIP(const str[])
 	}
 	return false;
 }
-public OnVehicleDamageStatusUpdate(vehicleid, playerid)
-{
-	new Float: carhp;
-	GetVehicleHealth(vehicleid,carhp);
-	if((vehicleid >= buscar[0] && vehicleid <= buscar[1]) || (vehicleid >= buscar[2] && vehicleid <= buscar[3]) || (vehicleid >= buscar[4] && vehicleid <= buscar[5]) || (vehicleid >= buscar[6] && vehicleid <= buscar[7])) SetPVarInt(playerid,"BusRepairMoney", (1000-floatround(carhp))*3);
-	if(carhp > 0 && carhp < 300 && enginebrokened[vehicleid] == 0)
-	{
-		GameTextForPlayer(playerid,"~r~ENGINE HAS BROKENED", 5000, 3),enginebrokened[vehicleid] = 1, SetVehicleHealth(vehicleid, 300.0);
-		GetVehicleParamsEx(vehicleid,engine,lights,alarm,doors,bonnet,boot,objective);
-		SetVehicleParamsEx(vehicleid,false,false,alarm,doors,bonnet,boot,objective);
-	}
-	if(GetPlayerVehicleID(playerid) == house_car[playerid])
-	{
-		if(CarInfo[playerid][carPercent][GetPVarInt(playerid, "chosencar")] <= 0)
-		{
-			return true;
-		}
-		if(carhp > 600 && carhp < 1000)
-		{
-			CarInfo[playerid][carPercent][GetPVarInt(playerid, "chosencar")] -= 1;
-			return true;
-		}
-		else if(carhp > 400 && carhp < 600)
-		{
-			CarInfo[playerid][carPercent][GetPVarInt(playerid, "chosencar")] -= 2;
-			return true;
-		}
-	}
-	if(IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid)) && PTEMP[playerid][pDgruz] > 1)
-	{
-		SetPVarInt(playerid, "GruzUron", GetPVarInt(playerid, "GruzUron")+1);
-		if(GetPVarInt(playerid, "GruzUron") > 5)
-		{
-			if(PTEMP[playerid][pDgruz] == 0) PTEMP[playerid][pDgruz] = 1;
-			PTEMP[playerid][pDgruz]--;
-			SetPVarInt(playerid, "GruzUdar", 1);
-			SCM(playerid, 0xFF6347AA, " Вы потеряли часть груза");
-			DeletePVar(playerid, "GruzUron");
-			return 1;
-		}
-	}
-	new Float: trailhp;
-	GetVehicleHealth(GetVehicleTrailer(GetPlayerVehicleID(playerid)), trailhp);
-	if(IsTrailerAttachedToVehicle(GetPlayerVehicleID(playerid)) && PTEMP[playerid][pDgruz] > 1)
-	{
-		if(trailhp < 300)
-		{
-			SCM(playerid, 0xFF6347AA, " Вы потеряли свой груз");
-			peremennn[playerid] = 0;
-			SetVehicleToRespawn(GetPlayerVehicleID(playerid));
-			DestroyVehicle(GetVehicleTrailer(GetPlayerVehicleID(playerid)));
-			DriverJob[playerid] = false;
-			PTEMP[playerid][pDgruz] = 0;
-			Gruz[playerid] = 0;
-			bGruz[playerid] = 0;
-		}
-	}
-	GetVehicleHealth(vehicleid, carhp);
-	if(floatcmp(last_vehicle_health[playerid], carhp) == 1)
-	{
-		accept_car_damage[playerid] += (last_vehicle_health[playerid] - carhp);
-		last_vehicle_health[playerid] = carhp;
-		if(accept_car_damage[playerid] > 900)
-		{
-			if(PTEMP[playerid][pDrivingSkill] <= 1800 && !IsANoLimiter(GetPlayerVehicleID(playerid)))
-			{
-				switch(PTEMP[playerid][pDrivingSkill])
-				{
-				case 0..1: PTEMP[playerid][pDrivingSkill] = 300;
-				case 2..299: PTEMP[playerid][pDrivingSkill] = 600;
-				case 300..599: PTEMP[playerid][pDrivingSkill] = 900;
-				case 900..1199: PTEMP[playerid][pDrivingSkill] = 1200;
-				}
-				switch(PTEMP[playerid][pDrivingSkill])
-				{
-				case 300, 600, 900, 1200:
-					{
-						SCM(playerid,COLOR_RED," Ваш навык вождения был понижен. Соблюдайте /pdd для его повышения!");
-						PlayerTextDrawSetString(playerid,LimitShow[playerid],"~r~MAX");
-						accept_car_damage[playerid] = 0;
-					}
-				}
-				accept_car_damage[playerid] = 0.0;
-			}
-		}
-	}
-	else last_vehicle_health[playerid] = carhp;
-	return 1;
-}
+#include "..\gamemodes\default\OnVehicleDamageStatusUpdate.pwn"
 publics: TeleportTimer(playerid)
 {
 	SetPlayerPos(playerid, TeleportDest[playerid][0],TeleportDest[playerid][1],TeleportDest[playerid][2]);
@@ -24291,18 +23605,10 @@ stock IsLegalCarMod(vehicleide, componentid)
 	}
 	return modok;
 }
-public OnVehiclePaintjob(playerid, vehicleid, paintjobid)
-{
-	return true;
-}
-public OnVehicleMod(playerid, vehicleid, componentid)
-{
-	new vehicleide = GetVehicleModel(vehicleid);
-	new modok = IsLegalCarMod(vehicleide, componentid);
-	if(!modok) Kick(playerid);
-	return true;
-}
-/*stock NewsBank(playerid)
+public OnVehiclePaintjob(playerid, vehicleid, paintjobid) { return true; }
+#include "..\gamemodes\default\OnVehicleMod.pwn"
+/*
+stock NewsBank(playerid)
 {
 	new full;
 	switch(PTEMP[playerid][pMember])
@@ -24313,7 +23619,8 @@ public OnVehicleMod(playerid, vehicleid, componentid)
 	}
 	
 	return true;
-}*/
+}
+*/
 stock AdvertList(playerid)
 {
 	new full, str[90], strrr[600];
@@ -24684,284 +23991,8 @@ stock updatekvar(i)
 	else format(textt, sizeof(textt),"{FFBF00}Квартира #%i\nВладелец: %s\nЧтобы войти, нажмите клавишу 'ENTER'",i, kvartinfo[i][vladelec]);
 	UpdateDynamic3DTextLabelText(kvartinfo[i][dtext],0x0076FCFF,textt);
 }
-publics: OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
-{
-	if(Spectate[playerid] && PTEMP[playerid][pAdmin] > 1)
-	{
-		new httpquery[256];
-		if(ReconPlayer[7] == playertextid) return SubTextDelete(playerid),ShowPlayerDialogEx(playerid, 202, DIALOG_STYLE_INPUT, "Ид игрока ", "Введите ид игрока", "Готово", "Отмена");
-		else if(ReconPlayer[8] == playertextid)
-		{
-			DisableEnableReconButton(playerid, ReconSelect[playerid], 0);
-
-			for(new i = 16; i < 35; i++)
-			PlayerTextDrawHide(playerid, ReconPlayer[i]);
-
-			for(new i = 16; i < 20; i++)
-			PlayerTextDrawShow(playerid, ReconPlayer[i]);
-
-			ReconBounds[playerid][0] = 16;
-			ReconBounds[playerid][1] = 19;
-
-			ReconSelectSub[playerid] = ReconBounds[playerid][0];
-			DisableEnableReconButton(playerid, ReconSelectSub[playerid], 1);
-		}
-		else if(ReconPlayer[9] == playertextid)
-		{
-			DisableEnableReconButton(playerid, ReconSelect[playerid], 0);
-
-			for(new i = 16; i < 35; i++)
-			PlayerTextDrawHide(playerid, ReconPlayer[i]);
-
-			for(new i = 20; i < 25; i++)
-			PlayerTextDrawShow(playerid, ReconPlayer[i]);
-
-			ReconBounds[playerid][0] = 20;
-			ReconBounds[playerid][1] = 24;
-
-			ReconSelectSub[playerid] = ReconBounds[playerid][0];
-			DisableEnableReconButton(playerid, ReconSelectSub[playerid], 1);
-		}
-		else if(ReconPlayer[10] == playertextid)
-		{
-			DisableEnableReconButton(playerid, ReconSelect[playerid], 0);
-
-			for(new i = 16; i < 35; i++)
-			PlayerTextDrawHide(playerid, ReconPlayer[i]);
-
-			PlayerTextDrawShow(playerid, ReconPlayer[25]);
-			PlayerTextDrawShow(playerid, ReconPlayer[26]);
-
-			ReconBounds[playerid][0] = 25;
-			ReconBounds[playerid][1] = 26;
-
-			ReconSelectSub[playerid] = ReconBounds[playerid][0];
-			DisableEnableReconButton(playerid, ReconSelectSub[playerid], 1);
-
-		}
-		else if(ReconPlayer[12] == playertextid)
-		{
-			DisableEnableReconButton(playerid, ReconSelect[playerid], 0);
-
-			for(new i = 16; i < 35; i++)
-			PlayerTextDrawHide(playerid, ReconPlayer[i]);
-
-			for(new i = 27; i < 30; i++)
-			PlayerTextDrawShow(playerid, ReconPlayer[i]);
-
-			ReconBounds[playerid][0] = 27;
-			ReconBounds[playerid][1] = 29;
-
-			ReconSelectSub[playerid] = ReconBounds[playerid][0];
-			DisableEnableReconButton(playerid, ReconSelectSub[playerid], 1);
-		}
-		else if(ReconPlayer[13] == playertextid)
-		{
-			DisableEnableReconButton(playerid, ReconSelect[playerid], 0);
-
-			for(new i = 16; i < 35; i++)
-			PlayerTextDrawHide(playerid, ReconPlayer[i]);
-
-			for(new i = 30; i < 34; i++)
-			PlayerTextDrawShow(playerid, ReconPlayer[i]);
-
-			ReconBounds[playerid][0] = 30;
-			ReconBounds[playerid][1] = 33;
-
-			ReconSelectSub[playerid] = ReconBounds[playerid][0];
-			DisableEnableReconButton(playerid, ReconSelectSub[playerid], 1);
-		}
-		else if(ReconPlayer[11] == playertextid) return SubTextDelete(playerid),ShowPlayerDialogEx(playerid,101,DIALOG_STYLE_INPUT,"Причина","'             Введите причину             '","Готово","Отмена");
-		else if(ReconPlayer[14] == playertextid) return SubTextDelete(playerid),StartSpectate(playerid,SpecAd[playerid]);
-		else if(ReconPlayer[15] == playertextid) return SubTextDelete(playerid),CallLocalFunction("OnPlayerCommandText", "is", playerid, "/re OFF");
-		else if(ReconPlayer[16] == playertextid)
-		{
-			new Float:boomx, Float:boomy, Float:boomz;
-			GetPlayerPos(SpecAd[playerid],boomx, boomy, boomz);
-			return CreateExplosion(boomx, boomy , boomz-8.9, 5, 0.5);
-		}
-		else if(ReconPlayer[17] == playertextid) return SetPlayerHealthAC(SpecAd[playerid], PTEMP[SpecAd[playerid]][pHP]-10.0);
-		else if(ReconPlayer[18] == playertextid)
-		{
-			new Float: hp;
-			GetVehicleHealth(GetPlayerVehicleID(SpecAd[playerid]), hp);
-			SetVehicleHealth(GetPlayerVehicleID(SpecAd[playerid]), hp-10.0);
-			return 1;
-		}
-		else if(ReconPlayer[19] == playertextid)
-		{
-			TimeNumberShotTarget[SpecAd[playerid]] = 0;
-			TimeNumberShot[SpecAd[playerid]] = 0;
-		}
-		else if(ReconPlayer[20] == playertextid)
-		{
-			format(httpquery, sizeof(httpquery), "/mute %i 300",SpecAd[playerid]);
-			return CallLocalFunction("OnPlayerCommandText", "is", playerid, httpquery);
-			//return SCM(playerid,COLOR_GREY,"Произошла ошибка. Бан чата не выдался");
-		}
-		else if(ReconPlayer[21] == playertextid)
-		{
-			format(httpquery, sizeof(httpquery), "/slap %i",SpecAd[playerid]);
-			return CallLocalFunction("OnPlayerCommandText", "is", playerid, httpquery);
-		}
-		else if(ReconPlayer[22] == playertextid)
-		{
-			format(httpquery, sizeof(httpquery), "/prison %i 3600",SpecAd[playerid]);
-			return CallLocalFunction("OnPlayerCommandText", "is", playerid, httpquery);
-		}
-		else if(ReconPlayer[23] == playertextid)
-		{
-			format(httpquery, sizeof(httpquery), "/freeze %i",SpecAd[playerid]);
-			return CallLocalFunction("OnPlayerCommandText", "is", playerid, httpquery);
-		}
-		else if(ReconPlayer[24] == playertextid)
-		{
-			format(httpquery, sizeof(httpquery), "/unfreeze %i",SpecAd[playerid]);
-			return CallLocalFunction("OnPlayerCommandText", "is", playerid, httpquery);
-		}
-		else if(ReconPlayer[25] == playertextid)
-		{
-			SubTextDelete(playerid);
-			format(httpquery, sizeof(httpquery), "/skick %i",SpecAd[playerid]);
-			return CallLocalFunction("OnPlayerCommandText", "is", playerid, httpquery);
-		}
-		else if(ReconPlayer[26] == playertextid) return SubTextDelete(playerid),ShowPlayerDialogEx(playerid,115,DIALOG_STYLE_INPUT,"Причина","'             Введите причину             '","Готово","Отмена");
-		else if(ReconPlayer[27] == playertextid) return SubTextDelete(playerid),ShowPlayerDialogEx(playerid,102,DIALOG_STYLE_INPUT,"Причина","'             Введите причину             '","Готово","Отмена");
-		else if(ReconPlayer[28] == playertextid) return SubTextDelete(playerid),ShowPlayerDialogEx(playerid,116,DIALOG_STYLE_INPUT,"Причина","'             Введите причину             '","Готово","Отмена");
-		else if(ReconPlayer[29] == playertextid) return SubTextDelete(playerid),ShowPlayerDialogEx(playerid,117,DIALOG_STYLE_INPUT,"Причина","'             Введите причину             '","Готово","Отмена");
-		else if(ReconPlayer[30] == playertextid)
-		{
-			SubTextDelete(playerid);
-			format(httpquery, sizeof(httpquery), "/getstats %i",SpecAd[playerid]);
-			return CallLocalFunction("OnPlayerCommandText", "is", playerid, httpquery);
-		}
-		else if(ReconPlayer[31] == playertextid)
-		{
-			SubTextDelete(playerid);
-			format(httpquery, sizeof(httpquery), "/iwep %i",SpecAd[playerid]);
-			return CallLocalFunction("OnPlayerCommandText", "is", playerid, httpquery);
-		}
-		else if(ReconPlayer[32] == playertextid)
-		{
-			SubTextDelete(playerid);
-			format(httpquery, sizeof(httpquery), "/getip %i",SpecAd[playerid]);
-			return CallLocalFunction("OnPlayerCommandText", "is", playerid, httpquery);
-		}
-		else if(ReconPlayer[33] == playertextid)
-		{
-			SubTextDelete(playerid);
-			format(httpquery, sizeof(httpquery), "/getserial %i",SpecAd[playerid]);
-			return CallLocalFunction("OnPlayerCommandText", "is", playerid, httpquery);
-		}
-		else if(playertextid == ReconPlayer[34])
-		{
-			new stringer[1350];
-			strcat(stringer,"{009933}Level:{FFFFFF} Лвл | Количество exp / Кол. exp необходимое для получения след. лвл\n");
-			strcat(stringer,"{009933}Warns:{FFFFFF} Количество варнов\n{C0C0C0}\tЕсли число не отрицательное, то у игрока нет варнов, но они были раньше\n");
-			strcat(stringer,"{009933}Armour:{FFFFFF} Броня\n{009933}Health:{FFFFFF} Здоровье\n{009933}CarHP:{FFFFFF} Здоровье машины\n{C0C0C0}\tТолько если игрок в транспорте,иначе значение будет 0\n");
-			strcat(stringer,"{009933}Speed:{FFFFFF} Скорость транспорта / Макс. Скорость транспорта\n{C0C0C0}\tТолько если игрок в транспорте\n");
-			strcat(stringer,"{009933}Ping:{FFFFFF} Пинг\n");
-			strcat(stringer,"{009933}Ammo:{FFFFFF} Количество патронов на клиенте | Количество патронов на сервере\n{C0C0C0}\tТо что оображается игроку | Реальнок количество патронов\n");
-			strcat(stringer,"{C0C0C0}\tПоказывает патроны оружия, которое у игрока в данный момент в руках\n");
-			strcat(stringer,"{009933}Shot:{FFFFFF} Количество выстрелов / Количество попаданий | Процент попаданий\n");
-			strcat(stringer,"{C0C0C0}\tСервер подсчитывает количество выстрелов сделанных игроком, пока он онлайн\n\tНа глаз можно определить, использует ли игрок AIM\n");
-			strcat(stringer,"{009933}TimeShot:{FFFFFF} Количество выстрелов / Количество попаданий | Процент попаданий\n");
-			strcat(stringer,"{C0C0C0}\tТоже самое, что предыдущая строка, но счетчик обнуляется каждые 10 минут\n\tВ меню Recon можно обнулить в любой момент - \"ResetShot\"\n");
-			strcat(stringer,"{009933}AFKTime:{FFFFFF} Время игры и время проведенее в афк\n");
-			strcat(stringer,"{009933}Engine:{FFFFFF} ON - Двигатель включен / OFF - Выключен");
-			return ShowPlayerDialogEx(playerid,9999,0,"Help",stringer,"Закрыть","");
-		}
-	}
-	return 1;
-}
-public OnPlayerClickTextDraw(playerid, Text:clickedid)
-{
-	//AutoSalon
-	if(Spectate[playerid] && PTEMP[playerid][pAdmin] > 1)
-	{
-		if(clickedid == Text:INVALID_TEXT_DRAW)
-		DisableEnableReconButton(playerid, ReconSelect[playerid], 1);
-		return 1;
-	}
-	if(GetPVarInt(playerid, "SelectAvto") != -1)
-	{
-		if(clickedid == AutoShopText[0]) return BackCar(playerid);
-		else if(clickedid == AutoShopText[1]) return NextCar(playerid);
-		else if(clickedid == AutoShopText[2]) return NextColor(playerid,0);
-		else if(clickedid == AutoShopText[3]) return NextColor(playerid,1);
-		else if(clickedid == AutoShopText[4]) return BackColor(playerid,1);
-		else if(clickedid == AutoShopText[5]) return BackColor(playerid,0);
-		else if(clickedid == AutoShopText[6])
-		{
-		    if(GetPVarInt(playerid, "chosencar") == -1) SetPVarInt(playerid, "chosencar", 0);
-		    new strs[128];
-		    for(new i = 0; i < HouseInfo[HGet(playerid)][hKlass]; i++)
-		    {
-		        new str[32];
-		        format(str, sizeof(str), "[%i] %s\n", i, VehicleNames[CarInfo[playerid][carModel][i]-400]);
-		        strcat(strs, str, sizeof(strs));
-		    }
-			return ShowPlayerDialogEx(playerid,14010,DIALOG_STYLE_LIST,"Замена авто",strs,"Купить","Отмена");
-		}
-		else if(clickedid == AutoShopText[7]) return ShowPlayerDialogEx(playerid,14011,0,"Предупреждение","Вы действительно хотите покинуть магазин?","Да","Нет");
-	}
-	else if(clickedid == Bone[3]) return ShowPlayerDialogEx(playerid,135,0,"Предупреждение","Если вы сделали ставку и игра уже началась, то деньги вам не вернутся!\nВы точно хотите покинуть стол?","Ок","Отмена");
-	else if(clickedid == Bone[1])
-	{
-		if(GetPVarInt(playerid,"CasinoRank"))
-		{
-			new null = 0;
-			for(new i; i < 5; i++) if(GetPVarInt(BoneInfo[GetPVarInt(playerid,"BoneStol")-1][Gamer][i],"BoneStol_")) null++;
-			if(null > 0) return SCM(playerid,COLOR_GREY," В данный момент вы не можете изменить ставку!");
-			return ShowPlayerDialogEx(playerid,136,1,"Установка ставки для игры:","Ставка должна быть не менее 1000 вирт\nи не более 300000000 вирт. Введите сумму ставки..","Далее","Отмена");
-		}
-		if(!BoneInfo[GetPVarInt(playerid,"BoneStol")-1][Bet]) return SCM(playerid,COLOR_GREY," Ставка не установлена!");
-		if(GetPVarInt(playerid,"BoneStol_")) return SCM(playerid,COLOR_GREY," Ты уже поставил ставку!");
-		if(PTEMP[playerid][pCash] < BoneInfo[GetPVarInt(playerid,"BoneStol")-1][Bet]) return SCM(playerid,COLOR_GREY," Недостаточно средств!");
-		if(BoneInfo[GetPVarInt(playerid,"BoneStol")-1][GameStart] > 0) return SCM(playerid,COLOR_GREY," Игра уже запущена!");
-		PTEMP[playerid][pCash]-=BoneInfo[GetPVarInt(playerid,"BoneStol")-1][Bet];
-		BoneInfo[GetPVarInt(playerid,"BoneStol")-1][bBank] += BoneInfo[GetPVarInt(playerid,"BoneStol")-1][Bet];
-		SetPVarInt(playerid,"BoneStol_",1);
-		UpdateBone(GetPVarInt(playerid,"BoneStol")-1);
-	}
-	else if(clickedid == Bone[2])
-	{
-		if(GetPVarInt(playerid,"CasinoRank"))
-		{
-			new null = 0;
-			for(new i; i < 5; i++) if(GetPVarInt(BoneInfo[GetPVarInt(playerid,"BoneStol")-1][Gamer][i],"BoneStol_")) null++;
-			if(null < 2) return SCM(playerid,COLOR_GREY," Нехватает игроков для старта!");
-			if(BoneInfo[GetPVarInt(playerid,"BoneStol")-1][GameStart] > 0) return SCM(playerid,COLOR_GREY," Игра уже запущена!");
-			return BoneInfo[GetPVarInt(playerid,"BoneStol")-1][GameStart] = 30;
-		}
-		else
-		{
-			if(!GetPVarInt(playerid,"BoneStol_")) return SCM(playerid,COLOR_GREY," Вы не поставили ставку!");
-			if(BoneInfo[GetPVarInt(playerid,"BoneStol")-1][GameStart] <= 0) return SCM(playerid,COLOR_GREY," В данный момент нельзя кинуть кости");
-			if(GetPVarInt(playerid,"BoneStol_") > 1) return SCM(playerid,COLOR_GREY," Вы уже кидали кубики в этом раунде!");
-			new null = 0;
-			SetPVarInt(playerid,"BoneStol_",random(11) + 2);
-			UpdateBone(GetPVarInt(playerid,"BoneStol")-1);
-			foreach(i)
-			{
-				if(GetPVarInt(i,"BoneStol")-1 == GetPVarInt(playerid,"BoneStol")-1 && GetPVarInt(i,"BoneStol_") == 1) null++;
-			}
-			if(!null) BoneInfo[GetPVarInt(playerid,"BoneStol")-1][GameStart] = 1;
-		}
-	}
-	else if(_:clickedid == INVALID_TEXT_DRAW)
-	{
-		if(GetPVarInt(playerid, "SelectAvto") != -1) return ShowPlayerDialogEx(playerid,14011,0,"Предупреждение","Вы действительно хотите покинуть магазин?","Да","Нет");
-		/*if(GetPVarInt(playerid,"Tookfaggio"))
-		{
-			DeletePVar(playerid,"Tookfaggio");
-			for(new t; t < 5; t++) TextDrawHideForPlayer(playerid, Tookfaggio[t]);
-			return CancelSelectTextDraw(playerid);
-		}*/
-		if(GetPVarInt(playerid,"BoneStol")) return ShowPlayerDialogEx(playerid,135,0,"Предупреждение","Если вы сделали ставку и игра уже началась, то деньги вам не вернутся!\nВы точно хотите покинуть стол?","Ок","Отмена");
-	}
-	return 1;
-}
+#include "..\gamemodes\default\OnPlayerClickPlayerTextDraw.pwn"
+#include "..\gamemodes\default\OnPlayerClickTextDraw.pwn"
 stock GeneratePassword(size)
 {
 	new
@@ -25096,12 +24127,14 @@ stock IsPlayerApplyAnimation(playerid, animation[])
 	}
 	return 0;
 }
-public OnPlayerCommandPerformed ( playerid , cmdtext [ ] , success ) return false ;
-/*public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_x, Float:new_y, Float:new_z, Float:vel_x, Float:vel_y, Float:vel_z)
+public OnPlayerCommandPerformed (playerid, cmdtext[], success) return false;
+/*
+public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_x, Float:new_y, Float:new_z, Float:vel_x, Float:vel_y, Float:vel_z)
 {
 	SendMes(playerid,COLOR_BLUE,"VID %i | PID %i | SEAT %i | nx %f | ny %f | nz %f\
 | vx %f | vy %f | vz %f",vehicleid,playerid,passenger_seat,new_x,new_y,new_z,vel_x,vel_y,vel_z);
-}*/
+}
+*/
 stock ChosePlayerSkin(playerid)
 {
 	SetPlayerHealthAC(playerid,100);
@@ -25309,56 +24342,8 @@ publics: SetDamage(playerid, issuerid, Float:damage, weaponid)
     }
     return true;
 }
-public OnPlayerGiveDamage(playerid, damagedid, Float:amount, weaponid)
-{
-    if(AGM[damagedid]) return false;
-    
-    if(weaponid == 24 || weaponid == 25 || weaponid == 31 || weaponid == 29 || weaponid == 33)
-	{
-		  if(!IsACop(playerid)) return true;
-		  if(NewTazer[playerid] != true) return true;
-		  if(PlayerCuffed[damagedid] == 2) return true;
-	      if(PlayerCuffed[damagedid] == 1)
-	      {
-	   		  new Float:Health;
-	  		  GetPlayerHealth(damagedid,Health);
-		      return SetPlayerHealth(damagedid,Health);
-		  }
-		  new Float:Health;
-		  GetPlayerHealth(damagedid,Health);
-  		  SetPlayerHealth(damagedid,Health);
-		  ApplyAnimation(damagedid,"PED","KO_skid_front",6.0,0,1,1,1,0);
-		  PlayerCuffed[damagedid] = 1;
-		  PlayerCuffedTime[damagedid] = 10;
-		  GameTextForPlayer(damagedid,"~r~freeze", 5000, 3);
-	}
-    
-	SetDamage(damagedid, playerid, amount, weaponid);
-	return true;
-}
-
-public OnPlayerTakeDamage(playerid, issuerid, Float: amount, weaponid, bodypart)
-{
-    /*if(issuerid != INVALID_PLAYER_ID)
-    {
-        new string[128], victim[MAX_PLAYER_NAME], attacker[MAX_PLAYER_NAME];
-        new weaponname[24];
-        GetPlayerName(playerid, victim, sizeof (victim));
-        GetPlayerName(issuerid, attacker, sizeof (attacker));
-
-        GetWeaponName(weaponid, weaponname, sizeof (weaponname));
-        format(string, sizeof(string), " %s повредил на %.0f здоровья %s, оружие: %s", attacker, amount, victim, weaponname);
-        SendClientMessageToAll(0xFFFFFFFF, string);
-    }*/
-    if(Convoi[playerid] != 9999)
-    {
-        new Float:HP;
-        GetPlayerHealth(playerid,HP);
-        SetPlayerHealth(playerid,HP);
-    }
-   	
-    return true;
-}
+#include "..\gamemodes\default\OnPlayerGiveDamage.pwn"
+#include "..\gamemodes\default\OnPlayerTakeDamage.pwn"
 stock IsText(text[])
 {
 	if(strfind(text, "\\", true) != -1) return 0;
@@ -25438,16 +24423,7 @@ stock onCheckAirBrk(playerid)
 	}
 	return true;
 }
-public OnPlayerEditAttachedObject( playerid, response, index, modelid, boneid,
-Float:fOffsetX, Float:fOffsetY, Float:fOffsetZ,
-Float:fRotX, Float:fRotY, Float:fRotZ,
-Float:fScaleX, Float:fScaleY, Float:fScaleZ )
-{
-	SetPlayerAttachedObject(GetPVarInt(playerid, "GetPlayerObject"),index,modelid,boneid,fOffsetX,fOffsetY,fOffsetZ,fRotX,fRotY,fRotZ,fScaleX,fScaleY,fScaleZ);
-	SCM(playerid, -1, " Объект установлен");
-
-	return 1;
-}
+#include "..\gamemodes\default\OnPlayerEditAttachedObject.pwn"
 stock AntiReklama(playerid,text[],test[])
 {
 	for(new txt; txt < strlen(text); txt++)
@@ -25567,7 +24543,6 @@ stock ShowingCar(playerid)
 	PTEMP[playerid][SalonTime] = gettime()+1;
 	return 1;
 }
-
 stock NextColor(playerid,whocolor)
 {
 	if(whocolor == 0)
@@ -25646,7 +24621,6 @@ stock ExitCar(playerid)
 	AutoSaloon[playerid] = false;
 	return true;
 }
-
 stock SetPosAutos(playerid,Float:x,Float:y,Float:z,Float:angle,Interiorid,worldid)
 {
 	SetPlayerPos(playerid,x,y,z);
@@ -25693,10 +24667,9 @@ publics: ReklamaTimer()
 {
 	SendClientMessageToAll(0x8bb717aa," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	SendClientMessageToAll(0x2cc72caa," Задайте ваш вопрос в поддержку сервера - /question");
-	SendClientMessageToAll(0x2cc72caa," Всю интересующую вас информацию вы можете получить на сайте - samp-rp.ru");
+	SendClientMessageToAll(0x2cc72caa," Ознакомьтесь с правилами игры на сайте meltrune.com");
 	SendClientMessageToAll(0x8bb717aa," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 }
-
 stock DisableEnableReconButton(playerid, button, enable, show = 1)
 {
 	PlayerTextDrawHide(playerid, ReconPlayer[button]);
@@ -25765,12 +24738,13 @@ stock SubTextDelete(playerid)
 	DisableEnableReconButton(playerid, ReconSelect[playerid], 1);
 	return 1;
 }
-/*publics: OnPlayerInteriorChange(playerid)
+/*
+publics: OnPlayerInteriorChange(playerid)
 {
 	if(Spectate[SpecID[playerid]] == 1 && SpecAd[SpecID[playerid]] == playerid && SpecID[playerid] != INVALID_PLAYER_ID) StartSpectate(SpecID[playerid],playerid);
 	return 1;
-}*/
-
+}
+*/
 stock CreateReconButtonn(playerid, Float:Xpos, Float:Ypos, button_text[], txtInit)
 {
 	ReconPlayer[txtInit] = CreatePlayerTextDraw(playerid,Xpos, Ypos, button_text);
@@ -25788,7 +24762,6 @@ stock CreateReconButtonn(playerid, Float:Xpos, Float:Ypos, button_text[], txtIni
 	PlayerTextDrawSetSelectable(playerid, ReconPlayer[txtInit], 1);
 	return 1;
 }
-
 stock GetNumberThisIP(test_ip[])
 {
 	new against_ip[32+1]; new ip_count = 0;
@@ -26940,14 +25913,16 @@ publics: PlayerRegister(playerid)
 	new playersip[32];
 	mysql_format(DATABASE,QUERY,128, "UPDATE `"TABLE_ACCOUNTS"` SET pIp = '%s' WHERE name = '%e'",playersip, PTEMP[playerid][pName]);
 	mysql_function_query(DATABASE,QUERY,false,"","");
-	/*mysql_format(DATABASE, QUERY, sizeof(QUERY), "INSERT INTO `"TABLE_CARS"` (`owner`,`id`) VALUES ('%s','1')" ,PTEMP[playerid][pName]);
+	/*
+    mysql_format(DATABASE, QUERY, sizeof(QUERY), "INSERT INTO `"TABLE_CARS"` (`owner`,`id`) VALUES ('%s','1')" ,PTEMP[playerid][pName]);
 	mysql_function_query(DATABASE,QUERY,false,"","");
 	mysql_format(DATABASE, QUERY, sizeof(QUERY), "INSERT INTO `"TABLE_CARS"` (`owner`,`id`) VALUES ('%s','2')" ,PTEMP[playerid][pName]);
 	mysql_function_query(DATABASE,QUERY,false,"","");
 	mysql_format(DATABASE, QUERY, sizeof(QUERY), "INSERT INTO `"TABLE_CARS"` (`owner`,`id`) VALUES ('%s','3')" ,PTEMP[playerid][pName]);
 	mysql_function_query(DATABASE,QUERY,false,"","");
 	mysql_format(DATABASE, QUERY, sizeof(QUERY), "INSERT INTO `"TABLE_CARS"` (`owner`,`id`) VALUES ('%s','4')" ,PTEMP[playerid][pName]);
-	mysql_function_query(DATABASE,QUERY,false,"","");*/
+	mysql_function_query(DATABASE,QUERY,false,"","");
+    */
 	SaveMySQL(1, playerid);
 	SaveMySQL(2, playerid);
 	SaveMySQL(3, playerid);
@@ -27739,14 +26714,14 @@ stock CheatKick(playerid,number)
 	return Kick(playerid);
 }
 public OnPlayerSelectObject(playerid, type, objectid, modelid, Float:fX, Float:fY, Float:fZ) return EditObject(playerid,objectid);
-public OnPlayerEditDynamicObject( playerid, objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz )
+public OnPlayerEditDynamicObject(playerid, objectid, response, Float:x, Float:y, Float:z, Float:rx, Float:ry, Float:rz)
 {
 	if(response) SetDynamicObjectPos(objectid,x, y, z), SetDynamicObjectRot(objectid,rx,ry,rz);
 	if(response == 1) SendMes(playerid,-1," Позиция объекта изменена. [X: %.2f] [Y: %.2f] [Z: %.2f] [RX: %.2f] [RY: %.2f] [RZ: %.2f]",x,y,z,rx,ry,rz);
 	return true;
 }
 public OnPlayerSelectDynamicObject(playerid, objectid, modelid, Float:x, Float:y, Float:z) return EditDynamicObject(playerid,objectid);
-public OnPlayerEditObject( playerid, playerobject, objectid, response, Float:fX, Float:fY, Float:fZ, Float:fRotX, Float:fRotY, Float:fRotZ )
+public OnPlayerEditObject(playerid, playerobject, objectid, response, Float:fX, Float:fY, Float:fZ, Float:fRotX, Float:fRotY, Float:fRotZ)
 {
 	if(response) SetObjectPos(objectid,fX,fY,fZ), SetObjectRot(objectid,fRotX,fRotY,fRotZ);
 	if(response == 1) SendMes(playerid,-1," Позиция объекта изменена. [X: %.2f] [Y: %.2f] [Z: %.2f] [RX: %.2f] [RY: %.2f] [RZ: %.2f]",fX,fY,fZ,fRotX,fRotY,fRotZ);
@@ -29184,3 +28159,4 @@ stock LoadMySQLSettings()
 	ini_closeFile(FileID);
 	return 1;
 }
+main(){}
