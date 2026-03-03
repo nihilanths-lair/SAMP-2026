@@ -31,8 +31,6 @@ AntiDeAMX2()
 new format_string[128];
 #define SendMes(%0,%1,%2,%3)    format(format_string, sizeof(format_string),%2,%3) && SCM(%0, %1, format_string)
 
-//#define  MainMenu  "[1] Настройки\n[2] Статистика персонажа\n[3] Команды сервера\n{FFFF00}[4] Задать вопрос по игре\n{FFFFFF}[5] Репорт\n[6] Смена пароля\n[7] Очистить чат\n[8] Правила\n[9] Слив денег\n[10] Безопасность\n[11] Смена ника\n[12] Донат\n[13] Бонусы"
-
 //==========================================
 new bool:SERVERTEST = false;
 new QUERY[4096];
@@ -40,11 +38,11 @@ new DATABASE;
 //==========================================
 
 // Настройки мода
-#define  NumberServer  "01"
+#define  NumberServer  "0"
 #define  FullServName  "Samp Role Play"
 #define  NameServer    "Samp-Rp"
 #define  NameSite 	   "hos7.ru"
-#define  HostName 	   "Samp-Rp.Ru | Server: "NumberServer" | Client: 0.3.7"
+#define  HostName 	   "Samp-Rp.Ru | Server: "NumberServer""
 #define  Mode 		   "Samp-Rp.Ru Russia"
 
 enum MYSQL_SETTINGS
