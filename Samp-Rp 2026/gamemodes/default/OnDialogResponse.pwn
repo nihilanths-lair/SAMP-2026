@@ -1,16 +1,167 @@
+new RulesMSG[17][] =
+{
+	{"1. Игровой процесс\n"},
+	{"Запрещено:\n"},
+	{"- Использование любых программ скриптов читов и.т.п. дающие нечестное преймущество в игре.\n"},
+	{"- Использование багов (Ошибок, Неисправностей мода).\n"},
+	{"- Использовать ESC в целях ухода от погони/смерти.\n"},
+	{"- Убивать игроков на спавне (Место возрождения, базы организаций).\n"},
+	{"- Убивать игроков при помощи транспорта (Давить, Стрелять с водительского места).\n"},
+	{"- Убийство/нанесение физического вреда игрокам без причины (ДМ - Death Match).\n"},
+	{"- Злоупотребление игровыми возможностями для создания неудобств игрокам.\n\n"},
+	{"2. Ник в игре:\n"},
+	{"- (сменить ник можно через /mm >> Сменить ник)\n"},
+	{"- Ник должен состоять из Имени_Фамилии с заглавных букв.\n"},
+	{"Запрещено:\n"},
+	{"- Запрещено использовать чужие (уже кем-то занятые) ники.\n"},
+	{"- Запрещено использовать ники, содержащие нецензурные или оскорбительные слова.\n"},
+	{"- Отправлять более одной заявки в час (Исключение: Просьба Администрации).\n"},
+	{"- Если вам отказали в смене ника, Значит нельзя.\n"}
+};
+new RulesMSGG[22][] =
+{
+	{"3. Чат:\n"},
+	{"- OOC (Out Of Charter) - это всё, что касается реального мира.\n"},
+	{"- IC (In Charter) - это всё, что касается виртульного мира, то есть игры.\n"},
+	{"Запрещено:\n"},
+	{"- Ругательство, оскорбления или нецензурная речь.\n"},
+	{"- Угрозы игрокам (Не относящиеся к игровому процессу).\n"},
+	{"- Писать сообщения в верхнем регистре (Caps Lock).\n"},
+	{"- Писать в чат объявлений сообщения не относящихся к Role Play.\n"},
+	{"- Писать одно и тоже сообщение слишком часто.\n"},
+	{"- Обсуждать, критиковать действия администрации.\n"},
+	{"- Реклама сторонних ресурсов.\n\n"},
+	{"4. Администрация сервера:\n"},
+	{"- Необходимо сообщать администрации о каких либо нарушениях из данных правил (/mm > Репорт).\n"},
+	{"- Администрация самостоятельно выбирает штрафные санкции для каждого из случаев.\n"},
+	{"- Запрещено препятствовать администрации в работе.\n"},
+	{"- Решение администрации является окончательным и не подлежит обсуждению.\n\n"},
+	{"5. Торговля:\n"},
+	{"- Запрещены любые денежные махинации.\n"},
+	{"- Запрещена продажа / покупка чего либо, за реальные деньги.\n"},
+	{"- Запрещен обмен внеигровых предметов в любой форме, на игровые.\n"},
+	{"- Запрещен обмен чего либо между игровыми серверами.\n"},
+	{"- Запрещена продажа / передача аккаунтов.\n"}
+};
+
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
 	//if(GetPVarInt(playerid,"USEDIALOGID") != dialogid) return Kick(playerid);
-	while(strfind(inputtext, "%s",true) !=-1) strdel(inputtext,strfind(inputtext, "%s",true),strfind(inputtext, "%s",true)+2);
-	while(strfind(inputtext, "%",true) !=-1) strdel(inputtext,strfind(inputtext, "%",true),strfind(inputtext, "%",true)+2);
+	while (strfind(inputtext, "%s",true) !=-1) strdel(inputtext,strfind(inputtext, "%s",true),strfind(inputtext, "%s",true)+2);
+	while (strfind(inputtext, "%",true) !=-1) strdel(inputtext,strfind(inputtext, "%",true),strfind(inputtext, "%",true)+2);
+
 	new gun,ammo;
 	new gunname[32];
-	new playername[MAX_PLAYER_NAME];
+
 	SetPVarInt(playerid, "USEDIALOGID", 0);
-	GetPlayerName(playerid, playername, sizeof(playername));
-	switch(dialogid)
+	switch (dialogid)
 	{
-	
+	case 2:
+    {
+        if (response)
+        {
+            if (!strlen(inputtext))
+            {
+                format(string, 256, "{B4B5B7}______________________________________\n\n Добро пожаловать на сервер "NameServer"{B4B5B7}\n       Регистрация нового персонажа\n\nЛогин: {BFC0C2}%s{B4B5B7}\nВведите пароль:\n______________________________________", Name(playerid));
+                ShowPlayerDialogEx(playerid, 2, DIALOG_STYLE_INPUT, "Регистрация", string, "Готово", "Отмена");
+                return true;
+            }
+            if (!strlen(inputtext) || strlen(inputtext) < 6 || strlen(inputtext) > 16)
+            {
+                return ShowPlayerDialogEx(playerid, 2, DIALOG_STYLE_MSGBOX, "Ошибка!", "{FF6347}Длина пароля должна быть от 6 до 15 символов", "Повтор", "");
+            }
+            for (new i = strlen(inputtext); i != 0; --i)
+            switch (inputtext[i])
+            {
+            case 'А'..'Я', 'а'..'я', ' ': return ShowPlayerDialogEx(playerid, 2, DIALOG_STYLE_MSGBOX, "Ошибка!", "{00FF21}Введенный вами пароль содержит русские буквы.\n Смените раскладку клавиатуры!", "Повтор", "");
+            }
+            strmid(PTEMP[playerid][pKey], inputtext, 0, strlen(inputtext), 32);
+            PlayerPlaySound(playerid, 1097, 0.0, 0.0, 0.0);
+
+            new rulesdialog[1300];
+            format(rulesdialog, sizeof (rulesdialog), "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+             RulesMSG[0], RulesMSG[1], RulesMSG[2], RulesMSG[3], RulesMSG[4], RulesMSG[5], RulesMSG[6], RulesMSG[7], RulesMSG[8],
+             RulesMSG[9], RulesMSG[10], RulesMSG[11], RulesMSG[12], RulesMSG[13], RulesMSG[14], RulesMSG[15], RulesMSG[16]
+            );
+            ShowPlayerDialogEx(playerid, 12, DIALOG_STYLE_MSGBOX, "Правила сервера", rulesdialog, "Согласен", "Выйти");
+            return true;
+        }
+        else
+        {
+            SCM(playerid, COLOR_LIGHTRED, " Для выхода из игры используйте /q(uit)");
+            Kick(playerid);
+        }
+    }
+    case 4:
+    {
+        if (response) PTEMP[playerid][pSex] = 1;
+        else PTEMP[playerid][pSex] = 2;
+        
+        PTEMP[playerid][pTut] = 0;
+        PTEMP[playerid][pAdmin] = 0;
+        //PTEMP[playerid][pHelper] = 0;
+        SetPVarInt(playerid, "Register", 1);
+        SpawnPlayer(playerid);
+        DelGun(playerid);
+    }
+    case 12:
+    {
+        if (!response) return SCM(playerid, COLOR_LIGHTRED, " Для выхода из игры используйте /q(uit)"), Kick(playerid);
+
+        PEfir[playerid] = 999;
+        Pefir[playerid] = 0;
+
+        new rulesdialogg[1324];
+        format(rulesdialogg, sizeof (rulesdialogg), "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+         RulesMSGG[0], RulesMSGG[1], RulesMSGG[2], RulesMSGG[3], RulesMSGG[4], RulesMSGG[5], RulesMSGG[6], RulesMSGG[7], RulesMSGG[8], RulesMSGG[9], RulesMSGG[10],
+         RulesMSGG[11], RulesMSGG[12], RulesMSGG[13], RulesMSGG[14], RulesMSGG[15], RulesMSGG[16], RulesMSGG[17], RulesMSGG[18], RulesMSGG[19], RulesMSGG[20], RulesMSGG[21]
+        );
+        ShowPlayerDialogEx(playerid, 13, DIALOG_STYLE_MSGBOX, "Правила сервера", rulesdialogg, "Согласен", "Выйти");
+        return true;
+    }
+	case 13:
+    {
+        if (response) ShowPlayerDialogEx(playerid, 1945, DIALOG_STYLE_INPUT, "Электронная почта", "Введите действующий адрес электронной почты,\nесли вы забудете пароль, то на него будет выслан новый", "Далее", "Пропуск");
+        else Kick(playerid);
+        return true;
+    }
+    case 1945:
+	{
+		if (strlen(inputtext) > 0)
+		{
+			ShowPlayerDialogEx(playerid, 2625, DIALOG_STYLE_INPUT, "По приглашению от:", "Введите ник игрока, пригласившиго вас на сервер", "Далее", "Пропуск");
+			strmid(PTEMP[playerid][pEmail], inputtext, 0, strlen(inputtext), strlen(inputtext)+5);
+		}
+		else
+		{
+			SCM(playerid, COLOR_GREY, " Длина должна быть от 1 до 64 символов");
+			ShowPlayerDialogEx(playerid, 1945, DIALOG_STYLE_INPUT, "Электронная почта", "Пожалуйста введите действующий адрес электронной почты,\nесли вы забудите пароль на него будет выслан новый", "Далее", "Пропуск");
+		}
+		return true;
+	}
+    case 2625:
+    {
+        if (response)
+        {
+            if (!strlen(inputtext)) return ShowPlayerDialogEx(playerid, 2625, DIALOG_STYLE_INPUT, "По приглашению от:", "Введите ник игрока, пригласившего вас на сервер", "Далее", "Пропуск");
+            mysql_format(DATABASE, QUERY, 128, "SELECT `Name` FROM `"TABLE_ACCOUNTS"` WHERE `Name` = '%e'",inputtext);
+            mysql_function_query(DATABASE, QUERY, true, "OnMySQL_QUERY", "iis", 3, playerid, inputtext);
+        }
+        else strmid(PTEMP[playerid][pDrug], "-", 0, strlen("-"), strlen("-")+5);
+        
+        ShowPlayerDialogEx(playerid, 4, DIALOG_STYLE_MSGBOX, " ", "Какого пола будет ваш персонаж:\n", "Мужчина", "Женщина");
+        TogglePlayerControllable(playerid, 0);
+    }
+    case 2626:
+	{
+		if (!response) return true;
+		if (strlen(inputtext) < 1 || strlen(inputtext) > 64)
+		{
+			return SCM(playerid, COLOR_GREY, " Длина должна быть от 1 до 64 символов"), ShowPlayerDialogEx(playerid, 2626, DIALOG_STYLE_INPUT, "Электронная почта", "Введите действующий адрес электронной почты,\nесли вы забудете пароль, то на него будет выслан новый", "Готово", "Пропуск");
+        }
+		strmid(PTEMP[playerid][pEmail], inputtext, 0, strlen(inputtext), strlen(inputtext)+5);
+		return ShowPlayerDialogEx(playerid, 2625, DIALOG_STYLE_INPUT, "По приглашению от:", "Введите ник игрока, пригласившего вас на сервер", "Далее", "Пропуск");
+	}
 	case 19284:
 	    {
 	        if(!response) return true;
@@ -5769,25 +5920,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 			return true;
 		}
-	case 2626:
-		{
-			if(!response) return true;
-			if(strlen(inputtext) < 1 || strlen(inputtext) > 64) return SCM(playerid, COLOR_GREY, " Длина должна быть от 1 до 64 символов"), ShowPlayerDialogEx(playerid,2626,DIALOG_STYLE_INPUT, "Электронная почта", "Пожалуйста введите действующий адрес электронной почты,\nесли вы забудите пароль на него будет выслан новый", "Готово", "Пропуск");
-            strmid(PTEMP[playerid][pEmail], inputtext, 0, strlen(inputtext), strlen(inputtext)+5);
-			return ShowPlayerDialogEx(playerid,2625,DIALOG_STYLE_INPUT, "По приглашению от:", "Введите ник игрока, пригласившиго вас на сервер", "Далее", "Пропуск");
-		}
-	case 2625:
-		{
-			if(response)
-			{
-				if(!strlen(inputtext)) return ShowPlayerDialogEx(playerid,2625,DIALOG_STYLE_INPUT, "По приглашению от:", "Введите ник игрока, пригласившиго вас на сервер", "Далее", "Пропуск");
-				mysql_format(DATABASE, QUERY, 128,"SELECT `Name` FROM `"TABLE_ACCOUNTS"` WHERE `Name` = '%e'",inputtext);
-				mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",3,playerid,inputtext);
-			}
-			else strmid(PTEMP[playerid][pDrug], "-", 0, strlen("-"), strlen("-")+5);
-			ShowPlayerDialogEx(playerid,4,DIALOG_STYLE_MSGBOX, " ", "Какого пола будет ваш персонаж:\n", "Мужчина", "Женщина");
-			TogglePlayerControllable(playerid, 0);
-		}
 	case 9125:
 		{
 			if(response)
@@ -8334,44 +8466,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				return true;
 			}
 		}
-	case 12:
-		{
-			if(!response) return SCM(playerid, COLOR_LIGHTRED, " Для выхода из игры используйте /q(uit)"),Kick(playerid);
-			PEfir[playerid] = 999;
-			Pefir[playerid] = 0;
-			new rulesdialogg[1324];
-			format(rulesdialogg,sizeof(rulesdialogg), "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
-			RulesMSGG[0],RulesMSGG[1],RulesMSGG[2],RulesMSGG[3],RulesMSGG[4],RulesMSGG[5],RulesMSGG[6],RulesMSGG[7],RulesMSGG[8],RulesMSGG[9],RulesMSGG[10],RulesMSGG[11],RulesMSGG[12],RulesMSGG[13],RulesMSGG[14],RulesMSGG[15],RulesMSGG[16],RulesMSGG[17],RulesMSGG[18],RulesMSGG[19],RulesMSGG[20],RulesMSGG[21]);
-			ShowPlayerDialogEx(playerid,13,DIALOG_STYLE_MSGBOX, "Правила сервера", rulesdialogg, "Согласен", "Выйти");
-			return true;
-		}
-	case 13:
-		{
-			if(response)
-			{
-				ShowPlayerDialogEx(playerid, 1945, DIALOG_STYLE_INPUT, "Электронная почта", "Пожалуйста введите действующий адрес электронной почты,\nесли вы забудите пароль на него будет выслан новый", "Далее", "Пропуск");
-				return true;
-			}
-			else
-			{
-				Kick(playerid);
-				return true;
-			}
-		}
-	case 1945:
-		{
-			if(strlen(inputtext) > 0)
-			{
-				ShowPlayerDialogEx(playerid,2625,DIALOG_STYLE_INPUT, "По приглашению от:", "Введите ник игрока, пригласившиго вас на сервер", "Далее", "Пропуск");
-				strmid(PTEMP[playerid][pEmail], inputtext, 0, strlen(inputtext), strlen(inputtext)+5);
-			}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Длина должна быть от 1 до 64 символов");
-				ShowPlayerDialogEx(playerid, 1945, DIALOG_STYLE_INPUT, "Электронная почта", "Пожалуйста введите действующий адрес электронной почты,\nесли вы забудите пароль на него будет выслан новый", "Далее", "Пропуск");
-			}
-			return true;
-		}
 	case 9500:
 		{
 			if(!response) DeletePVar(playerid,"Licenses");
@@ -10225,43 +10319,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 			return ShowPlayerDialogEx(playerid, 1994, DIALOG_STYLE_LIST, "AnimList", "[0] Dance 0\n[1] Dance 1\n[2] Dance 2\n[3] Dance 3\n[4] Dance 4\n[5] Smoking\n[6] Sunbathe1\n[7] Sunbathe2\n[8] Crack1\n[9] Crack2\n[10] Crack3\n[11] Crack4\n[12] Crack5\n[13] Crack6\n[14] Crack7\n[15] Crack8\n[16] Crack9\n[17] Dealer\n[18] Ped\n[19] Руки вверх\n[20] Ped1\n[21] Ped2\n[22] Ped3\n[23] Ped4\n[24] Ped5\n[25] Ped6\n[26] Ped7", "Готово", "Отмена");
 		}
-	case 2:
-		{
-			new name[MAX_PLAYER_NAME];
-			GetPlayerName(playerid, name, sizeof(name));
-			GetPlayerName(playerid, playername, sizeof(playername));
-			if(response)
-			{
-				if(!strlen(inputtext))
-				{
-					format(string,256, "{B4B5B7}______________________________________\n\n Добро пожаловать на сервер "NameServer"{B4B5B7}\n       Регистрация нового персонажа\n\nЛогин: {BFC0C2}%s{B4B5B7}\nВведите пароль:\n______________________________________", name);
-					ShowPlayerDialogEx(playerid,2,DIALOG_STYLE_INPUT, "Регистрация",string, "Готово", "Отмена");
-					return true;
-				}
-				if(!strlen(inputtext) || strlen(inputtext) < 6 || strlen(inputtext) > 16)
-				{
-					return ShowPlayerDialogEx(playerid,2,DIALOG_STYLE_MSGBOX, "Ошибка!", "{FF6347}Длина пароля должна быть от 6 до 15 символов", "Повтор", "");
-				}
-				for(new i = strlen(inputtext); i != 0; --i)
-				switch(inputtext[i])
-				{
-				case 'А'..'Я', 'а'..'я', ' ':
-					return ShowPlayerDialogEx(playerid,2,DIALOG_STYLE_MSGBOX, "Ошибка!", "{00FF21}Введенный вами пароль содержит русские буквы.\n Смените раскладку клавиатуры!", "Повтор", "");
-				}
-				strmid(PTEMP[playerid][pKey],inputtext, 0, strlen(inputtext), 32);
-				PlayerPlaySound(playerid, 1097, 0.0, 0.0, 0.0);
-				new rulesdialog[1300];
-				format(rulesdialog,sizeof(rulesdialog), "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
-				RulesMSG[0],RulesMSG[1],RulesMSG[2],RulesMSG[3],RulesMSG[4],RulesMSG[5],RulesMSG[6],RulesMSG[7],RulesMSG[8],RulesMSG[9],RulesMSG[10],RulesMSG[11],RulesMSG[12],RulesMSG[13],RulesMSG[14],RulesMSG[15],RulesMSG[16]);
-				ShowPlayerDialogEx(playerid,12,DIALOG_STYLE_MSGBOX, "Правила сервера", rulesdialog, "Согласен", "Выйти");
-				return true;
-			}
-			else
-			{
-				SCM(playerid, COLOR_LIGHTRED, " Для выхода из игры используйте /q(uit)");
-				Kick(playerid);
-			}
-		}
 	case 9898:
 		{
 			if(!response) return true;
@@ -10393,23 +10450,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
       			}
 				case 1: CallLocalFunction("OnPlayerCommandText", "is", playerid, "/enterg"); // Войти в гараж
       		}
-		}
-	case 4:
-		{
-			if(response)
-			{
-				PTEMP[playerid][pSex] = 1;
-			}
-			else
-			{
-				PTEMP[playerid][pSex] = 2;
-			}
-			PTEMP[playerid][pTut] = 0;
-			PTEMP[playerid][pAdmin] = 0;
-			//PTEMP[playerid][pHelper] = 0;
-			SetPVarInt(playerid,"Register",1);
-			SpawnPlayer(playerid);
-			DelGun(playerid);
 		}
 	case 29322:
 		{
