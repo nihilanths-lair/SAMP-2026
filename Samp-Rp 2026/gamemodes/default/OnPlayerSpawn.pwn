@@ -34,7 +34,7 @@ public OnPlayerSpawn(playerid)
 	SetPlayerHealthAC(playerid, 100.0);
 	if(PTEMP[playerid][pSex] > 0 && PTEMP[playerid][pTut] == 0) return ChosePlayerSkin(playerid);
 	TogglePlayerControllableEx(playerid, 0);
-	SetTimerEx("UnFreeze" , 400, false, "i", playerid);
+	SetTimerEx("_UnFreeze" , 400, false, "i", playerid);
 	switch(PTEMP[playerid][pMember]) { case 5,6,14,13,12,15,17,18,24,26,29: SetPVarInt(playerid,"Fraction_Duty",1); }
 	if(PTEMP[playerid][pMember] > 0 && GetPVarInt(playerid, "Fraction_Duty")) SetPlayerSkin(playerid, PTEMP[playerid][pModel]);
 	else SetPlayerSkin(playerid, PTEMP[playerid][pChar][0]);

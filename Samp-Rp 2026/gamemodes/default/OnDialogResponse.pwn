@@ -526,7 +526,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					}
 		        }
 		    }
-			SetTimerEx("ServerBonus" , 250, false, "i", playerid);
+			SetTimerEx("_ServerBonus" , 250, false, "i", playerid);
 		}
 	case 5255:
 	    {
@@ -561,7 +561,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				mysql_function_query(DATABASE,QUERY,false,"","");
 				SendMes(playerid, -1, " Вы изменили начальные деньги на руках при регистрации на %i", strval(inputtext));
 			}
-			SetTimerEx("ServerBonus" , 250, false, "i", playerid);
+			SetTimerEx("_ServerBonus" , 250, false, "i", playerid);
 	    }
 	case 19270:
 	    {
@@ -580,7 +580,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						FarmInfo[listitem+1][fBiker] = PTEMP[playerid][pMember];
 				        format(string, sizeof(string), " Вы завладели Фермой №%i", listitem);
 				        SendFamilyMessage(PTEMP[playerid][pMember], COLOR_GREEN, string);
-				        SetTimer("CanCaptBiker",7200000, true);
+				        SetTimer("_CanCaptBiker",7200000, true);
 				        FarmInfo[listitem+1][isCaptured] = true;
 				        switch(PTEMP[playerid][pMember])
 						{
@@ -616,8 +616,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							    case 26: IsCapted[warloks] = true;
 							    case 29: IsCapted[pagans] = true;
 							}
-							SetTimer("CanCaptBiker", 7200000, true);
-							SetTimer("StopCaptureBiker", 900000, true);
+							SetTimer("_CanCaptBiker", 7200000, true);
+							SetTimer("_StopCaptureBiker", 900000, true);
 							FarmInfo[listitem+1][isCaptured] = true;
 				        }
 				    }
@@ -636,7 +636,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						WorkshopInfo[list+1][wBiker] = PTEMP[playerid][pMember];
 				        format(string, sizeof(string), " Вы завладели Мастерской №%i", list);
 				        SendFamilyMessage(PTEMP[playerid][pMember], COLOR_GREEN, string);
-				        SetTimer("CanCaptBiker",7200000, true);
+				        SetTimer("_CanCaptBiker",7200000, true);
 				        WorkshopInfo[list+1][isCaptured] = true;
 				        switch(PTEMP[playerid][pMember])
 						{
@@ -672,8 +672,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 							    case 26: IsCapted[warloks] = true;
 							    case 29: IsCapted[pagans] = true;
 							}
-							SetTimer("CanCaptBiker", 7200000, true);
-							SetTimer("StopCaptureBiker", 900000, true);
+							SetTimer("_CanCaptBiker", 7200000, true);
+							SetTimer("_StopCaptureBiker", 900000, true);
 							WorkshopInfo[list+1][isCaptured] = true;
 				        }
 				    }
@@ -878,7 +878,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    }
 	case 21022:
 	    {
-	        if(!response) return DeletePVar(playerid, "SelectedSupport"),SetTimerEx("SpMenu" , 50, false, "i", playerid);
+	        if(!response) return DeletePVar(playerid, "SelectedSupport"),SetTimerEx("_SpMenu" , 50, false, "i", playerid);
 			new Names[32];
 			GetPVarString(playerid, "SelectedSupport", Names, sizeof(Names));
 			switch(listitem)
@@ -899,7 +899,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					CallLocalFunction("OnPlayerCommandText", "is", playerid, string);
 				}
 			}
-			SetTimerEx("SpMenu" , 50, false, "i", playerid);
+			SetTimerEx("_SpMenu" , 50, false, "i", playerid);
 	    }
 	case 21023:
 	    {
@@ -907,7 +907,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(!strlen(inputtext)) return ShowPlayerDialogEx(playerid, 21023, DIALOG_STYLE_INPUT, "Добавить саппорта", "Введите ник нейм саппорта", "Добавтиь", "Назад");
 			format(string, sizeof(string), "/addsupport %s 1", inputtext);
 			CallLocalFunction("OnPlayerCommandText", "is", playerid, string);
-			SetTimerEx("SpMenu" , 50, false, "i", playerid);
+			SetTimerEx("_SpMenu" , 50, false, "i", playerid);
 	    }
 	case 21025:
 	    {
@@ -953,7 +953,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			GetPVarString(playerid, "chosenadmin", Names, 32);
 			format(string, sizeof(string), "/addmoderation %s %i", Names, lvl);
 			CallLocalFunction("OnPlayerCommandText", "is", playerid, string);
-			SetTimerEx("AdmMenu" , 50, false, "i", playerid);
+			SetTimerEx("_AdmMenu" , 50, false, "i", playerid);
 		}
 	case 21028:
 		{
@@ -1022,7 +1022,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			GetPVarString(playerid, "selectedadmin", niknames, 32);
 			format(string, sizeof(string), "/addmoderation %s %i", niknames, lvl);
 			CallLocalFunction("OnPlayerCommandText", "is", playerid, string);
-			SetTimerEx("AdmMenu" , 50, false, "i", playerid);
+			SetTimerEx("_AdmMenu" , 50, false, "i", playerid);
 	    }
 	case 21030:
 	    {
@@ -1052,7 +1052,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			GetPVarString(playerid, "selectedadmin", niknames, 32);
 			format(string, sizeof(string), "/addmoderation %s 0", niknames);
 			CallLocalFunction("OnPlayerCommandText", "is", playerid, string);
-			SetTimerEx("AdmMenu" , 50, false, "i", playerid);
+			SetTimerEx("_AdmMenu" , 50, false, "i", playerid);
 	    }
 	case 21032:
 	    {
@@ -10578,7 +10578,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				{
 					if(PTEMP[playerid][pAdmin] >= 10)
 					{
-						SCM(playerid,0x83BFBFAA, "<> /setplayerskin  /rr  /money  /givemoney  /ServerBonus");
+						SCM(playerid,0x83BFBFAA, "<> /setplayerskin  /rr  /money  /givemoney  /_ServerBonus");
 
 					}
 					else return SCM(playerid,COLOR_GREY," У вас недостаточно прав");
@@ -11423,15 +11423,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			            SCM(playerid, -1, " Ожидание...");
                         new randpass = 10000 + random(99999);
                         SetPVarInt(playerid, "mail_key", randpass);
-			            format(string, sizeof(string), "to=%s&subject=Код подтверждения Е-мэйл&text=Код подтверждения Е-мэйл: %i<br><br> ---<br> С уважением,<br> Samp Role Play<br> http://samp-rp.ru<br><br> Не отвечайте на это письмо если вы считаете, что данное письмо пришло к вам по ошибке.", PTEMP[playerid][pEmail], randpass);
-			            HTTP(playerid, HTTP_POST, "olexandr-shch.000webhostapp.com/sendmail.php", string, "MyHttpResponse");
-			            if(PTEMP[playerid][pActivemail] && !GetPVarInt(playerid, "mail_access"))
+			            
+						format(string, sizeof (string), "to=%s&subject=Код подтверждения Е-мэйл&text=Код подтверждения Е-мэйл: %i<br><br> ---<br> С уважением,<br> Entropy Role Play<br> http://samp-rp.ru<br><br> Не отвечайте на это письмо если вы считаете, что данное письмо пришло к вам по ошибке.", PTEMP[playerid][pEmail], randpass);
+			            HTTP(1, HTTP_POST, "website.com/sendmail.php", string, "MyHttpResponse");
+
+			            if (PTEMP[playerid][pActivemail] && !GetPVarInt(playerid, "mail_access"))
 					    {
-							format(string, sizeof(string), "[0] Разблокировать. Получить код\n[1] Разблокировать. Ввести код\n[2] {000000}Указать новый эмаил\n[3] {000000}Подтвердить. Получить код\n[4] {000000}Подтвердить. Ввести код");
+							format(string, sizeof (string), "[0] Разблокировать. Получить код\n[1] Разблокировать. Ввести код\n[2] {000000}Указать новый эмаил\n[3] {000000}Подтвердить. Получить код\n[4] {000000}Подтвердить. Ввести код");
 						}
 						else
 						{
-						    format(string, sizeof(string), "[0] {000000}Разблокировать. Получить код\n[1] {000000}Разблокировать. Ввести код\n[2] Указать новый эмаил\n[3] Подтвердить. Получить код\n[4] Подтвердить. Ввести код");
+						    format(string, sizeof (string), "[0] {000000}Разблокировать. Получить код\n[1] {000000}Разблокировать. Ввести код\n[2] Указать новый эмаил\n[3] Подтвердить. Получить код\n[4] Подтвердить. Ввести код");
 						}
 						ShowPlayerDialogEx(playerid,35,DIALOG_STYLE_LIST, "Эмаил", string, "Выбрать", "Назад");
 			        }
@@ -11508,15 +11510,17 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     SCM(playerid, -1, " Ожидание...");
                     new randpass = 10000 + random(99999);
                     SetPVarInt(playerid, "mail_key", randpass);
-		            format(string, sizeof(string), "to=%s&subject=Код подтверждения Е-мэйл&text=Код подтверждения Е-мэйл: %i<br><br> ---<br> С уважением,<br> Samp Role Play<br> http://samp-rp.ru<br><br> Не отвечайте на это письмо если вы считаете, что данное письмо пришло к вам по ошибке.", PTEMP[playerid][pEmail], randpass);
-		            HTTP(playerid, HTTP_POST, "olexandr-shch.000webhostapp.com/sendmail.php", string, "MyHttpResponse");
-		            if(PTEMP[playerid][pActivemail] && !GetPVarInt(playerid, "mail_access"))
+
+		            format(string, sizeof (string), "to=%s&subject=Код подтверждения Е-мэйл&text=Код подтверждения Е-мэйл: %i<br><br> ---<br> С уважением,<br> Entropy Role Play<br> http://samp-rp.ru<br><br> Не отвечайте на это письмо если вы считаете, что данное письмо пришло к вам по ошибке.", PTEMP[playerid][pEmail], randpass);
+		            HTTP(playerid, HTTP_POST, "website.com/sendmail.php", string, "MyHttpResponse");
+
+		            if (PTEMP[playerid][pActivemail] && !GetPVarInt(playerid, "mail_access"))
 				    {
-						format(string, sizeof(string), "[0] Разблокировать. Получить код\n[1] Разблокировать. Ввести код\n[2] {000000}Указать новый эмаил\n[3] {000000}Подтвердить. Получить код\n[4] {000000}Подтвердить. Ввести код");
+						format(string, sizeof (string), "[0] Разблокировать. Получить код\n[1] Разблокировать. Ввести код\n[2] {000000}Указать новый эмаил\n[3] {000000}Подтвердить. Получить код\n[4] {000000}Подтвердить. Ввести код");
 					}
 					else
 					{
-					    format(string, sizeof(string), "[0] {000000}Разблокировать. Получить код\n[1] {000000}Разблокировать. Ввести код\n[2] Указать новый эмаил\n[3] Подтвердить. Получить код\n[4] Подтвердить. Ввести код");
+					    format(string, sizeof (string), "[0] {000000}Разблокировать. Получить код\n[1] {000000}Разблокировать. Ввести код\n[2] Указать новый эмаил\n[3] Подтвердить. Получить код\n[4] Подтвердить. Ввести код");
 					}
 					ShowPlayerDialogEx(playerid,35,DIALOG_STYLE_LIST, "Эмаил", string, "Выбрать", "Назад");
 				}
@@ -11687,14 +11691,16 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				cache_get_field_content(0,"pEmail",PTEMP[playerid][pEmail],DATABASE,60);
 			}
 			else return SCM(playerid, COLOR_GREY, " Ваш Эмеил не был найден..."), Kick(playerid);
-	        if(!strcmp(inputtext, PTEMP[playerid][pEmail], false))
+	        if (!strcmp(inputtext, PTEMP[playerid][pEmail], false))
 	        {
 	            SCM(playerid, -1, " Ожидание...");
 		        new randpass = 10000 + random(99999);
 	            SetPVarInt(playerid, "mail_key", randpass);
-	            format(string, sizeof(string), "to=%s&subject=Код подтверждения Е-мэйл&text=Код подтверждения Е-мэйл: %i<br><br> ---<br> С уважением,<br> Samp Role Play<br> http://samp-rp.ru<br><br> Не отвечайте на это письмо если вы считаете, что данное письмо пришло к вам по ошибке.", PTEMP[playerid][pEmail], randpass);
-	            HTTP(playerid, HTTP_POST, "olexandr-shch.000webhostapp.com/sendmail.php", string, "MyHttpResponse");
-	            CallLocalFunction("OnPlayerCommandText", "is", playerid, "/restoreaccess");
+
+	            format(string, sizeof (string), "to=%s&subject=Код подтверждения Е-мэйл&text=Код подтверждения Е-мэйл: %i<br><br> ---<br> С уважением,<br> Entropy Role Play<br> http://samp-rp.ru<br><br> Не отвечайте на это письмо если вы считаете, что данное письмо пришло к вам по ошибке.", PTEMP[playerid][pEmail], randpass);
+	            HTTP(playerid, HTTP_POST, "website.com/sendmail.php", string, "MyHttpResponse");
+	            
+				CallLocalFunction("OnPlayerCommandText", "is", playerid, "/restoreaccess");
           	}
           	else
  			{
@@ -11722,8 +11728,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				mysql_format(DATABASE, QUERY, sizeof(QUERY), "UPDATE `"TABLE_ACCOUNTS"` SET `pKey` = '%s', `pKeyip` = '%s' WHERE `Name` = '%s'", Hash1, Hash2, PTEMP[playerid][pName]);
 				mysql_query(DATABASE, QUERY);
 	            format(string, sizeof(string), "to=%s&subject=Восстановление доступа&text=Здравствуйте!<br><br>Ваши пароли на сервере "NameServer" были сброшены: <br>Ваш новый пароль от аккаунта: <b>%s</b><br>Ваш новый защитный ключ: <b>%s</b><br><br>С уважением, администрация!", PTEMP[playerid][pEmail], randpass1, randpass2);
-	            HTTP(playerid, HTTP_POST, "olexandr-shch.000webhostapp.com/sendmail.php", string, "MyHttpResponse2");
-	            SetTimerEx("Kicking" , 3000, false, "i", playerid);
+	            HTTP(playerid, HTTP_POST, "website.com/sendmail.php", string, "MyHttpResponse2");
+	            SetTimerEx("_Kicking" , 3000, false, "i", playerid);
 	        }
 	    }
 	case 9943:

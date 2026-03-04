@@ -101,18 +101,17 @@ public OnGameModeInit()
 	TextDrawSetProportional(Bone[3], 1);
 	TextDrawSetSelectable(Bone[3], true);
 	//
-	for(new i; i < MAX_BONE; i++)
+	for (new i; i < MAX_BONE; i++)
 	{
 		CreateDynamicObject(1824,BoneCoor[i][0],BoneCoor[i][1],BoneCoor[i][2],0,0,BoneCoor[i][3]);
 		BoneInfo[i][Crupie] = INVALID_PLAYER_ID;
 		for(new idx= 0; idx < 5; idx++) BoneInfo[i][Gamer][idx] = INVALID_PLAYER_ID;
 		BoneInfo[i][GameStart] = 0;
 	}
-	for(new i = 0; i < MAX_ROULET; i++) RouletKrupie[i] = INVALID_PLAYER_ID;
+	for (new i = 0; i < MAX_ROULET; i++) RouletKrupie[i] = INVALID_PLAYER_ID;
 	ShowPlayerMarkers(PLAYER_MARKERS_MODE_GLOBAL);
 	ShowNameTags(1);
 	AntiDeAMX2();
-	AntiDeAMX();
 	SetNameTagDrawDistance(30.0);
 	EnableStuntBonusForAll(0);
 	DisableInteriorEnterExits();
@@ -768,13 +767,13 @@ public OnGameModeInit()
 	AddVehicleComponent(Roadtrain[5], 1074);
 	//============================== Таймеры ===================================
 	SetTimer("OnCheckTrigger",250,1);
-	SetTimer("UpdateFresh", 250,1);
-	freshtimer = SetTimer("Fresh", 1000,1);
-	SetTimer("UpdateSpeedometr",150,1);
-	Hptimer = SetTimer("HPCheck", 40000, 1);
+	SetTimer("_UpdateFresh", 250,1);
+	freshtimer = SetTimer("_Fresh", 1000,1);
+	SetTimer("_UpdateSpeedometr",150,1);
+	Hptimer = SetTimer("_HPCheck", 40000, 1);
 	reklamatimer = SetTimer("ReklamaTimer",1800000,true);
-	SetTimer("Recognition", 1500000, 1);
-	SetTimer("GzCheck", 1000,1);
+	SetTimer("_Recognition", 1500000, 1);
+	SetTimer("_GzCheck", 1000,1);
 	//==========================================================================
 	for(new Vehicles = 0; Vehicles < MAX_VEHICLES; Vehicles++) {
 		Farmcar_pickup[Vehicles] = 0;

@@ -10,7 +10,7 @@ public OnPlayerEnterCheckpoint(playerid)
 		}
 	}
 	DeletePVar(playerid,"checkpoint");
-	if(updatecheck[playerid] != 9999) KillTimer(kekovich(playerid)),DisablePlayerCheckpoint(playerid);
+	if (updatecheck[playerid] != 9999) KillTimer(_kekovich(playerid)), DisablePlayerCheckpoint(playerid);
 	if(updatecheck[playerid] != 9999) GameTextForPlayer(playerid, "\n\n~g~At Destination", 3000, 3),updatecheck[playerid] = 9999;
 	new tmpcar = GetPlayerVehicleID(playerid);
 	if(GetTickCount() - GetPVarInt(playerid,"entercheckpoint") <= 500) return CheatKick(playerid,003);

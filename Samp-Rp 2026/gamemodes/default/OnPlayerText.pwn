@@ -182,7 +182,7 @@ public OnPlayerText(playerid, text[])
 				format(string, 156, " %s показал(a) распальцовку Los Santos Vagos Gang", sendername);
 				ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 				ApplyAnimation(playerid, "GHANDS", "gsign1LH",4.1, 0, 1, 1, 1, 1);
-				SetTimerEx("ClearAnim", 2000, false, "d", playerid);
+				SetTimerEx("_ClearAnim", 2000, false, "d", playerid);
 				return false;
 			}
 		case 15:
@@ -192,7 +192,7 @@ public OnPlayerText(playerid, text[])
 				format(string, 156, " %s показал(a) распальцовку Grove Street Gang", sendername);
 				ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 				ApplyAnimation(playerid, "GHANDS", "gsign1LH",4.1, 0, 1, 1, 1, 1);
-				SetTimerEx("ClearAnim", 2000, false, "d", playerid);
+				SetTimerEx("_ClearAnim", 2000, false, "d", playerid);
 				return false;
 			}
 		case 17:
@@ -202,7 +202,7 @@ public OnPlayerText(playerid, text[])
 				format(string, 156, " %s показал(a) распальцовку Varios Los Aztecas Gang", sendername);
 				ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 				ApplyAnimation(playerid, "GHANDS", "gsign1LH",4.1, 0, 1, 1, 1, 1);
-				SetTimerEx("ClearAnim", 2000, false, "d", playerid);
+				SetTimerEx("_ClearAnim", 2000, false, "d", playerid);
 				return false;
 			}
 		case 12:
@@ -212,7 +212,7 @@ public OnPlayerText(playerid, text[])
 				format(string,156, " %s показал(a) распальцовку The Ballas Gang", sendername);
 				ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 				ApplyAnimation(playerid, "GHANDS", "gsign1LH",4.1, 0, 1, 1, 1, 1);
-				SetTimerEx("ClearAnim", 2000, false, "d", playerid);
+				SetTimerEx("_ClearAnim", 2000, false, "d", playerid);
 				return false;
 			}
 		case 18:
@@ -222,7 +222,7 @@ public OnPlayerText(playerid, text[])
 				format(string,156, " %s показал(a) распальцовку The Rifa Gang", sendername);
 				ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 				ApplyAnimation(playerid, "GHANDS", "gsign1LH",4.1, 0, 1, 1, 1, 1);
-				SetTimerEx("ClearAnim", 2000, false, "d", playerid);
+				SetTimerEx("_ClearAnim", 2000, false, "d", playerid);
 				return false;
 			}
 		case 24:
@@ -232,7 +232,7 @@ public OnPlayerText(playerid, text[])
 				format(string,156, " %s показал(a) распальцовку Hell's Angels MC", sendername);
 				ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 				ApplyAnimation(playerid, "GHANDS", "gsign1LH",4.1, 0, 1, 1, 1, 1);
-				SetTimerEx("ClearAnim", 2000, false, "d", playerid);
+				SetTimerEx("_ClearAnim", 2000, false, "d", playerid);
 				return false;
 			}
 		case 26:
@@ -242,7 +242,7 @@ public OnPlayerText(playerid, text[])
 				format(string,156, " %s показал(a) распальцовку Warlocks MC", sendername);
 				ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 				ApplyAnimation(playerid, "GHANDS", "gsign1LH",4.1, 0, 1, 1, 1, 1);
-				SetTimerEx("ClearAnim", 2000, false, "d", playerid);
+				SetTimerEx("_ClearAnim", 2000, false, "d", playerid);
 				return false;
 			}
 		case 29:
@@ -252,7 +252,7 @@ public OnPlayerText(playerid, text[])
 				format(string,156, " %s показал(a) распальцовку Pagans MC", sendername);
 				ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 				ApplyAnimation(playerid, "GHANDS", "gsign1LH",4.1, 0, 1, 1, 1, 1);
-				SetTimerEx("ClearAnim", 2000, false, "d", playerid);
+				SetTimerEx("_ClearAnim", 2000, false, "d", playerid);
 				return false;
 			}
 		case 3,19:
@@ -263,7 +263,7 @@ public OnPlayerText(playerid, text[])
 				format(string,156, " %s выполнил воинское приветствие", sendername);
 				ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
 				ApplyAnimation(playerid, "VENDING", "VEND_Drink_P",4.1, 0, 1, 1, 1, 1);
-				SetTimerEx("ClearAnim", 1300, false, "d", playerid);
+				SetTimerEx("_ClearAnim", 1300, false, "d", playerid);
 				return false;
 			}
 		}
@@ -327,7 +327,7 @@ public OnPlayerText(playerid, text[])
 		if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT)
 		{
 			if(PlayerCuffedTime[playerid] == 0) ApplyAnimation(playerid,"PED","IDLE_chat",4.1,0,1,1,1,1);
-			if(PlayerCuffedTime[playerid] == 0) SetTimerEx("ClearAnim", 3600, 0, "d", playerid);
+			if(PlayerCuffedTime[playerid] == 0) SetTimerEx("_ClearAnim", 3600, 0, "d", playerid);
 		}
 		SetPlayerChatBubble(playerid, text, 0x6495EDFF, 20.0, 10000);
 		Flood[playerid] = 1;
@@ -367,7 +367,7 @@ public OnPlayerText(playerid, text[])
 		if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT)
 		{
 			if(PlayerCuffedTime[playerid] == 0) ApplyAnimation(playerid,"PED","IDLE_chat",4.1,0,1,1,1,1);
-			if(PlayerCuffedTime[playerid] == 0) SetTimerEx("ClearAnim", 3600, 0, "d", playerid);
+			if(PlayerCuffedTime[playerid] == 0) SetTimerEx("_ClearAnim", 3600, 0, "d", playerid);
 		}
 		GetPlayerName(playerid, sendername, sizeof(sendername));
 		format(string,156, "- %s: %s", sendername, text);

@@ -803,7 +803,7 @@ public OnPlayerPickUpDynamicPickup(playerid, pickupid)
 			SetPlayerFacingAngle(playerid, 359.8156);
 			SetPlayerVirtualWorld(playerid, 1);
 			TogglePlayerControllable(playerid, 0);
-			SetTimerEx("UnFreeze" , 400, false, "i", playerid);
+			SetTimerEx("_UnFreeze" , 400, false, "i", playerid);
 		}
 		else
 		{
@@ -855,7 +855,7 @@ public OnPlayerPickUpDynamicPickup(playerid, pickupid)
 			SetPlayerFacingAngle(playerid, 359.8156);
 			SetPlayerVirtualWorld(playerid, 3);
 			TogglePlayerControllable(playerid, 0);
-			SetTimerEx("UnFreeze" , 400, false, "i", playerid);
+			SetTimerEx("_UnFreeze" , 400, false, "i", playerid);
 		}
 		else
 		{
@@ -911,7 +911,7 @@ public OnPlayerPickUpDynamicPickup(playerid, pickupid)
 		SetPlayerFacingAngle(playerid, 270);
 		SetPlayerVirtualWorld(playerid, 3);
 		TogglePlayerControllableEx(playerid, 0);
-		SetTimerEx("UnFreeze" , 1000, false, "i", playerid);
+		SetTimerEx("_UnFreeze" , 1000, false, "i", playerid);
 		RobInts[playerid] = 5;
 	}
 	else if(pickupid == medicss[1]) // medic SF exit
@@ -929,7 +929,7 @@ public OnPlayerPickUpDynamicPickup(playerid, pickupid)
 		SetPlayerFacingAngle(playerid, 270);
 		SetPlayerVirtualWorld(playerid, 4);
 		TogglePlayerControllableEx(playerid, 0);
-		SetTimerEx("UnFreeze" , 1000, false, "i", playerid);
+		SetTimerEx("_UnFreeze" , 1000, false, "i", playerid);
 		RobInts[playerid] = 6;
 	}
 	else if(pickupid == medicss[3]) // medic LS exit
@@ -947,7 +947,7 @@ public OnPlayerPickUpDynamicPickup(playerid, pickupid)
 		SetPlayerFacingAngle(playerid, 270);
 		SetPlayerVirtualWorld(playerid, 5);
 		TogglePlayerControllableEx(playerid, 0);
-		SetTimerEx("UnFreeze" , 1000, false, "i", playerid);
+		SetTimerEx("_UnFreeze" , 1000, false, "i", playerid);
 		RobInts[playerid] = 7;
 	}
 	if(pickupid == medicss[5]) // medic LV exit
@@ -965,7 +965,7 @@ public OnPlayerPickUpDynamicPickup(playerid, pickupid)
 		SetPlayerFacingAngle(playerid, 270);
 		SetPlayerVirtualWorld(playerid, 6);
 		TogglePlayerControllableEx(playerid, 0);
-		SetTimerEx("UnFreeze" , 1000, false, "i", playerid);
+		SetTimerEx("_UnFreeze" , 1000, false, "i", playerid);
 		RobInts[playerid] = 8;
 	}
 	if(pickupid == medicss[7]) // medic FC exit
@@ -983,7 +983,7 @@ public OnPlayerPickUpDynamicPickup(playerid, pickupid)
 		SetPlayerFacingAngle(playerid, 270);
 		SetPlayerVirtualWorld(playerid, 7);
 		TogglePlayerControllableEx(playerid, 0);
-		SetTimerEx("UnFreeze" , 1000, false, "i", playerid);
+		SetTimerEx("_UnFreeze" , 1000, false, "i", playerid);
 		RobInts[playerid] = 9;
 	}
 	if(pickupid == medicss[9]) // medic CGH exit
@@ -1085,7 +1085,7 @@ public OnPlayerPickUpDynamicPickup(playerid, pickupid)
 			SetPlayerFacingAngle(playerid, 359.8156);
 			SetPlayerVirtualWorld(playerid, 2);
 			TogglePlayerControllable(playerid, 0);
-			SetTimerEx("UnFreeze" , 400, false, "i", playerid);
+			SetTimerEx("_UnFreeze" , 400, false, "i", playerid);
 		}
 		else
 		{
@@ -2059,7 +2059,7 @@ public OnPlayerPickUpDynamicPickup(playerid, pickupid)
 		SetPlayerPos(playerid,2806.8708,-1603.3502,-36.5231);
 		SetPlayerFacingAngle(playerid, 500);
 		TogglePlayerControllable(playerid, 0);
-		SetTimerEx("UnFreeze" , 400, false, "i", playerid);
+		SetTimerEx("_UnFreeze" , 400, false, "i", playerid);
 	}
 	else if(pickupid == vagospic[1])
 	{

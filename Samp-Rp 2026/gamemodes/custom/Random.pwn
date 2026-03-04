@@ -1,0 +1,1 @@
+Random(min, max) { return random(max - min) + min; }

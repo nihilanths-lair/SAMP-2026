@@ -1780,7 +1780,7 @@ CMD:instopen(playerid, params[])
 	if(PTEMP[playerid][pMember] != 11 && PTEMP[playerid][pLeader] != 11 && TakingLesson[playerid] != 1) return SCM(playerid, COLOR_GREY, " Вам недоступна эта функция");
 	if(!PlayerToPoint(8.0,playerid,-2074.50000000,-94.90000153,35.00000000)) return true;
 	MoveObject(licgate, -2074.50000000,-94.90000153,35.00000000+0.020,0.020, 0.00,0.00,90.00);
-	SetTimer("LicClose", 8000, 0);
+	SetTimer("_LicClose", 8000, 0);
 	SCM(playerid, 0x6495EDFF, " Шлакбаум опустится через 8 секунд");
 	return true;
 }
@@ -1790,7 +1790,7 @@ CMD:prodopen(playerid, params[])
 	if(PTEMP[playerid][pJob] != 5) return true;
 	if(!PlayerToPoint(10.0,playerid,2203.8630371094,-2252.1179199219,13.5)) return true;
 	MoveObject(gruzgate, 2203.7639160156,-2252.0598117188,13.40+0.120,0.120, 0.00,0.00,316.00);
-	SetTimer("GruzClose", 8000, 0);
+	SetTimer("_GruzClose", 8000, 0);
 	SCM(playerid, 0x6495EDFF, " Шлакбаум опустится через 8 секунд");
 	return true;
 }
@@ -2055,7 +2055,7 @@ CMD:mafiawar(playerid, params[])
 			else ZoneWar = GangZoneCreate(-789.8281,2015.9144, -662.7654,2083.9297);
 			GangZoneShowForAll(ZoneWar, 0xB2B2B2AA);
 			GangZoneFlashForAll(ZoneWar,COLOR_RED);
-			MzCheckTimer = SetTimer("MzCheck", 1000,1);
+			MzCheckTimer = SetTimer("_MzCheck", 1000,1);
 		}
 	}
 	return true;
@@ -2581,7 +2581,7 @@ CMD:usedrugs(playerid, params[])
 		else SCM(playerid,-1," (( Здоровье можно пополнить не чаще, чем раз в 1 минуту ))");
 		SetPlayerTime(playerid,17,0);
 		SetPlayerWeather(playerid, -67);
-		SetTimerEx("AddictionTimer", 20000, false, "i", playerid);
+		SetTimerEx("_AddictionTimer", 20000, false, "i", playerid);
 	}
 	else if(PTEMP[playerid][pAddiction] < 5000 && health+ 10.0*params[0] > 140)
 	{
@@ -2601,7 +2601,7 @@ CMD:usedrugs(playerid, params[])
 		{
 			SetPlayerTime(playerid,17,0);
 			SetPlayerWeather(playerid, -68);
-			SetTimerEx("AddictionTimer", 10000, false, "i", playerid);
+			SetTimerEx("_AddictionTimer", 10000, false, "i", playerid);
 		}
 	}
 	PTEMP[playerid][pNarcoLomka] = 0;
@@ -6365,7 +6365,7 @@ CMD:shout(playerid, params[])
 	format(YCMDstr, sizeof(YCMDstr), " %s крикнул: %s!!",Name(playerid),params[0]);
 	ProxDetector(60.0, playerid, YCMDstr,-1,-1,-1,COLOR_FADE1,COLOR_FADE2);
 	Flood[playerid] = 1;
-	if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) ApplyAnimation(playerid, "RIOT", "RIOT_shout", 2000.0, 0, 1, 1, 1, 1, 1), SetTimerEx("ClearAnim", 800, false, "d", playerid);
+	if(GetPlayerState(playerid) == PLAYER_STATE_ONFOOT) ApplyAnimation(playerid, "RIOT", "RIOT_shout", 2000.0, 0, 1, 1, 1, 1, 1), SetTimerEx("_ClearAnim", 800, false, "d", playerid);
 	SetPlayerChatBubble(playerid,params[0],COLOR_YELLOW,60.0,10000);
 	SetPVarInt(playerid,"Flood",0);
 	return true;
@@ -6428,9 +6428,14 @@ CMD:showlicenses(playerid, params[])
 }
 CMD:divorce(playerid, params[])
 {
-	if(PTEMP[playerid][pLogin] == 0) return true;
+	if (PTEMP[playerid][pLogin] == 0) return true;
 	SCM(playerid, 0x6ab1ffaa, " У вас больше нет жены / мужа");
-	ClearMarriage(playerid);
+	if (!IsPlayerConnected(playerid))
+	{
+		mysql_format(DATABASE,QUERY, 128, "UPDATE accounts SET pMarriedTo = '-' WHERE name = '%s'", PTEMP[playerid][pName]);
+		mysql_function_query(DATABASE, QUERY, false, "", "");
+	}
+	else strmid(PTEMP[playerid][pMarriedTo], "-", 0, strlen("-"), 32);
 	return true;
 }
 CMD:propose(playerid, params[])
@@ -12244,7 +12249,7 @@ CMD:atazer(playerid, params[])
 				TogglePlayerControllable(i,0);
 				SCM(i,-1," Вы заморожены на 10 секунд");
 				SetPlayerSpecialAction(i,SPECIAL_ACTION_HANDSUP);
-				SetTimerEx("UnFreeze", 10000, 0, "i", i);
+				SetTimerEx("_UnFreeze", 10000, 0, "i", i);
 			}
 		}
 	}
@@ -12263,7 +12268,7 @@ CMD:atazer(playerid, params[])
 					TogglePlayerControllable(i,0);
 					SCM(i,-1," Вы заморожены на 10 секунд");
 					SetPlayerSpecialAction(i,SPECIAL_ACTION_HANDSUP);
-					SetTimerEx("UnFreeze", 10000, 0, "i", i);
+					SetTimerEx("_UnFreeze", 10000, 0, "i", i);
 				}
 			}
 		}
@@ -12281,7 +12286,7 @@ CMD:atazer(playerid, params[])
 				TogglePlayerControllable(i,0);
 				SCM(i,-1," Вы заморожены на 10 секунд");
 				SetPlayerSpecialAction(i,SPECIAL_ACTION_HANDSUP);
-				SetTimerEx("UnFreeze", 10000, 0, "i", i);
+				SetTimerEx("_UnFreeze", 10000, 0, "i", i);
 			}
 		}
 	}
@@ -12306,7 +12311,7 @@ CMD:ftazer(playerid, params[])
 				TogglePlayerControllable(i,0);
 				SCM(i,-1," Вы заморожены на 10 секунд");
 				SetPlayerSpecialAction(i,SPECIAL_ACTION_HANDSUP);
-				SetTimerEx("UnFreeze", 10000, 0, "i", i);
+				SetTimerEx("_UnFreeze", 10000, 0, "i", i);
 			}
 		}
 	}
@@ -12325,7 +12330,7 @@ CMD:ftazer(playerid, params[])
 					TogglePlayerControllable(i,0);
 					SCM(i,-1," Вы заморожены на 10 секунд");
 					SetPlayerSpecialAction(i,SPECIAL_ACTION_HANDSUP);
-					SetTimerEx("UnFreeze", 10000, 0, "i", i);
+					SetTimerEx("_UnFreeze", 10000, 0, "i", i);
 				}
 			}
 		}
@@ -12343,7 +12348,7 @@ CMD:ftazer(playerid, params[])
 				TogglePlayerControllable(i,0);
 				SCM(i,-1," Вы заморожены на 10 секунд");
 				SetPlayerSpecialAction(i,SPECIAL_ACTION_HANDSUP);
-				SetTimerEx("UnFreeze", 10000, 0, "i", i);
+				SetTimerEx("_UnFreeze", 10000, 0, "i", i);
 			}
 		}
 	}
@@ -12433,7 +12438,7 @@ CMD:follow(playerid,params[])
 		if(konv != -1) return SCM(playerid, COLOR_GREY, " Вы уже кого-то сопровождаете");
 		Convoi[params[0]] = playerid;
 		SetPVarInt(playerid, "TempConvoi", params[0]);
-		TimerForPlayer[params[0]] = SetTimerEx("ConvoiToPlayer", 250, 1, "i", params[0]);
+		TimerForPlayer[params[0]] = SetTimerEx("_ConvoiToPlayer", 250, 1, "i", params[0]);
 		GameTextForPlayer(params[0],"~r~follow", 5000, 3);
     }
     return true;
@@ -13138,7 +13143,7 @@ CMD:accept(playerid, params[])
 		if(GetPVarInt(playerid, "Hour_Gun") == 0 && !IsAGang(playerid))
 		{
 			SetPVarInt(playerid,"Hour_Gun", 1);
-            SetTimerEx("GunTimer" , 3600000, false, "i", playerid);
+            SetTimerEx("_GunTimer" , 3600000, false, "i", playerid);
             PTEMP[GetPVarInt(playerid, "Sell_GunId")][pGRating] += 100;
             switch(PTEMP[GetPVarInt(playerid, "Sell_GunId")][pMember])
             {
@@ -13311,7 +13316,7 @@ CMD:accept(playerid, params[])
 						if(GetPVarInt(playerid, "Hour_Drugs") == 0 && !IsAGang(playerid))
 						{
 							SetPVarInt(playerid,"Hour_Drugs", 1);
-				            SetTimerEx("DrugsTimer" , 3600000, false, "i", playerid);
+				            SetTimerEx("_DrugsTimer" , 3600000, false, "i", playerid);
 				            PTEMP[DrugOffer[playerid]][pGRating] += 100;
 				            switch(PTEMP[DrugOffer[playerid]][pMember])
 				            {
@@ -13371,9 +13376,9 @@ CMD:accept(playerid, params[])
 				else if(training[playerid] == 6) training[playerid] = 1339;
 				else if(training[i] == 6) training[i] = 1339;
 				TogglePlayerControllable(playerid, 0);
-				SetTimerEx("UnFreeze" , 2000, false, "i", playerid);
+				SetTimerEx("_UnFreeze" , 2000, false, "i", playerid);
 				TogglePlayerControllable(i, 0);
-				SetTimerEx("UnFreeze" , 2000, false, "i", i);
+				SetTimerEx("_UnFreeze" , 2000, false, "i", i);
 				boyidet = true;
 				GameTextForPlayer(playerid, "~r~FIGHT", 2500, 3);
 				GameTextForPlayer(i, "~r~FIGHT", 2500, 3);
@@ -13983,7 +13988,7 @@ CMD:service(playerid, params[])
 				GetPlayerPos(plid, X, Y, Z);
 				SetPlayerCheckpoint(playerid, X, Y, Z, 5);
 				updatecheck[playerid] = plid;
-				SetTimerEx("kekovich" , 1000, true, "i", playerid);
+				SetTimerEx("_kekovich" , 1000, true, "i", playerid);
 				CP[playerid] = 777;
 			}
 	    }
@@ -14157,5 +14162,23 @@ CMD:send(playerid, params[])
 	CallLocalFunction("OnPlayerCommandText", "is", params[0], command);
 	else
 	CallLocalFunction("OnPlayerText", "is", params[0], command);
+	return true;
+}
+//--
+CMD:onlyoneip(playerid, params[])
+{
+	if(PTEMP[playerid][pLogin] == 0) return true;
+	if(PTEMP[playerid][pAdmin] < 10) return true;
+	if(onlyOneIp)
+	{
+	    onlyOneIp = false;
+	    SCM(playerid, COLOR_REDD, " Success!");
+	}
+	else
+	{
+		onlyOneIp = true;
+	    SCM(playerid, COLOR_GREEN, " Success!");
+	}
+	printf("Администратор %s включил вход на сервер только с одного аккаунта",Name(playerid));
 	return true;
 }

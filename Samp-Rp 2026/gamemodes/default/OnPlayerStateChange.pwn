@@ -20,7 +20,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		}
 	}
 	new caridi = GetPlayerVehicleID(playerid);
-	//if(newstate == PLAYER_STATE_DRIVER && Type == 2) Timerkk[playerid] = SetTimerEx("UnSurfCar",1600,1, "i",GetPlayerVehicleID(playerid));
+	//if(newstate == PLAYER_STATE_DRIVER && Type == 2) Timerkk[playerid] = SetTimerEx("_UnSurfCar",1600,1, "i",GetPlayerVehicleID(playerid));
 	if(newstate == PLAYER_STATE_ONFOOT)
 	{
 		new Veh = GetPlayerVehicleID(playerid);

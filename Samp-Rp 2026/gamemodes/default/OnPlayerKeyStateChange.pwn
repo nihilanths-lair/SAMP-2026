@@ -75,7 +75,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				SetPlayerAttachedObject(playerid, 1, 1851, 1, 0.062400, 0.453750, 0.000000, 0.000000, 94.689310, 0.000000);
 				ApplyAnimation(KostiName[playerid],"CARRY","crry_prtial",4.1,1,0,0,1,1);
 				SetPlayerAttachedObject(KostiName[playerid], 1, 1851, 1, 0.062400, 0.453750, 0.000000, 0.000000, 94.689310, 0.000000);
-				SetTimer("DiceOff", 5000, 0);
+				SetTimer("_DiceOff", 5000, 0);
 				OpustitRuki[playerid] = 1;
 				OpustitRuki[KostiName[playerid]] = 1;
 				dicetime = gettime() + 5;
@@ -104,7 +104,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				SetPlayerAttachedObject(playerid, 1 , 1851, 1, 0.062397, 0.453746, 0.000000, 0.000000, 94.689308, 0.000000);
 				ApplyAnimation(KostiName[playerid],"CARRY","crry_prtial",4.1,1,0,0,1,1);
 				SetPlayerAttachedObject(KostiName[playerid], 1, 1851, 1, 0.062400, 0.453750, 0.000000, 0.000000, 94.689310, 0.000000);
-				SetTimer("DiceOff", 5000, 0);
+				SetTimer("_DiceOff", 5000, 0);
 				OpustitRuki[playerid] = 1;
 				OpustitRuki[KostiName[playerid]] = 1;
 				dicetime = gettime() + 5;
@@ -125,7 +125,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 				SetPlayerAttachedObject(playerid, 1 , 1851, 1, 0.062397, 0.453746, 0.000000, 0.000000, 94.689308, 0.000000);
 				ApplyAnimation(KostiName[playerid],"CARRY","crry_prtial",4.1,1,0,0,1,1);
 				SetPlayerAttachedObject(KostiName[playerid], 1, 1851, 1, 0.062400, 0.453750, 0.000000, 0.000000, 94.689310, 0.000000);
-				SetTimer("DiceOff", 5000, 0);
+				SetTimer("_DiceOff", 5000, 0);
 				OpustitRuki[playerid] = 1;
 				OpustitRuki[KostiName[playerid]] = 1;
 				dicetime = gettime() + 5;
@@ -200,7 +200,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
 			GetVehicleParamsEx(avtocar[playerid],engine,lights,alarm,doors,bonnet,boot,objective);
 			if(doors == 0) return SCM(playerid,COLOR_GREY," Замок автомобиля уже открыт!");
 			ApplyAnimation(playerid,"BD_FIRE","wash_up",4.1,1,1,1,1,0);
-			timervzlom[playerid] = SetTimerEx("Ugon", 20000, 0, "i", playerid);
+			timervzlom[playerid] = SetTimerEx("_Ugon", 20000, 0, "i", playerid);
 			idcarv[playerid] = avtocar[playerid];
 			nachalvzlom[playerid] = 1;
 			SCM(playerid,COLOR_BLUE," Вы пытаетесь взломать замок автомобиля (( Не отпускайте клавишу 20 секунд )) ");
@@ -265,7 +265,7 @@ public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)
  					GameTextForPlayer(i,"~r~freeze", 5000, 3);
 					ApplyAnimation(i, "ped", "gas_cwr", 4.1, 0, 1, 1, 1, 0, 1);
 					TogglePlayerControllable(i, false);
-					SetTimerEx("UnFreeze" , 10000, false, "i", i);
+					SetTimerEx("_UnFreeze" , 10000, false, "i", i);
 					//GameTextForPlayer(i,"~g~unfreeze", 10000, 3);
 					SetCameraBehindPlayer(i);
 	            }
