@@ -186,8 +186,8 @@ enum bikerss
 {
 	hells,
 	warloks,
-	pagans,
-};
+	pagans
+}
 new bool:IsCapted[bikerss];
 enum robbing
 {
@@ -196,7 +196,7 @@ enum robbing
 	bikerCar,
 	robType,
 	bresult
-};
+}
 new RobbingBiker[robbing];
 new Text3D:Rob3DText;
 new bool:BikerRobbedBizz[50];
@@ -204,8 +204,8 @@ enum bikercapt
 {
 	atack,
 	other,
-	reasons,
-};
+	reasons
+}
 new BikerCapture[bikercapt];
 new Text3D:BikerText[MAX_PLAYERS];
 new ZoneCaptureBiker;
@@ -214,8 +214,8 @@ enum zoneinfo
 	Float:zoneX1,
 	Float:zoneY1,
 	Float:zoneX2,
-	Float:zoneY2,
-};
+	Float:zoneY2
+}
 new BikerZoneCoords[3][zoneinfo];
 new BikerZone[3];
 new BikerKills[bikercapt];
@@ -237,23 +237,26 @@ new training[MAX_PLAYERS];
 new Text:URL;
 new bool:times[MAX_PLAYERS];
 new booston = 0;
-enum votes {
+enum votes
+{
 	vcaption[32],
 	vquestion[100],
 	vlevel,
 	variants[32],
 	vactive
-};
-enum news {
+}
+enum news
+{
 	sfn,
 	lsn,
 	lvn
-};
+}
 new VoteNews[news][10][votes];
-enum vars {
+enum vars
+{
 	vname[32],
 	vnumber
-};
+}
 new VoteNewsVariants_LS[10][10][vars];
 new VoteNewsVariants_SF[10][10][vars];
 new VoteNewsVariants_LV[10][10][vars];
@@ -273,13 +276,13 @@ new peremennn[MAX_PLAYERS];
 new Players[500];
 new players;
 #define SPD ShowPlayerDialog
-#define 	foreach(%0) 			for(new st, %0=Players[st]; st <players; %0=Players[++st])
+#define  foreach(%0)  for (new st, %0 = Players[st]; st < players; %0 = Players[++st])
 new monitoring;
 enum workshoplistInfo
 {
 	wlID,
-	wlName[MAX_PLAYER_NAME],
-};
+	wlName[MAX_PLAYER_NAME]
+}
 new WorkshopList[10][5][workshoplistInfo];
 #define MAX_VEHICLE_COMPONENT 171
 new AwtomasMassiveID[MAX_PLAYERS][MAX_VEHICLE_COMPONENT];
@@ -289,179 +292,180 @@ enum AllComponents
 	Type[20],
 	Name[20],
 	Cost
-};
-new AllTuningComponentsInfo[MAX_VEHICLE_COMPONENT][AllComponents]= {
-	{1008,    "Nitro",        "Nos 5x"            ,2000},
-	{1009,    "Nitro",        "Nos 2x"            ,1000},
-	{1010,    "Nitro",        "Nos 10x"            ,3000},
-	{1073,    "Wheels",        "Shadow"            ,5000},
-	{1074,    "Wheels",        "Mega"                ,5000},
-	{1075,    "Wheels",        "Rimshine"            ,5000},
-	{1076,    "Wheels",        "Wires"                ,5000},
-	{1077,    "Wheels",        "Classic"            ,5000},
-	{1078,    "Wheels",        "Twist"                ,5000},
-	{1079,    "Wheels",        "Cutter"            ,5000},
-	{1080,    "Wheels",        "Switch"            ,5000},
-	{1081,    "Wheels",        "Grove"                ,5000},
-	{1082,    "Wheels",        "Import"            ,5000},
-	{1083,    "Wheels",        "Dollar"            ,5000},
-	{1084,    "Wheels",        "Trance"            ,5000},
-	{1085,    "Wheels",        "Atomic"            ,5000},
-	{1025,    "Wheels",        "Offroad"            ,5000},
-	{1096,    "Wheels",        "Ahab"                ,5000},
-	{1097,    "Wheels",        "Virtual"            ,5000},
-	{1098,    "Wheels",        "Access"            ,5000},
-	{1086,    "Stero",        "Sony"                ,500},
-	{1087,    "Hydraulics",    "LowRider"            ,4000},
-	{1000,    "Spoiler",    "Pro"                    ,2000},
-	{1001,    "Spoiler",    "Win"                    ,2000},
-	{1002,    "Spoiler",    "Drag"                    ,2000},
-	{1003,    "Spoiler",    "Alpha"                    ,2000},
-	{1014,    "Spoiler",    "Champ"                    ,2000},
-	{1015,    "Spoiler",    "Race"                    ,2000},
-	{1016,    "Spoiler",    "Worx"                    ,2000},
-	{1049,    "Spoiler",    "Alien"                    ,2000},
-	{1050,    "Spoiler",    "X-Flow"                ,2000},
-	{1058,    "Spoiler",    "Alien"                    ,2000},
-	{1023,    "Spoiler",    "Fury"                    ,2000},
-	{1158,    "Spoiler",    "X-Flow"                ,2000},
-	{1146,    "Spoiler",    "X-Flow    "                ,2000},
-	{1147,    "Spoiler",    "Alien"                    ,2000},
-	{1138,    "Spoiler",    "Alien"                    ,2000},
-	{1139,    "Spoiler",    "X-Flow"                ,2000},
-	{1060,    "Spoiler",    "X-Flow"                ,2000},
-	{1162,    "Spoiler",    "Alien"                    ,2000},
-	{1163,    "Spoiler",    "X-Flow"                ,2000},
-	{1164,    "Spoiler",    "Alien"                    ,2000},
-	{1004,    "Hood",        "Champ Scoop"                ,1000},
-	{1005,    "Hood",        "Fury Scoop"                ,1000},
-	{1011,    "Hood",        "Race Scoop"                ,1000},
-	{1012,    "Hood",        "Worx Scoop"                ,1000},
-	{1100,    "Bullbars",    "Chrome Grill"            ,1000},
-	{1123,    "Bullbars",    "Chrome Bars"    ,1000},
-	{1125,    "Bullbars",    "Chrome Lights"    ,1000},
-	{1117,    "Front Bumper","Chrome"                ,2000},
-	{1152,    "Front Bumper","X-Flow"                ,2000},
-	{1153,    "Front Bumper","Alien"                ,2000},
-	{1155,    "Front Bumper","Alien"                ,2000},
-	{1157,    "Front Bumper","X-Flow"                ,2000},
-	{1160,    "Front Bumper","Alien"                ,2000},
-	{1165,    "Front Bumper","X-Flow"                ,2000},
-	{1166,    "Front Bumper","Alien"                ,2000},
-	{1169,    "Front Bumper","Alien"                ,2000},
-	{1170,    "Front Bumper","X-Flow"                ,2000},
-	{1171,    "Front Bumper","Alien"                ,2000},
-	{1172,    "Front Bumper","X-Flow"                ,2000},
-	{1173,    "Front Bumper","X-Flow"                ,2000},
-	{1174,    "Front Bumper","Chrome"                ,2000},
-	{1176,    "Rear Bumper","Chrome"                ,2000},
-	{1179,    "Front Bumper","Chrome"                ,2000},
-	{1181,    "Front Bumper","Slamin"                ,2000},
-	{1182,    "Front Bumper","Chrome"                ,2000},
-	{1185,    "Front Bumper","Slamin"                ,2000},
-	{1188,    "Front Bumper","Slamin"                ,2000},
-	{1189,    "Front Bumper","Chrome"                ,2000},
-	{1190,    "Front Bumper","Slamin"                ,2000},
-	{1191,    "Front Bumper","Chrome"                ,2000},
-	{1140,    "Rear Bumper","X-Flow"                ,2000},
-	{1141,    "Rear Bumper","Alien"                ,2000},
-	{1148,    "Rear Bumper","X-Flow"                ,2000},
-	{1149,    "Rear Bumper","Alien"                ,2000},
-	{1150,    "Rear Bumper","Alien"                ,2000},
-	{1151,    "Rear Bumper","X-Flow"                ,2000},
-	{1154,    "Rear Bumper","Alien"                ,2000},
-	{1156,    "Rear Bumper","X-Flow"                ,2000},
-	{1159,    "Rear Bumper","Alien"                ,2000},
-	{1161,    "Rear Bumper","X-Flow"                ,2000},
-	{1167,    "Rear Bumper","X-Flow"                ,2000},
-	{1168,    "Rear Bumper","Alien"                ,2000},
-	{1175,    "Rear Bumper","Slamin"                ,2000},
-	{1177,    "Rear Bumper","Slamin"                ,2000},
-	{1178,    "Rear Bumper","Slamin"                ,2000},
-	{1180,    "Rear Bumper","Chrome"                ,2000},
-	{1183,    "Rear Bumper","Slamin"                ,2000},
-	{1184,    "Rear Bumper","Chrome"                ,2000},
-	{1186,    "Rear Bumper","Slamin"                ,2000},
-	{1187,    "Rear Bumper","Chrome"                ,2000},
-	{1192,    "Rear Bumper","Chrome"                ,2000},
-	{1193,    "Rear Bumper","Slamin"                ,2000},
-	{1143,    "Vents",    "Oval"            ,1000},
-	{1145,    "Vents",    "Square"        ,1000},
-	{1032,    "Roof",        "Alien"            ,2000},
-	{1006,    "Roof",        "Scoop"                ,2000},
-	{1038,    "Roof",        "Alien"            ,2000},
-	{1035,    "Roof",        "X-Flow"            ,2000},
-	{1033,    "Roof",        "X-Flow"            ,2000},
-	{1053,    "Roof",        "X-Flow"                    ,2000},
-	{1054,    "Roof",        "Alien"                        ,2000},
-	{1055,    "Roof",        "Alien"                        ,2000},
-	{1061,    "Roof",        "X-Flow"                    ,2000},
-	{1067,    "Roof",        "Alien"                        ,2000},
-	{1068,    "Roof",        "X-Flow"                    ,2000},
-	{1088,    "Roof",        "Alien"                        ,2000},
-	{1091,    "Roof",        "X-Flow"                    ,2000},
-	{1103,    "Roof",        "Covertible"                ,2000},
-	{1128,    "Roof",        "Vinyl Hardtop"                ,2000},
-	{1130,    "Roof",        "Hardtop"                    ,2000},
-	{1131,    "Roof",        "Softtop"                    ,2000},
-	{1013,    "Lamps",        "Round Fog"                    ,1000},
-	{1024,    "Lamps",        "Square Fog"                ,1000},
-	{1109,    "Rear Bullbars","Chrome"                ,1000},
-	{1110,    "Rear Bullbars","Slamin"                ,1000},
-	{1115,    "Front Bullbars","Chrome"                ,1000},
-	{1116,    "Front Bullbars","Slamin"                ,1000},
-	{1018,    "Exhaust",    "Upswept"                    ,2000},
-	{1019,    "Exhaust",    "Twin"                        ,2000},
-	{1020,    "Exhaust",    "Large"                        ,2000},
-	{1021,    "Exhaust",    "Medium"                    ,2000},
-	{1022,    "Exhaust",    "Small"                        ,2000},
-	{1028,    "Exhaust",    "Alien"                        ,2000},
-	{1029,    "Exhaust",    "X-Flow"                    ,2000},
-	{1034,    "Exhaust",  "Alien"                        ,2000},
-	{1037,    "Exhaust",    "X-Flow"                    ,2000},
-	{1043,    "Exhaust",    "Slamin"                    ,2000},
-	{1044,    "Exhaust",    "Chrome"                    ,2000},
-	{1045,    "Exhaust",    "X-Flow"                    ,2000},
-	{1046,    "Exhaust",    "Alien"                        ,2000},
-	{1059,    "Exhaust",    "X-Flow"                    ,2000},
-	{1064,    "Exhaust",    "Alien"                        ,2000},
-	{1065,    "Exhaust",    "Alien"                        ,2000},
-	{1066,    "Exhaust",    "X-Flow"                    ,2000},
-	{1092,    "Exhaust",    "Alien"                     ,2000},
-	{1089,    "Exhaust",    "X-Flow"                    ,2000},
-	{1126,    "Exhaust",    "Chrome"            		,2000},
-	{1127,    "Exhaust",    "Slamin"            		,2000},
-	{1129,    "Exhaust",    "Chrome"                    ,2000},
-	{1113,    "Exhaust",    "Chrome"                    ,2000},
-	{1114,    "Exhaust",    "Slamin"                    ,2000},
-	{1104,    "Exhaust",    "Chrome"                    ,2000},
-	{1105,    "Exhaust",    "Slamin"                    ,2000},
-	{1132,    "Exhaust",    "Slamin"                    ,2000},
-	{1135,    "Exhaust",    "Slamin"                    ,2000},
-	{1136,    "Exhaust",    "Chrome"                    ,2000},
-	{1007,    "Sideskirt",    "Sideskirt"                ,2000},
-	{1026,    "Sideskirt",    "Alien"                    ,2000},
-	{1031,    "Sideskirt",    "X-Flow"                ,2000},
-	{1036,    "Sideskirt",    "Alien"                    ,2000},
-	{1039,    "Sideskirt",    "X-Flow"                ,2000},
-	{1041,    "Sideskirt",    "X-Flow"                ,2000},
-	{1042,    "Sideskirt",    "Chrome"                ,2000},
-	{1047,    "Sideskirt",    "Alien"                    ,2000},
-	{1048,    "Sideskirt",    "X-Flow"                ,2000},
-	{1056,    "Sideskirt",    "Alien"                    ,2000},
-	{1057,    "Sideskirt",    "X-Flow"                ,2000},
-	{1069,    "Sideskirt",    "Alien"                    ,2000},
-	{1070,    "Sideskirt",    "X-Flow"                ,2000},
-	{1090,    "Sideskirt",    "Alien"                    ,2000},
-	{1093,    "Sideskirt",    "X-Flow"                ,2000},
-	{1095,    "Sideskirt",    "X-Flow"                ,2000},
-	{1106,    "Sideskirt",    "Chrome Arches"            ,2000},
-	{1108,    "Sideskirt",    "Chrome Strip"            ,2000},
-	{1118,    "Sideskirt",    "Chrome Trim"            ,2000},
-	{1119,    "Sideskirt",    "Wheelcovers"            ,2000},
-	{1122,    "Sideskirt",    "Chrome Flames"            ,2000},
-	{1133,    "Sideskirt",    "Chrome Strip"            ,2000},
-	{1134,    "Sideskirt",    "Chrome Strip"            ,2000}
+}
+new AllTuningComponentsInfo[MAX_VEHICLE_COMPONENT][AllComponents] =
+{
+	{1008, "Nitro"         , "Nos 5x"       , 2000},
+	{1009, "Nitro"         , "Nos 2x"       , 1000},
+	{1010, "Nitro"         , "Nos 10x"      , 3000},
+	{1073, "Wheels"        , "Shadow"       , 5000},
+	{1074, "Wheels"        , "Mega"         , 5000},
+	{1075, "Wheels"        , "Rimshine"     , 5000},
+	{1076, "Wheels"        , "Wires"        , 5000},
+	{1077, "Wheels"        , "Classic"      , 5000},
+	{1078, "Wheels"        , "Twist"        , 5000},
+	{1079, "Wheels"        , "Cutter"       , 5000},
+	{1080, "Wheels"        , "Switch"       , 5000},
+	{1081, "Wheels"        , "Grove"        , 5000},
+	{1082, "Wheels"        , "Import"       , 5000},
+	{1083, "Wheels"        , "Dollar"       , 5000},
+	{1084, "Wheels"        , "Trance"       , 5000},
+	{1085, "Wheels"        , "Atomic"       , 5000},
+	{1025, "Wheels"        , "Offroad"      , 5000},
+	{1096, "Wheels"        , "Ahab"         , 5000},
+	{1097, "Wheels"        , "Virtual"      , 5000},
+	{1098, "Wheels"        , "Access"       , 5000},
+	{1086, "Stero"         , "Sony"         ,  500},
+	{1087, "Hydraulics"    , "LowRider"     , 4000},
+	{1000, "Spoiler"       , "Pro"          , 2000},
+	{1001, "Spoiler"       , "Win"          , 2000},
+	{1002, "Spoiler"       , "Drag"         , 2000},
+	{1003, "Spoiler"       , "Alpha"        , 2000},
+	{1014, "Spoiler"       , "Champ"        , 2000},
+	{1015, "Spoiler"       , "Race"         , 2000},
+	{1016, "Spoiler"       , "Worx"         , 2000},
+	{1049, "Spoiler"       , "Alien"        , 2000},
+	{1050, "Spoiler"       , "X-Flow"       , 2000},
+	{1058, "Spoiler"       , "Alien"        , 2000},
+	{1023, "Spoiler"       , "Fury"         , 2000},
+	{1158, "Spoiler"       , "X-Flow"       , 2000},
+	{1146, "Spoiler"       , "X-Flow"       , 2000},
+	{1147, "Spoiler"       , "Alien"        , 2000},
+	{1138, "Spoiler"       , "Alien"        , 2000},
+	{1139, "Spoiler"       , "X-Flow"       , 2000},
+	{1060, "Spoiler"       , "X-Flow"       , 2000},
+	{1162, "Spoiler"       , "Alien"        , 2000},
+	{1163, "Spoiler"       , "X-Flow"       , 2000},
+	{1164, "Spoiler"       , "Alien"        , 2000},
+	{1004, "Hood"          , "Champ Scoop"  , 1000},
+	{1005, "Hood"          , "Fury Scoop"   , 1000},
+	{1011, "Hood"          , "Race Scoop"   , 1000},
+	{1012, "Hood"          , "Worx Scoop"   , 1000},
+	{1100, "Bullbars"      , "Chrome Grill" , 1000},
+	{1123, "Bullbars"      , "Chrome Bars"  , 1000},
+	{1125, "Bullbars"      , "Chrome Lights", 1000},
+	{1117, "Front Bumper"  , "Chrome"       , 2000},
+	{1152, "Front Bumper"  , "X-Flow"       , 2000},
+	{1153, "Front Bumper"  , "Alien"        , 2000},
+	{1155, "Front Bumper"  , "Alien"        , 2000},
+	{1157, "Front Bumper"  , "X-Flow"       , 2000},
+	{1160, "Front Bumper"  , "Alien"        , 2000},
+	{1165, "Front Bumper"  , "X-Flow"       , 2000},
+	{1166, "Front Bumper"  , "Alien"        , 2000},
+	{1169, "Front Bumper"  , "Alien"        , 2000},
+	{1170, "Front Bumper"  , "X-Flow"       , 2000},
+	{1171, "Front Bumper"  , "Alien"        , 2000},
+	{1172, "Front Bumper"  , "X-Flow"       , 2000},
+	{1173, "Front Bumper"  , "X-Flow"       , 2000},
+	{1174, "Front Bumper"  , "Chrome"       , 2000},
+	{1176, "Rear Bumper"   , "Chrome"       , 2000},
+	{1179, "Front Bumper"  , "Chrome"       , 2000},
+	{1181, "Front Bumper"  , "Slamin"       , 2000},
+	{1182, "Front Bumper"  , "Chrome"       , 2000},
+	{1185, "Front Bumper"  , "Slamin"       , 2000},
+	{1188, "Front Bumper"  , "Slamin"       , 2000},
+	{1189, "Front Bumper"  , "Chrome"       , 2000},
+	{1190, "Front Bumper"  , "Slamin"       , 2000},
+	{1191, "Front Bumper"  , "Chrome"       , 2000},
+	{1140, "Rear Bumper"   , "X-Flow"       , 2000},
+	{1141, "Rear Bumper"   , "Alien"        , 2000},
+	{1148, "Rear Bumper"   , "X-Flow"       , 2000},
+	{1149, "Rear Bumper"   , "Alien"        , 2000},
+	{1150, "Rear Bumper"   , "Alien"        , 2000},
+	{1151, "Rear Bumper"   , "X-Flow"       , 2000},
+	{1154, "Rear Bumper"   , "Alien"        , 2000},
+	{1156, "Rear Bumper"   , "X-Flow"       , 2000},
+	{1159, "Rear Bumper"   , "Alien"        , 2000},
+	{1161, "Rear Bumper"   , "X-Flow"       , 2000},
+	{1167, "Rear Bumper"   , "X-Flow"       , 2000},
+	{1168, "Rear Bumper"   , "Alien"        , 2000},
+	{1175, "Rear Bumper"   , "Slamin"       , 2000},
+	{1177, "Rear Bumper"   , "Slamin"       , 2000},
+	{1178, "Rear Bumper"   , "Slamin"       , 2000},
+	{1180, "Rear Bumper"   , "Chrome"       , 2000},
+	{1183, "Rear Bumper"   , "Slamin"       , 2000},
+	{1184, "Rear Bumper"   , "Chrome"       , 2000},
+	{1186, "Rear Bumper"   , "Slamin"       , 2000},
+	{1187, "Rear Bumper"   , "Chrome"       , 2000},
+	{1192, "Rear Bumper"   , "Chrome"       , 2000},
+	{1193, "Rear Bumper"   , "Slamin"       , 2000},
+	{1143, "Vents"         , "Oval"         , 1000},
+	{1145, "Vents"         , "Square"       , 1000},
+	{1032, "Roof"          , "Alien"        , 2000},
+	{1006, "Roof"          , "Scoop"        , 2000},
+	{1038, "Roof"          , "Alien"        , 2000},
+	{1035, "Roof"          , "X-Flow"       , 2000},
+	{1033, "Roof"          , "X-Flow"       , 2000},
+	{1053, "Roof"          , "X-Flow"       , 2000},
+	{1054, "Roof"          , "Alien"        , 2000},
+	{1055, "Roof"          , "Alien"        , 2000},
+	{1061, "Roof"          , "X-Flow"       , 2000},
+	{1067, "Roof"          , "Alien"        , 2000},
+	{1068, "Roof"          , "X-Flow"       , 2000},
+	{1088, "Roof"          , "Alien"        , 2000},
+	{1091, "Roof"          , "X-Flow"       , 2000},
+	{1103, "Roof"          , "Covertible"   , 2000},
+	{1128, "Roof"          , "Vinyl Hardtop", 2000},
+	{1130, "Roof"          , "Hardtop"      , 2000},
+	{1131, "Roof"          , "Softtop"      , 2000},
+	{1013, "Lamps"         , "Round Fog"    , 1000},
+	{1024, "Lamps"         , "Square Fog"   , 1000},
+	{1109, "Rear Bullbars" , "Chrome"       , 1000},
+	{1110, "Rear Bullbars" , "Slamin"       , 1000},
+	{1115, "Front Bullbars", "Chrome"       , 1000},
+	{1116, "Front Bullbars", "Slamin"       , 1000},
+	{1018, "Exhaust"       , "Upswept"      , 2000},
+	{1019, "Exhaust"       , "Twin"         , 2000},
+	{1020, "Exhaust"       , "Large"        , 2000},
+	{1021, "Exhaust"       , "Medium"       , 2000},
+	{1022, "Exhaust"       , "Small"        , 2000},
+	{1028, "Exhaust"       , "Alien"        , 2000},
+	{1029, "Exhaust"       , "X-Flow"       , 2000},
+	{1034, "Exhaust"       , "Alien"        , 2000},
+	{1037, "Exhaust"       , "X-Flow"       , 2000},
+	{1043, "Exhaust"       , "Slamin"       , 2000},
+	{1044, "Exhaust"       , "Chrome"       , 2000},
+	{1045, "Exhaust"       , "X-Flow"       , 2000},
+	{1046, "Exhaust"       , "Alien"        , 2000},
+	{1059, "Exhaust"       , "X-Flow"       , 2000},
+	{1064, "Exhaust"       , "Alien"        , 2000},
+	{1065, "Exhaust"       , "Alien"        , 2000},
+	{1066, "Exhaust"       , "X-Flow"       , 2000},
+	{1092, "Exhaust"       , "Alien"        , 2000},
+	{1089, "Exhaust"       , "X-Flow"       , 2000},
+	{1126, "Exhaust"       , "Chrome"       , 2000},
+	{1127, "Exhaust"       , "Slamin"       , 2000},
+	{1129, "Exhaust"       , "Chrome"       , 2000},
+	{1113, "Exhaust"       , "Chrome"       , 2000},
+	{1114, "Exhaust"       , "Slamin"       , 2000},
+	{1104, "Exhaust"       , "Chrome"       , 2000},
+	{1105, "Exhaust"       , "Slamin"       , 2000},
+	{1132, "Exhaust"       , "Slamin"       , 2000},
+	{1135, "Exhaust"       , "Slamin"       , 2000},
+	{1136, "Exhaust"       , "Chrome"       , 2000},
+	{1007, "Sideskirt"     , "Sideskirt"    , 2000},
+	{1026, "Sideskirt"     , "Alien"        , 2000},
+	{1031, "Sideskirt"     , "X-Flow"       , 2000},
+	{1036, "Sideskirt"     , "Alien"        , 2000},
+	{1039, "Sideskirt"     , "X-Flow"       , 2000},
+	{1041, "Sideskirt"     , "X-Flow"       , 2000},
+	{1042, "Sideskirt"     , "Chrome"       , 2000},
+	{1047, "Sideskirt"     , "Alien"        , 2000},
+	{1048, "Sideskirt"     , "X-Flow"       , 2000},
+	{1056, "Sideskirt"     , "Alien"        , 2000},
+	{1057, "Sideskirt"     , "X-Flow"       , 2000},
+	{1069, "Sideskirt"     , "Alien"        , 2000},
+	{1070, "Sideskirt"     , "X-Flow"       , 2000},
+	{1090, "Sideskirt"     , "Alien"        , 2000},
+	{1093, "Sideskirt"     , "X-Flow"       , 2000},
+	{1095, "Sideskirt"     , "X-Flow"       , 2000},
+	{1106, "Sideskirt"     , "Chrome Arches", 2000},
+	{1108, "Sideskirt"     , "Chrome Strip" , 2000},
+	{1118, "Sideskirt"     , "Chrome Trim"  , 2000},
+	{1119, "Sideskirt"     , "Wheelcovers"  , 2000},
+	{1122, "Sideskirt"     , "Chrome Flames", 2000},
+	{1133, "Sideskirt"     , "Chrome Strip" , 2000},
+	{1134, "Sideskirt"     , "Chrome Strip" , 2000}
 };
 // Vote
 new LPick[20];
@@ -469,15 +473,15 @@ new idgols;
 enum IGolos
 {
 	Variant[128],
-	Golosov,
-};
+	Golosov
+}
 new Golosovan[10][IGolos];
 new Text3D:GLT[20];
 enum GG
 {
 	NameGolos[128],
-	bool:goloson,
-};
+	bool:goloson
+}
 new pickupalla;
 new GL2[GG];
 // Рулетка
@@ -501,7 +505,8 @@ new KostiMoney[MAX_PLAYERS];
 new Text:Bone[4];
 new PlayerText:PlayerBone[MAX_PLAYERS][4];
 new
-Float:BoneCoor[MAX_BONE][4] ={
+Float:BoneCoor[MAX_BONE][4] =
+{
 	{1944.19,1010.90,992.00,90.00},
 	{1944.19,1017.70,992.00,90.00},
 	{1944.19,1025.00,992.00,90.00},
@@ -527,7 +532,8 @@ enum Bones
 }
 new BoneInfo[MAX_BONE+1][Bones];
 
-new MaxSpeedCar[212] = {
+new MaxSpeedCar[212] = 
+{
 	87,81,103,-1,73,91,-1,-1,-1,-1,-1,123,93,-1,-1,106,-1,-1,64,82,93,82,82,-1,75,-1,94,-1,
 	-1,112,-1,-1,-1,-1,92,-1,85,-1,-1,93,-1,-1,-1,-1,62,90,-1,-1,-1,-1,-1,107,-1,-1,-1,-1,-1,-1,87,-1,-1,88 ,-1,79 ,-1,-1,
 	87,87,79,-1,-1,61,-1,-1,82,96,-1,103,75,77,102,-1,-1,-1,-1,-1,-1,-1,-1,77,-1,82,78,-1,119,97,90,-1,-1,-1,-1,-1,119,119,-1,-1,99,92,-1,-1,-1,-1,
@@ -539,7 +545,7 @@ enum _spectator
 	sID,
 	SShout[4],
 	SAFK[3],
-Float:sPos[4],
+    Float:sPos[4],
 	sVirt,
 	sInt
 }
@@ -553,23 +559,23 @@ new Float:streampos[3];
 
 new PlayerText:Seriu[MAX_PLAYERS][2];
 new
-PlayerText:ReconPlayer[35],
-ReconBounds[MAX_PLAYERS][2],
-ReconSelect[MAX_PLAYERS],
-SpecAd[MAX_PLAYERS],
-Float:SpecPlayer[MAX_PLAYERS][3],
-SpecPlayerInt[MAX_PLAYERS],
-SpecPlayerWorld[MAX_PLAYERS],
-SpecID[MAX_PLAYERS],
-Spectate[MAX_PLAYERS],
-NumberShot[MAX_PLAYERS],
-DisallowSpawn[MAX_PLAYERS],
-TimeNumberShot[MAX_PLAYERS],
-NumberShotTarget[MAX_PLAYERS],
-TimeNumberShotTarget[MAX_PLAYERS],
-Float:SpecPlayerAngle[MAX_PLAYERS],
-LastReconClick[MAX_PLAYERS][2],
-ReconSelectSub[MAX_PLAYERS];
+ PlayerText:ReconPlayer[35],
+ ReconBounds[MAX_PLAYERS][2],
+ ReconSelect[MAX_PLAYERS],
+ SpecAd[MAX_PLAYERS],
+ Float:SpecPlayer[MAX_PLAYERS][3],
+ SpecPlayerInt[MAX_PLAYERS],
+ SpecPlayerWorld[MAX_PLAYERS],
+ SpecID[MAX_PLAYERS],
+ Spectate[MAX_PLAYERS],
+ NumberShot[MAX_PLAYERS],
+ DisallowSpawn[MAX_PLAYERS],
+ TimeNumberShot[MAX_PLAYERS],
+ NumberShotTarget[MAX_PLAYERS],
+ TimeNumberShotTarget[MAX_PLAYERS],
+ Float:SpecPlayerAngle[MAX_PLAYERS],
+ LastReconClick[MAX_PLAYERS][2],
+ ReconSelectSub[MAX_PLAYERS];
 
 new Text:AutoShopText[12];
 new PlayerText:ShopText[MAX_PLAYERS];
@@ -663,7 +669,8 @@ new ShopCar[86][2] =
 	{415,5600000},
 	{411,6000000}//a 85
 };
-new spys[5][2] = {
+new spys[5][2] =
+{
 	{-1,-1},
 	{-1,-1},
 	{-1,-1},
@@ -694,8 +701,8 @@ new IsSmoking[MAX_PLAYERS];
 enum exInfo
 {
 	ExitIP[MAX_PLAYER_NAME],
-	ExitTime,
-};
+	ExitTime
+}
 new ExitInfo[MAX_PLAYERS][exInfo];
 new auctionpic[2];
 new police[MAX_VEHICLES];
@@ -707,26 +714,20 @@ new KeysPrice[MAX_PLAYERS];
 new KeysGram[MAX_PLAYERS];
 new FreezePlayer[MAX_PLAYERS];
 new Rvanka[MAX_PLAYERS];
+
 stock SetPlayerToFacePlayer(playerid, targetid)
 {
-        new
-                Float:pX,
-                Float:pY,
-                Float:pZ,
-                Float:X,
-                Float:Y,
-                Float:Z,
-                Float:ang;
-        if(!IsPlayerConnected(playerid) || !IsPlayerConnected(targetid)) return 0;
-        GetPlayerPos(targetid, X, Y, Z);
-        GetPlayerPos(playerid, pX, pY, pZ);
-        if( Y > pY ) ang = (-acos((X - pX) / floatsqroot((X - pX)*(X - pX) + (Y - pY)*(Y - pY))) - 90.0);
-        else if( Y < pY && X < pX ) ang = (acos((X - pX) / floatsqroot((X - pX)*(X - pX) + (Y - pY)*(Y - pY))) - 450.0);
-        else if( Y < pY ) ang = (acos((X - pX) / floatsqroot((X - pX)*(X - pX) + (Y - pY)*(Y - pY))) - 90.0);
-        if(X > pX) ang = (floatabs(floatabs(ang) + 180.0));
-        else ang = (floatabs(ang) - 180.0);
-        SetPlayerFacingAngle(playerid, ang);
-        return 0;
+    new Float:pX, Float:pY, Float:pZ, Float:X, Float:Y, Float:Z, Float:ang;
+    if(!IsPlayerConnected(playerid) || !IsPlayerConnected(targetid)) return 0;
+    GetPlayerPos(targetid, X, Y, Z);
+    GetPlayerPos(playerid, pX, pY, pZ);
+    if( Y > pY ) ang = (-acos((X - pX) / floatsqroot((X - pX)*(X - pX) + (Y - pY)*(Y - pY))) - 90.0);
+    else if( Y < pY && X < pX ) ang = (acos((X - pX) / floatsqroot((X - pX)*(X - pX) + (Y - pY)*(Y - pY))) - 450.0);
+    else if( Y < pY ) ang = (acos((X - pX) / floatsqroot((X - pX)*(X - pX) + (Y - pY)*(Y - pY))) - 90.0);
+    if(X > pX) ang = (floatabs(floatabs(ang) + 180.0));
+    else ang = (floatabs(ang) - 180.0);
+    SetPlayerFacingAngle(playerid, ang);
+    return 0;
 }
 stock CreateTrigger(Float:x,Float:y,Float:z)
 {
@@ -743,6 +744,7 @@ stock TogglePlayerControllableEx(playerid,toggle)
 #define TogglePlayerControllable TogglePlayerControllableEx
 new Float:CarHealth[MAX_VEHICLES];
 new TimeHealth[MAX_VEHICLES];
+
 stock SetVehHealth(vehicleid, Float:health)
 {
 	CarHealth[vehicleid] = health;
@@ -755,7 +757,9 @@ stock SetVehHealth(vehicleid, Float:health)
 	(((newkeys & (%0)) != (%0)) && ((oldkeys & (%0)) == (%0)))
 #define PRESSED(%0) \
 	(((newkeys & (%0)) == (%0)) && ((oldkeys & (%0)) != (%0)))
-new Float:acarsd[][3] = {
+
+new Float:acarsd[][3] =
+{
 	{2120.0693,2718.2942,10.8203},
 	{-1931.6606,271.5569,41.0469},
 	{2507.9807,-2113.6448,13.5469}
@@ -776,7 +780,9 @@ new Float:VEHHP[MAX_PLAYERS][2];
 new Text3D:JobText3D[MAX_VEHICLES];
 new buscar[8];
 new pPressed[MAX_PLAYERS];
-new Float:BusCityLV[][] = {
+
+new Float:BusCityLV[][] =
+{
 	{2827.7122,1287.5374,10.4960, 2828.5979,1349.7295,10.4851},
 	{2828.5979,1349.7295,10.4851, 2830.2490,1453.5867,10.4380},
 	{2830.2490,1453.5867,10.4380, 2810.9434,1475.6493,10.4112},
@@ -858,7 +864,8 @@ new Float:BusCityLV[][] = {
 	{2800.6440,1230.2970,10.4977, 2827.7122,1287.5374,10.4960},
 	{2827.7122,1287.5374,10.4960, 0.0, 0.0, 0.0}
 };
-new Float:BusCitySF[][] = {
+new Float:BusCitySF[][] =
+{
 	{-1988.0446,140.1014,27.2661, -2003.4841,214.1351,27.2661},
 	{-2003.4841,214.1351,27.2661, -2000.5131,313.4200,34.7426},
 	{-2000.5131,313.4200,34.7426, -1998.5398,471.8105,34.7427},
@@ -869,7 +876,7 @@ new Float:BusCitySF[][] = {
 	{-1708.5352,638.9060,24.4615, -1709.2012,713.6660,24.4673},
 	{-1709.2012,713.6660,24.4673, -1686.2982,726.0994,21.9807},
 	{-1686.2982,726.0994,21.9807, -1584.0829,725.0784,7.6853},
-	{-1584.0829,725.0784,7.6853,-1539.4480,751.1326,6.7661}, ///////////////
+	{-1584.0829,725.0784,7.6853, -1539.4480,751.1326,6.7661}, ///////////////
 	{-1539.4480,751.1326,6.7661, -1526.3699,902.7177,6.7661},
 	{-1526.3699,902.7177,6.7661, -1566.6733,1008.7411,6.7661},
 	{-1566.6733,1008.7411,6.7661, -1583.1990,1175.9945,6.7720},
@@ -917,8 +924,8 @@ new Float:BusCitySF[][] = {
 	{-2003.9662,82.7331,27.2662, -1988.0446,140.1014,27.2661},
 	{-1988.0446,140.1014,27.2661, 0.0, 0.0, 0.0}
 };
-
-new Float:BusCityLS[][] = {
+new Float:BusCityLS[][] =
+{
 	{1238.5247,-1832.1951,13.5304, 1214.3824,-1842.2007,13.5149},
 	{1214.3824,-1842.2007,13.5149, 1195.2499,-1849.5330,13.5300},
 	{1195.2499,-1849.5330,13.5300, 1076.8751,-1850.1189,13.5237},
@@ -1049,8 +1056,8 @@ new Float:BusCityLS[][] = {
 	{1238.5247,-1832.1951,13.5304,2626.2710,-1734.6022,11.2428},
 	{1238.5247,-1832.1951,13.5304,2626.2710,-1734.6022,11.2428}
 };
-
-new Float:BusSchool[][] = {
+new Float:BusSchool[][] =
+{
 	{1603.0409,-1158.1918,24.0066, 1375.5563,-1139.8900,23.7568},
 	{1375.5563,-1139.8900,23.7568, 1343.1094,-1159.3662,23.8041},
 	{1343.1094,-1159.3662,23.8041, 1339.5063,-1398.3763,13.4274},
@@ -1149,8 +1156,8 @@ new Float:BusSchool[][] = {
 	{1457.6628,-1196.4583,19.8684, 1613.9203,-1163.7047,23.9937},
 	{1613.9203,-1163.7047,23.9937, 1640.3938,-1126.9946,24.0055}
 };
-
-new Float:BusLSZavodi[][] = {
+new Float:BusLSZavodi[][] =
+{
 	{1626.6134,-1157.9778,23.9838, 1438.9491,-1158.1682,23.7565},
 	{1438.9491,-1158.1682,23.7565, 1371.1659,-1141.6920,23.7575},
 	{1371.1659,-1141.6920,23.7575, 1156.3663,-1142.7145,23.7581},
@@ -1223,8 +1230,8 @@ new Float:BusLSZavodi[][] = {
 	{1622.4208,-1162.8495,23.9980, 1641.7179,-1125.3340,24.0071},
 	{1641.7179,-1125.3340,24.0071, 1626.6134,-1157.9778,23.9838}
 };
-
-new Float:BusLSLV[][] = {
+new Float:BusLSLV[][] =
+{
 	{1626.6134,-1157.9778,23.9838, 1438.9491,-1158.1682,23.7565},
 	{1438.9491,-1158.1682,23.7565, 1371.1659,-1141.6920,23.7575},
 	{1371.1659,-1141.6920,23.7575, 1156.3663,-1142.7145,23.7581},
@@ -1341,7 +1348,8 @@ new PlayerText:FULLRECON[MAX_PLAYERS];
 new ChosenPlayer[MAX_PLAYERS];
 new PickupRazd[35];
 new strR[255][255];
-new SkinMen[][2] ={
+new SkinMen[][2] =
+{
 	{66,1000},
 	{15,1000},
 	{36,1000},
@@ -1414,7 +1422,8 @@ new SkinMen[][2] ={
 	{294,5000000}
 
 };
-new SkinMale[][2] ={
+new SkinMale[][2] =
+{
 	{65, 1000},
 	{192, 10000},
 	{219, 1000000},
@@ -1451,6 +1460,7 @@ new bool:warePMCLock = false;
 new bool:wareWCMLock = false;
 new AdvertTime;
 new Weapons[MAX_PLAYERS][47];
+
 stock GiveWeapon(playerid,weaponid,ammo)
 {
 	SetPVarInt(playerid, "GunCheckTime", 2);
@@ -1487,28 +1497,28 @@ enum adInfo
 	adName[50],
 	bool:edited,
 	editName[50]
-};
+}
 new AdvertInfo[30][3][adInfo];
 enum vibrosilInfo
 {
 	vModel,
 	vTime,
-Float:vX,
-Float:vY,
-Float:vZ,
-Text3D:vPodnyat,
+    Float:vX,
+    Float:vY,
+    Float:vZ,
+    Text3D:vPodnyat,
 	vKol,
 	vObject
-};
+}
 new VibrosInfo[999][vibrosilInfo], SLOTVIBROS = 0;
 enum atm
 {
 	aid,
-Float:aX,
-Float:aY,
-Float:aZ,
-Float:arZ
-};
+    Float:aX,
+    Float:aY,
+    Float:aZ,
+    Float:arZ
+}
 new ATMInfo[100][atm], TOTALATM = 0;
 new ATM[100], ATMADVERTISE[20][150];
 new Text3D:LABELATM[100], bool:LABELATM_;
@@ -1516,9 +1526,9 @@ enum wInfo
 {
 	wID,
 	wOwner[MAX_PLAYER_NAME],
-Float:wEntr[3],
-Float:wExit[3],
-Float:wMenu[3],
+    Float:wEntr[3],
+    Float:wExit[3],
+    Float:wMenu[3],
 	wBank,
 	wLandTax,
 	wProds,
@@ -1535,11 +1545,11 @@ Float:wMenu[3],
 	wAuction[5],
 	wAuctions[128],
 	wAuctionName[MAX_PLAYER_NAME],
-Text3D:wLabel,
+    Text3D:wLabel,
 	wPickup[4],
 	wBiker,
-bool:isCaptured,
-};
+    bool:isCaptured
+}
 new WorkshopInfo[5][wInfo], TOTALSHOPS = 0;
 // Развозчики продуктов на ферму
 new car_grain[MAX_VEHICLES][3];
@@ -1551,8 +1561,8 @@ enum fInfo
 {
 	fID,
 	fOwner[MAX_PLAYER_NAME],
-Float: fMenu[3],
-Float: fCloakroom[3],
+    Float:fMenu[3],
+    Float:fCloakroom[3],
 	fBank,
 	fLandTax,
 	fZp,
@@ -1573,20 +1583,21 @@ Float: fCloakroom[3],
 	fAuction[5],
 	fAuctions[64],
 	fAuctionName[MAX_PLAYER_NAME],
-Text3D:fLabel,
+    Text3D:fLabel,
 	fPickup[2],
 	fSeed_Car[2],
 	fCombine,
 	fBiker,
-bool:isCaptured,
-};
+    bool:isCaptured
+}
 new FarmInfo[6][fInfo], TOTALFARM = 0;
 new Farmtimer[MAX_PLAYERS];
 new bool:Farmcar_works[MAX_VEHICLES];
 new Farmcar_pickup[MAX_VEHICLES];
 new Text3D:Farmcar_text[MAX_VEHICLES];
 new Farmcar_prods[MAX_VEHICLES];
-new Float:Farmcombine_coord_one[16][3] = {
+new Float:Farmcombine_coord_one[16][3] =
+{
 	{-320.8694,-1365.4385,9.8428},
 	{-324.8013,-1401.0339,13.2010},
 	{-301.7462,-1425.4576,13.9760},
@@ -1604,7 +1615,8 @@ new Float:Farmcombine_coord_one[16][3] = {
 	{-264.4544,-1426.5730,9.1420},
 	{-324.6056,-1428.9579,14.8003}
 };
-new Float:Farmcombine_coord_two[15][3] = {
+new Float:Farmcombine_coord_two[15][3] =
+{
 	{-130.7027,44.7220,2.8443},
 	{-145.5741,61.2925,2.8443},
 	{-165.2465,43.3439,2.8443},
@@ -1621,7 +1633,8 @@ new Float:Farmcombine_coord_two[15][3] = {
 	{-191.2002,-74.9127,2.8443},
 	{-150.3399,-6.1474,2.8443}
 };
-new Float:Farmcombine_coord_three[15][3] = {
+new Float:Farmcombine_coord_three[15][3] =
+{
 	{-1187.8000,-1051.3243,128.9458},
 	{-1187.5616,-1020.7885,128.9458},
 	{-1187.0750,-958.0953,128.9390},
@@ -1638,7 +1651,8 @@ new Float:Farmcombine_coord_three[15][3] = {
 	{-1110.2307,-1055.0585,128.9465},
 	{-1182.4001,-1058.6345,128.9458}
 };
-new Float:Farmcombine_coord_four[10][3] = {
+new Float:Farmcombine_coord_four[10][3] =
+{
 	{-8.9009,-7.1966,2.8443},
 	{-25.3066,-51.6468,2.8443},
 	{-25.7014,-107.4654,2.8443},
@@ -1650,7 +1664,8 @@ new Float:Farmcombine_coord_four[10][3] = {
 	{20.3284,-42.6540,2.8424},
 	{-7.0064,-7.9382,2.8443}
 };
-new Float:Farmcombine_coord_five[11][3] = {
+new Float:Farmcombine_coord_five[11][3] =
+{
 	{1916.7062,194.0659,34.2542},
 	{1917.7260,216.1904,29.9047},
 	{1936.3885,233.2233,28.5738},
@@ -1663,31 +1678,36 @@ new Float:Farmcombine_coord_five[11][3] = {
 	{1933.9193,187.5078,34.8203},
 	{1918.4210,191.2246,34.7327}
 };
-new Float:Farmcar_coord_one[4][3] = {
+new Float:Farmcar_coord_one[4][3] =
+{
 	{-305.3935,-1334.0796,8.2550},
 	{-311.4154,-1359.4165,9.0605},
 	{-256.1160,-1385.5819,10.0414},
 	{-191.2922,-1380.0945,5.0030}
 };
-new Float:Farmcar_coord_two[4][3] = {
+new Float:Farmcar_coord_two[4][3] =
+{
 	{-167.5728,-4.7965,3.1172},
 	{-194.6789,49.8787,3.1172},
 	{-236.7553,-9.5347,3.1172},
 	{-227.7488,-52.3213,3.1172}
 };
-new Float:Farmcar_coord_three[4][3] = {
+new Float:Farmcar_coord_three[4][3] =
+{
 	{-1183.0190,-1058.6979,129.1978},
 	{-1154.6866,-1046.9103,129.2095},
 	{-1075.6294,-930.5206,129.2089},
 	{-1028.6787,-973.0988,129.2091}
 };
-new Float:Farmcar_coord_four[4][3] = {
+new Float:Farmcar_coord_four[4][3] =
+{
 	{-5.4270,-44.5476,2.8443},
 	{-0.9173,-95.1931,2.3333},
 	{37.3381,-77.9443,0.4641},
 	{-22.6910,-59.8679,2.8443}
 };
-new Float:Farmcar_coord_five[4][3] = {
+new Float:Farmcar_coord_five[4][3] =
+{
 	{1921.2250,204.1377,32.3460},
 	{1966.3246,198.3651,31.0604},
 	{1985.4440,183.7903,31.270},
@@ -1696,8 +1716,8 @@ new Float:Farmcar_coord_five[4][3] = {
 enum stallInfo
 {
 	stID,
-Float:stPos[4],
-Text3D:stText
+    Float:stPos[4],
+    Text3D:stText
 }
 new StallInfo[50][stallInfo], TOTALSTALL = 0;
 enum caInfo
@@ -1718,14 +1738,15 @@ enum caInfo
 	caKrupie8[32],
 	caKrupie9[32],
 	caKrupie10[32],
-Float:caPos[3],
+    Float:caPos[3]
 }
 new CasinoInfo[3][caInfo], TOTALCASINO = 0;
 new FormaFracPic[16];
 new freshtimer;
 new war = 0;
 new rabota1;
-new IPMSG[5][] = {
+new IPMSG[5][] =
+{
 	{"IP проверка обезопасит Ваш аккаунт от взлома!\n"},
 	{"Если Ваш IP адрес будет изменён, система потребуют ключ безопасности\n\n"},
 	{"Для того чтобы включить/отключить защиту \n"},
@@ -1813,10 +1834,11 @@ enum admveh
 	vehid,
 	color1,
 	color2
-};
+}
 new AdminVehicle[MAX_PLAYERS][admveh];
 new carpick[4];
-new VehicleNames[212][] = {
+new VehicleNames[212][] =
+{
 	"Landstalker","Bravura","Buffalo","Linerunner","Perrenial","Sentinel","Dumper","Firetruck","Trashmaster","Stretch","Manana","Infernus",
 	"Voodoo","Pony","Mule","Cheetah","Ambulance","Leviathan","Moonbeam","Esperanto","Taxi","Washington","Bobcat","Mr.Whoopee","BF Injection",
 	"Hunter","Premier","Enforcer","Securicar","Banshee","Predator","Bus","Rhino","Barracks","Hotknife","Trailer","Previon","Coach","Cabbie",
@@ -2010,15 +2032,14 @@ new groovhel = 500;
 new vagoshel = 500;
 new aztekhel = 500;
 new rifahel = 500;
-new yakuzahel = 500,
-rmhel = 500,
-lcnhel;
+new yakuzahel = 500, rmhel = 500, lcnhel;
 new lsamat;
 new lsaammo;
 new lsacarvertexit[MAX_PLAYERS];
 new Float:TeleportDest[MAX_PLAYERS][3];
 new Float:TelePos[MAX_PLAYERS][6];
-new GunNames[48][] = {
+new GunNames[48][] =
+{
 	"Нет",
 	"Кастет",
 	"Клюшка для гольфа",
@@ -2068,7 +2089,8 @@ new GunNames[48][] = {
 	"Парашют",
 	"Fake Pistol"
 };
-new legalmods[48][22] = {
+new legalmods[48][22] =
+{
 	{400, 1024,1021,1020,1019,1018,1013,0000,0000,0000,0000,0000,0000,0000,0000,0000,0000,0000,0000},
 	{401, 1145,1144,1143,1142,1020,1019,1017,1013,1007,1006,1005,1004,1003,1001,0000,0000,0000,0000},
 	{404, 1021,1020,1019,1017,1016,1013,1007,1002,1000,0000,0000,0000,0000,0000,0000,0000,0000,0000},
@@ -2188,7 +2210,7 @@ enum nInfo
 	nLcn,
 	nYakuza,
 	nRm
-};
+}
 enum frInfo
 {
 	fLsnews,
@@ -2210,7 +2232,7 @@ enum frInfo
 	fMmc,
 	fVmc,
 	fBmc
-};
+}
 new MafiaBank[1][nInfo];
 new FracBank[1][frInfo];
 enum bInfo
@@ -2218,12 +2240,12 @@ enum bInfo
 	bID,
 	bOwner[MAX_PLAYER_NAME],
 	bMessage[128],
-Float:bEntranceX,
-Float:bEntranceY,
-Float:bEntranceZ,
-Float:bExitX,
-Float:bExitY,
-Float:bExitZ,
+    Float:bEntranceX,
+    Float:bEntranceY,
+    Float:bEntranceZ,
+    Float:bExitX,
+    Float:bExitY,
+    Float:bExitZ,
 	bBuyPrice,
 	bEntranceCost,
 	bTill,
@@ -2231,12 +2253,12 @@ Float:bExitZ,
 	bLocked,
 	bInterior,
 	bProducts,
-Text3D: bLabel,
+    Text3D:bLabel,
 	bPrice,
 	bProdPrice,
-Float:bBarX,
-Float:bBarY,
-Float:bBarZ,
+    Float:bBarX,
+    Float:bBarY,
+    Float:bBarZ,
 	bMafia,
 	bCapture,
 	bType,
@@ -2250,8 +2272,8 @@ Float:bBarZ,
 	bLastStavka,
 	bTimeStavka,
 	bMinStavka,
-	bVirtualWorld,
-};
+	bVirtualWorld
+}
 new BizzInfo[100][bInfo];
 new BizzPay[100];
 new BizzMaxProds[100];
@@ -2261,16 +2283,16 @@ enum painfo
 {
 	paName[32],
 	paKills,
-	paDeaths,
-};
+	paDeaths
+}
 new PaintStats[15][painfo], Painlist = 0;
 enum cainfo
 {
-Float:callx,
-Float:cally,
-Float:callz,
-	callused,
-};
+    Float:callx,
+    Float:cally,
+    Float:callz,
+	callused
+}
 new CallInfo[MAX_PLAYERS][cainfo];
 //////////////////////////////
 publics: Float:GetDistanceBetweenPlayers(p1,p2)
@@ -2404,9 +2426,7 @@ stock CaptureTextDraws(playerid)
 	PlayerTextDrawFont(playerid,Capture[playerid], 3);
 	PlayerTextDrawSetProportional(playerid,Capture[playerid], 1);
 }
-new Float:gInviteSpawns[0][4] = {
-	{222.3489,-8.5845,1002.2109,266.7302}
-};
+new Float:gInviteSpawns[4] = {222.3489, -8.5845, 1002.2109, 266.7302};
 new LessonCar[MAX_PLAYERS];
 new LessonStat[MAX_PLAYERS];
 new pLessonCar[MAX_PLAYERS];
@@ -12828,32 +12848,35 @@ CMD:cname(playerid, params[])
 }
 CMD:forceskin(playerid, params[])
 {
-	if(PTEMP[playerid][pLogin] == 0) return true;
-	if(PTEMP[playerid][pAdmin] < 7 || dostup[playerid] == 0) return true;
-	if(sscanf(params, "u", params[0])) return SCM(playerid, -1, " Введите: /forceskin [id]");
-	if(!IsPlayerConnected(params[0])) return true;
-	if(params[0] == INVALID_PLAYER_ID) return true;
-	if(PTEMP[params[0]][pMember] < 1) return SCM(playerid, COLOR_GREY, " Игрок не состоит в организации");
-	SCM(params[0], COLOR_BLUE," Вы были допущены к изменению скина администратором Samp-Rp");
-	format(YCMDstr, sizeof(YCMDstr), " Вы допустили %s к изменению скина", Name(params[0]));
+	if (PTEMP[playerid][pLogin] == 0) return true;
+	if (PTEMP[playerid][pAdmin] < 7 || dostup[playerid] == 0) return true;
+	if (sscanf(params, "u", params[0])) return SCM(playerid, -1, " Введите: /forceskin [id]");
+	if (!IsPlayerConnected(params[0])) return true;
+	if (params[0] == INVALID_PLAYER_ID) return true;
+	if (PTEMP[params[0]][pMember] < 1) return SCM(playerid, COLOR_GREY, " Игрок не состоит в организации");
+
+	SCM(params[0], COLOR_BLUE," Вы были допущены к изменению скина администратором Entropy-Rp");
+	format(YCMDstr, sizeof (YCMDstr), " Вы допустили %s к изменению скина", Name(params[0]));
 	SCM(playerid, COLOR_BLUE, YCMDstr);
 	SCM(params[0], COLOR_RED, " Используйте клавишу 'Быстрый бег' (пробел по умолчанию)");
-	SCM(params[0], COLOR_RED, " Используйте клавишу 'Вверх,вниз' (W,S по умолчанию)");
-	ShowMenuForPlayer(ChoseSkin[0],params[0]);
-	SetPlayerInterior(params[0],5);
+	SCM(params[0], COLOR_RED, " Используйте клавишу 'Вверх, вниз' (W, S по умолчанию)");
+
+	ShowMenuForPlayer(ChoseSkin[0], params[0]);
+	SetPlayerInterior(params[0], 5);
 	OldSkin[params[0]] = GetPlayerSkin(params[0]);
 	ChosenSkin[params[0]] = OldSkin[params[0]];
-	new skin =2 + random(100);
-	SetPlayerVirtualWorld(params[0],skin);
-	new rand = 0;
-	SetPlayerPos(params[0], gInviteSpawns[rand][0], gInviteSpawns[rand][1], gInviteSpawns[rand][2]);
-	SetPlayerFacingAngle(params[0], gInviteSpawns[rand][3]);
-	SetPlayerCameraPos(params[0],gInviteSpawns[rand][0] + 3, gInviteSpawns[rand][1], gInviteSpawns[rand][2]);
-	SetPlayerCameraLookAt(params[0],gInviteSpawns[rand][0], gInviteSpawns[rand][1], gInviteSpawns[rand][2]);
+
+	SetPlayerVirtualWorld(params[0], 2+random(100));
+	SetPlayerPos            (params[0], gInviteSpawns[0]  , gInviteSpawns[1], gInviteSpawns[2]);
+	SetPlayerFacingAngle    (params[0], gInviteSpawns[3]                                      );
+	SetPlayerCameraPos      (params[0], gInviteSpawns[0]+3, gInviteSpawns[1], gInviteSpawns[2]);
+	SetPlayerCameraLookAt   (params[0], gInviteSpawns[0]  , gInviteSpawns[1], gInviteSpawns[2]);
 	TogglePlayerControllable(params[0], 0);
-	SelectChar[params[0]] = 255;
+
+	SelectChar[params[0]]   = 255;
 	SelectCharID[params[0]] = PTEMP[params[0]][pMember];
 	SelectCharPlace[params[0]] = 1;
+    
 	printf("Администратор %s заставил %s сменить фракционный скин", Name(playerid), Name(params[0]));
 	return true;
 }
@@ -24132,90 +24155,7 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
 | vx %f | vy %f | vz %f",vehicleid,playerid,passenger_seat,new_x,new_y,new_z,vel_x,vel_y,vel_z);
 }
 */
-stock ChosePlayerSkin(playerid)
-{
-	SetPlayerHealthAC(playerid,100);
-	SCM(playerid, 0xBC2C2CFF, " Используйте клавишу 'Быстрый бег' (пробел по умолчанию)");
-	SCM(playerid, 0xBC2C2CFF, " Используйте клавишу 'Вверх,вниз' (W,S по умолчанию)");
-	if(PTEMP[playerid][pSex] == 1 && PTEMP[playerid][pTut] == 0)
-	{
-		new rand = 0;
-		SetPlayerPos(playerid, gInviteSpawns[rand][0], gInviteSpawns[rand][1], gInviteSpawns[rand][2]);
-		SetPlayerFacingAngle(playerid, gInviteSpawns[rand][3]);
-		SetPlayerCameraPos(playerid,gInviteSpawns[rand][0] + 3, gInviteSpawns[rand][1], gInviteSpawns[rand][2]);
-		SetPlayerCameraLookAt(playerid,gInviteSpawns[rand][0], gInviteSpawns[rand][1], gInviteSpawns[rand][2]);
-		PTEMP[playerid][pTut] = 0;
-		PTEMP[playerid][pChar][0] = 79;
-		PTEMP[playerid][pModel] = 255;
-		PTEMP[playerid][pMember] = 0;
-		PTEMP[playerid][pLeader] = 0;
-		PTEMP[playerid][pRank] = 1;
-		SetPlayerInterior(playerid,5);
-		if(!IsValidMenu(bomj[0]))
-		{
-			bomj[0] = CreateMenu("Victim", 1, 50.0, 160.0, 110.0);
-			SetMenuColumnHeader(bomj[0], 0, "Choose Skin");
-			AddMenuItem(bomj[0], 0, ">> Next");
-			AddMenuItem(bomj[0], 0, "<< Previous");
-			AddMenuItem(bomj[0], 0, "Save");
-		}
-		ShowMenuForPlayer(bomj[0],playerid);
-		ChosenSkin[playerid] = 79;
-		TutTime[playerid] = 0;
-		TogglePlayerControllable(playerid, 0);
-		SetPlayerSkin(playerid,PTEMP[playerid][pChar][0]);
-		SelectChar[playerid] = 255;
-		SelectCharPlace[playerid] = 1;
-		PTEMP[playerid][pChar][0] = ChosenSkin[playerid];
-		new skin =2 + random(100);
-		SetPlayerVirtualWorld(playerid,skin);
-		SetPlayerPos(playerid, gInviteSpawns[rand][0], gInviteSpawns[rand][1], gInviteSpawns[rand][2]);
-		SetPlayerFacingAngle(playerid, gInviteSpawns[rand][3]);
-		SetPlayerCameraPos(playerid,gInviteSpawns[rand][0] + 3, gInviteSpawns[rand][1], gInviteSpawns[rand][2]);
-		SetPlayerCameraLookAt(playerid,gInviteSpawns[rand][0], gInviteSpawns[rand][1], gInviteSpawns[rand][2]);
-		return true;
-	}
-	else if(PTEMP[playerid][pSex] == 2 && PTEMP[playerid][pTut] == 0)
-	{
-		new rand = 0;
-		SetPlayerPos(playerid, gInviteSpawns[rand][0], gInviteSpawns[rand][1], gInviteSpawns[rand][2]);
-		SetPlayerFacingAngle(playerid, gInviteSpawns[rand][3]);
-		SetPlayerCameraPos(playerid,gInviteSpawns[rand][0] + 3, gInviteSpawns[rand][1], gInviteSpawns[rand][2]);
-		SetPlayerCameraLookAt(playerid,gInviteSpawns[rand][0], gInviteSpawns[rand][1], gInviteSpawns[rand][2]);
-		PTEMP[playerid][pSex] = 2;
-		PTEMP[playerid][pTut] = 0;
-		PTEMP[playerid][pChar][0] = 90;
-		PTEMP[playerid][pModel] = 255;
-		PTEMP[playerid][pMember] = 0;
-		PTEMP[playerid][pLeader] = 0;
-		PTEMP[playerid][pRank] = 1;
-		ChosenSkin[playerid] = 90;
-		SetPlayerInterior(playerid,5);
-		if(!IsValidMenu(bomj[1]))
-		{
-			bomj[1] = CreateMenu("Victim", 1, 50.0, 160.0, 110.0);
-			SetMenuColumnHeader(bomj[1], 0, "Choose Skin");
-			AddMenuItem(bomj[1], 0, ">> Next>");
-			AddMenuItem(bomj[1], 0, "<< Previous");
-			AddMenuItem(bomj[1], 0, "Save");
-		}
-		ShowMenuForPlayer(bomj[1],playerid);
-		TutTime[playerid] = 0;
-		TogglePlayerControllable(playerid, 0);
-		SetPlayerSkin(playerid,PTEMP[playerid][pChar][0]);
-		SelectChar[playerid] = 255;
-		SelectCharPlace[playerid] = 1;
-		PTEMP[playerid][pChar][0] = ChosenSkin[playerid];
-		new skin =2 + random(100);
-		SetPlayerVirtualWorld(playerid,skin);
-		SetPlayerPos(playerid, gInviteSpawns[rand][0], gInviteSpawns[rand][1], gInviteSpawns[rand][2]);
-		SetPlayerFacingAngle(playerid, gInviteSpawns[rand][3]);
-		SetPlayerCameraPos(playerid,gInviteSpawns[rand][0] + 3, gInviteSpawns[rand][1], gInviteSpawns[rand][2]);
-		SetPlayerCameraLookAt(playerid,gInviteSpawns[rand][0], gInviteSpawns[rand][1], gInviteSpawns[rand][2]);
-		return true;
-	}
-	return true;
-}
+#include "..\gamemodes\custom\ChosePlayerSkin.pwn"
 publics: AntiNopResetPlayerWeapon(playerid)
 {
 	new Guns[13][2];

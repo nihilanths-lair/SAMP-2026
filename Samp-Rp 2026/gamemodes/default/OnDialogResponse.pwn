@@ -8215,41 +8215,42 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			return true;
 		}
 	case 1011:
+	{
+		if (!response) return true;
+		if (!listitem)
 		{
-			if(!response) return true;
-			if(listitem == 0)
-			{
-				SCM(playerid, COLOR_BLUE, " Рабочий день окончен");
-				SetPlayerSkin(playerid, PTEMP[playerid][pChar][0]);
-				SetPlayerColor(playerid, TEAM_HIT_COLOR);
-				DeletePVar(playerid,"Fraction_Duty");
-				SetPlayerArmourAC(playerid,0);
-				ResetPlayerWeaponsEx(playerid);
-				Update3DTextLabelText(LabelRank[playerid], TEAM_GROVE_COLOR, "");
-			}
-			else if(listitem == 1)
-			{
-			    SCM(playerid, COLOR_RED, " Используйте клавишу 'Быстрый бег' (пробел по умолчанию)");
-				SCM(playerid, COLOR_RED, " Используйте клавишу 'Вверх,вниз' (W,S по умолчанию)");
-				SetPVarInt(playerid, "player_frac_mo",1);
-				ShowMenuForPlayer(ChoseSkin[0],playerid);
-				SetPlayerInterior(playerid,5);
-				OldSkin[playerid] = GetPlayerSkin(playerid);
-				ChosenSkin[playerid] = OldSkin[playerid];
-				new skin =2 + random(100);
-				SetPlayerVirtualWorld(playerid,skin);
-				new rand = 0;
-				SetPlayerPos(playerid, gInviteSpawns[rand][0], gInviteSpawns[rand][1], gInviteSpawns[rand][2]);
-				SetPlayerFacingAngle(playerid, gInviteSpawns[rand][3]);
-				SetPlayerCameraPos(playerid,gInviteSpawns[rand][0] + 3, gInviteSpawns[rand][1], gInviteSpawns[rand][2]);
-				SetPlayerCameraLookAt(playerid,gInviteSpawns[rand][0], gInviteSpawns[rand][1], gInviteSpawns[rand][2]);
-				TogglePlayerControllable(playerid, 0);
-				SelectChar[playerid] = 255;
-				SelectCharID[playerid] = PTEMP[playerid][pMember];
-				SelectCharPlace[playerid] = 1;
-			}
-			return true;
+			SCM(playerid, COLOR_BLUE, " Рабочий день окончен");
+			SetPlayerSkin(playerid, PTEMP[playerid][pChar][0]);
+			SetPlayerColor(playerid, TEAM_HIT_COLOR);
+			DeletePVar(playerid, "Fraction_Duty");
+			SetPlayerArmourAC(playerid, 0);
+			ResetPlayerWeaponsEx(playerid);
+			Update3DTextLabelText(LabelRank[playerid], TEAM_GROVE_COLOR, "");
 		}
+		else if (listitem == 1)
+		{
+			SCM(playerid, COLOR_RED, " Используйте клавишу 'Быстрый бег' (пробел по умолчанию)");
+			SCM(playerid, COLOR_RED, " Используйте клавишу 'Вверх, вниз' (W, S по умолчанию)");
+
+			SetPVarInt(playerid, "player_frac_mo", 1);
+			ShowMenuForPlayer(ChoseSkin[0], playerid);
+			SetPlayerInterior(playerid, 5);
+			OldSkin[playerid] = GetPlayerSkin(playerid);
+			ChosenSkin[playerid] = OldSkin[playerid];
+
+			SetPlayerVirtualWorld(playerid, 2+random(100));
+			SetPlayerPos            (playerid, gInviteSpawns[0]  , gInviteSpawns[1], gInviteSpawns[2]);
+			SetPlayerFacingAngle    (playerid, gInviteSpawns[3]                                      );
+			SetPlayerCameraPos      (playerid, gInviteSpawns[0]+3, gInviteSpawns[1], gInviteSpawns[2]);
+			SetPlayerCameraLookAt   (playerid, gInviteSpawns[0]  , gInviteSpawns[1], gInviteSpawns[2]);
+			TogglePlayerControllable(playerid, 0);
+
+			SelectChar[playerid]   = 255;
+			SelectCharID[playerid] = PTEMP[playerid][pMember];
+			SelectCharPlace[playerid] = 1;
+		}
+		return true;
+	}
 	case 5522:
 		{
 			if(!response) return true;
