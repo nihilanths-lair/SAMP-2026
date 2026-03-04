@@ -4429,6 +4429,7 @@ publics:_UnSurfCar(carid)
 
 #include "..\gamemodes\default\OnPlayerExitVehicle.pwn"
 #include "..\gamemodes\default\OnPlayerRequestClass.pwn"
+#include "..\gamemodes\default\OnPlayerRequestSpawn.pwn"
 
 SetPlayerCriminal(playerid, killerid[], reason[])
 {
