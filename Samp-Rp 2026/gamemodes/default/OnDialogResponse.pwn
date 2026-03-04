@@ -7342,7 +7342,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			    ShowPlayerDialog(playerid, 2230, DIALOG_STYLE_INPUT, "Взять интервью", "Введите ид игрока для начала интервью", "Далее", "Назад");
 				return true;
 			}
-			if(GetDistanceBetweenPlayerss(playerid, plid) > 5)
+			if (GetDistanceBetweenPlayers(playerid, plid) > 5)
 		 	{
 			 	SCM(playerid, COLOR_GREY, " Игрок слишком далеко!");
 			 	ShowPlayerDialog(playerid, 2230, DIALOG_STYLE_INPUT, "Взять интервью", "Введите ид игрока для начала интервью", "Далее", "Назад");
@@ -7370,7 +7370,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			    ShowPlayerDialog(playerid, 2231, DIALOG_STYLE_INPUT, "Завершить интервью", "Введите ид игрока для завершения интвервью", "Далее", "Назад");
 				return true;
 			}
-			if(GetDistanceBetweenPlayerss(playerid, plid) > 5)
+			if (GetDistanceBetweenPlayers(playerid, plid) > 5)
 		 	{
 			 	SCM(playerid, COLOR_GREY, " Игрок слишком далеко!");
 			 	ShowPlayerDialog(playerid, 2231, DIALOG_STYLE_INPUT, "Завершить интервью", "Введите ид игрока для завершения интвервью", "Далее", "Назад");
