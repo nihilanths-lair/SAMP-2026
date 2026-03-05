@@ -154,7 +154,7 @@ public OnGameModeInit()
 	TextDrawColor(BoxPanel, 943208449);
 	TextDrawSetOutline(BoxPanel, 0);
 	//****//
-	URL = TextDrawCreate(520.000000, 8.000000, "meltrune.com");
+	URL = TextDrawCreate(520.000000, 8.000000, "Entropy-Rp");
 	TextDrawFont(URL, 0);
 	TextDrawColor(URL, 0x4755B2AA);
 	TextDrawLetterSize(URL, 0.3600, 1.400000);

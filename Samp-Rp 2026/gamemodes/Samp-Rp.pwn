@@ -4425,7 +4425,8 @@ publics:_UnSurfCar(carid)
 
 #include "..\gamemodes\default\OnPlayerStateChange.pwn"
 
-#include "..\gamemodes\custom\LockCar.pwn"
+// ќткрытие и закрытие транспортного средства
+#include "..\gamemodes\custom\car...pwn"
 
 #include "..\gamemodes\default\OnPlayerExitVehicle.pwn"
 #include "..\gamemodes\default\OnPlayerRequestClass.pwn"
@@ -7000,9 +7001,6 @@ GetMoney()
 	}
 	return ;
 }
-
-#include "..\gamemodes\custom\UnLockCar.pwn"
-
 SpeedVehicle(playerid)
 {
 	new Float:ST[4];
