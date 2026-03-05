@@ -4426,7 +4426,7 @@ publics:_UnSurfCar(carid)
 #include "..\gamemodes\default\OnPlayerStateChange.pwn"
 
 // ќткрытие и закрытие транспортного средства
-#include "..\gamemodes\custom\car...pwn"
+#include "..\gamemodes\custom\car\car...pwn"
 
 #include "..\gamemodes\default\OnPlayerExitVehicle.pwn"
 #include "..\gamemodes\default\OnPlayerRequestClass.pwn"

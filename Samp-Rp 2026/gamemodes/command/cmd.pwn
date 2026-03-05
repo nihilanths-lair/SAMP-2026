@@ -10842,45 +10842,54 @@ CMD:alock(playerid, params[])
 }
 CMD:plock(playerid, params[])
 {
-	if(!PTEMP[playerid][pLogin]) return true;
-	if(GetNearestVehicle(playerid) < comptruck[0] || GetNearestVehicle(playerid) > comptruck[1]) return SCM(playerid,COLOR_GREY," Вы не можете закрыть / открыть данный автомобиль");
-	if(GetPVarInt(playerid,"rentcar_job") != GetNearestVehicle(playerid)) return SCM(playerid,COLOR_GREY," Это не ваш автомобиль!");
-	GetVehicleParamsEx(GetNearestVehicle(playerid),engine,lights,alarm,doors,bonnet,boot,objective);
+	if (!PTEMP[playerid][pLogin]) return true;
+
+	if (GetNearestVehicle(playerid) < comptruck[0] || GetNearestVehicle(playerid) > comptruck[1]) return SCM(playerid, COLOR_GREY, " Вы не можете закрыть / открыть данный автомобиль");
+	if (GetPVarInt(playerid, "rentcar_job") != GetNearestVehicle(playerid)) return SCM(playerid, COLOR_GREY, " Это не ваш автомобиль!");
+	GetVehicleParamsEx(GetNearestVehicle(playerid), engine, lights, alarm, doors, bonnet, boot, objective);
 	PlayerPlaySound(playerid, 24600, 0.0, 0.0, 0.0);
-	switch(doors)
+	switch (doors){
+	case 0:
 	{
-	case 0: GameTextForPlayer(playerid, "~w~CAR ~r~LOCK", 5000, 3), LockCar(playerid,GetNearestVehicle(playerid));
-	case 1: GameTextForPlayer(playerid, "~w~CAR ~g~UNLOCK", 5000, 3), UnLockCar(playerid,GetNearestVehicle(playerid));
+		GameTextForPlayer(playerid, "~w~CAR ~r~LOCK", 5000, 3);
+		LockCar(playerid, GetNearestVehicle(playerid));
 	}
+	case 1:
+	{
+		GameTextForPlayer(playerid, "~w~CAR ~g~UNLOCK", 5000, 3);
+		UnLockCar(playerid, GetNearestVehicle(playerid));
+	}}
 	return true;
 }
 CMD:lock(playerid, params[])
 {
-	if(PTEMP[playerid][pLogin] == 0) return true;
+	if (PTEMP[playerid][pLogin] == 0) return true;
 	//if(!HGet(playerid)) return SCM(playerid, COLOR_GRAD1, "В данный момент у вас нет машины");
-	if(!IsNearOurCar(playerid)) return true;
-	for(new carid = 0; carid < MAX_VEHICLES; carid++)
+	if (!IsNearOurCar(playerid)) return true;
+	for (new carid = 0; carid < MAX_VEHICLES; carid++)
 	{
-		if(!IsPlayerNearVehicle(playerid, carid, 3.0)) continue;
-		/*if(CarInfo[playerid][carID][0] != carid && CarInfo[playerid][carID][1] != carid && CarInfo[playerid][carID][2] != carid
-		&& CarInfo[playerid][carID][3] != carid && CarInfo[playerid][carID][4] != carid) continue;*/
-		if(garage_car[playerid][0] != carid && garage_car[playerid][1] != carid && garage_car[playerid][2] != carid
+		if (!IsPlayerNearVehicle(playerid, carid, 3.0)) continue;
+		/*
+		if(CarInfo[playerid][carID][0] != carid && CarInfo[playerid][carID][1] != carid && CarInfo[playerid][carID][2] != carid
+		&& CarInfo[playerid][carID][3] != carid && CarInfo[playerid][carID][4] != carid) continue;
+		*/
+		if (garage_car[playerid][0] != carid && garage_car[playerid][1] != carid && garage_car[playerid][2] != carid
 		&& garage_car[playerid][3] != carid && garage_car[playerid][4] != carid && house_car[playerid] != carid) continue;
 		
-		GetVehicleParamsEx(carid,engine,lights,alarm,doors,bonnet,boot,objective);
+		GetVehicleParamsEx(carid, engine, lights, alarm, doors, bonnet, boot, objective);
 		switch (doors)
 		{
 			case 0:
 			{
 				GameTextForPlayer(playerid, "~w~CAR ~r~LOCK", 5000, 3);
 				PlayerPlaySound(playerid, 24600, 0.0, 0.0, 0.0);
-				LockCar(playerid,carid);
+				LockCar(playerid, carid);
 			}
 			case 1:
 			{
 				GameTextForPlayer(playerid, "~w~CAR ~g~UNLOCK", 5000, 3);
 				PlayerPlaySound(playerid, 24600, 0.0, 0.0, 0.0);
-				UnLockCar(playerid,carid);
+				UnLockCar(playerid, carid);
 			}
 		}
 	}
@@ -10888,27 +10897,27 @@ CMD:lock(playerid, params[])
 }
 CMD:rlock(playerid, params[])
 {
-	if(PTEMP[playerid][pLogin] == 0) return true;
-	new carid;
-	carid = arenda[playerid];
-	GetVehicleParamsEx(carid,engine,lights,alarm,doors,bonnet,boot,objective);
-	new Float:cx,Float:cy,Float:cz;
+	if (PTEMP[playerid][pLogin] == 0) return true;
+
+	new carid = arenda[playerid];
+	GetVehicleParamsEx(carid, engine, lights, alarm, doors, bonnet, boot, objective);
+	new Float:cx, Float:cy, Float:cz;
 	GetVehiclePos(carid, cx, cy, cz);
-	if(!PlayerToPoint(4.0, playerid, cx, cy, cz)) return true;
+	if (!PlayerToPoint(4.0, playerid, cx, cy, cz)) return true;
 	switch (doors)
 	{
 	case 0:
-		{
-			GameTextForPlayer(playerid, "~w~CAR ~r~LOCK", 5000, 3);
-			PlayerPlaySound(playerid, 24600, 0.0, 0.0, 0.0);
-			LockCar(playerid,carid);
-		}
+	{
+		GameTextForPlayer(playerid, "~w~CAR ~r~LOCK", 5000, 3);
+		PlayerPlaySound(playerid, 24600, 0.0, 0.0, 0.0);
+		LockCar(playerid, carid);
+	}
 	case 1:
-		{
-			GameTextForPlayer(playerid, "~w~CAR ~g~UNLOCK", 5000, 3);
-			PlayerPlaySound(playerid, 24600, 0.0, 0.0, 0.0);
-			UnLockCar(playerid,carid);
-		}
+	{
+		GameTextForPlayer(playerid, "~w~CAR ~g~UNLOCK", 5000, 3);
+		PlayerPlaySound(playerid, 24600, 0.0, 0.0, 0.0);
+		UnLockCar(playerid, carid);
+	}
 	}
 	return true;
 }

@@ -1,3 +1,4 @@
+// Открыть транспортное средство
 UnLockCar(playerid, carid)
 {
 	if (GetPlayerState(playerid) == PLAYER_STATE_DRIVER)

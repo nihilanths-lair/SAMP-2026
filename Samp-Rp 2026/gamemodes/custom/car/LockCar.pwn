@@ -1,3 +1,4 @@
+// Закрыть транспортное средство
 LockCar(playerid, carid)
 {
 	if (GetPlayerState(playerid) == PLAYER_STATE_DRIVER)
