@@ -10,41 +10,52 @@ public OnGameModeInit()
 	new rand1 = random(2)+1;
 	new rand2 = random(2)+1;
 	new rand3 = random(2)+1;
-	ZernBuy = 3+rand1;
-	UrojSell = 33+rand2;
-	NarkSell = 33+rand3;
-    SendRconCommand("ackslimit 150000");
-    for(new i = 0; i < MAX_VEHICLES; i++)
-    {
-		jobcar[i] = false;
-	}
-	BikerZoneCoords[0][zoneX1] = 1937.3152,BikerZoneCoords[0][zoneY1] = 2210.0862,BikerZoneCoords[0][zoneX2] = 2011.1254,BikerZoneCoords[0][zoneY2] = 2266.0305;
-	BikerZoneCoords[1][zoneX1] = 808.8674,BikerZoneCoords[1][zoneY1] = -1160.4417,BikerZoneCoords[1][zoneX2] = 928.9384,BikerZoneCoords[1][zoneY2] = -1306.6891;
-	BikerZoneCoords[2][zoneX1] = -1875.3832,BikerZoneCoords[2][zoneY1] = 1187.3928,BikerZoneCoords[2][zoneX2] = -1754.3665,BikerZoneCoords[2][zoneY2] = 1287.2761;
-	for(new x = 0; x < 3; x++)
-	BikerZone[x] = GangZoneCreate(BikerZoneCoords[x][zoneX1],BikerZoneCoords[x][zoneY1],BikerZoneCoords[x][zoneX2],BikerZoneCoords[x][zoneY2]);
 
-	if(GetMaxPlayers() > 1000) return SendRconCommand("exit");
-	for(new i = 1; i<MAX_PLAYERS; i++) Sonar[i] = random(2000);
-	for(new i=0; i<MAX_PLAYERS; i++) strmid(ExitInfo[i][ExitIP],"None", 0, strlen("None"), 32), ExitInfo[i][ExitTime] = 0;
+	ZernBuy = 3 + rand1;
+	UrojSell = 33 + rand2;
+	NarkSell = 33 + rand3;
+    SendRconCommand("ackslimit 150000");
+    for (new i = 0; i < MAX_VEHICLES; i++) jobcar[i] = false;
+
+	BikerZoneCoords[0][zoneX1] = 1937.3152;
+    BikerZoneCoords[0][zoneY1] = 2210.0862;
+    BikerZoneCoords[0][zoneX2] = 2011.1254;
+    BikerZoneCoords[0][zoneY2] = 2266.0305;
+
+	BikerZoneCoords[1][zoneX1] = 808.8674;
+    BikerZoneCoords[1][zoneY1] = -1160.4417;
+    BikerZoneCoords[1][zoneX2] = 928.9384;
+    BikerZoneCoords[1][zoneY2] = -1306.6891;
+
+	BikerZoneCoords[2][zoneX1] = -1875.3832;
+    BikerZoneCoords[2][zoneY1] = 1187.3928;
+    BikerZoneCoords[2][zoneX2] = -1754.3665;
+    BikerZoneCoords[2][zoneY2] = 1287.2761;
+
+	for (new x = 0; x < 3; x++) BikerZone[x] = GangZoneCreate(BikerZoneCoords[x][zoneX1], BikerZoneCoords[x][zoneY1], BikerZoneCoords[x][zoneX2], BikerZoneCoords[x][zoneY2]);
+
+	if (GetMaxPlayers() > 1000) return SendRconCommand("exit");
+	for (new i = 1; i < MAX_PLAYERS; i++) Sonar[i] = random(2000);
+	for (new i = 0; i < MAX_PLAYERS; i++) strmid(ExitInfo[i][ExitIP],"None", 0, strlen("None"), 32), ExitInfo[i][ExitTime] = 0;
 	exitpodeezd = CreateDynamicPickup(1318, 1, 2238.9285,-1192.6212,1033.7969, -1);
 	podeezdils = CreatePickup(1318, 1, 2265.8848,1647.5061,1084.2344, -1);
+
 	new strings[256];
-	format(strings, sizeof(strings), "Порт СФ\nНефть: %d\nУголь: %d\nДерево: %d",Sellbenz[1],Sellugol[1],Sellderevo[1]);
+	format(strings, sizeof (strings), "Порт СФ\nНефть: %d\nУголь: %d\nДерево: %d",Sellbenz[1],Sellugol[1],Sellderevo[1]);
 	Doki[1] = Create3DTextLabel(strings, 0xFFFF00FF,-1731.4509,118.9413,3.5547,20.0,0,1);
-	format(strings, sizeof(strings), "Порт ЛС\nНефть: %d\nУголь: %d\nДерево: %d",Sellbenz[0],Sellugol[0],Sellderevo[0]);
+	format(strings, sizeof (strings), "Порт ЛС\nНефть: %d\nУголь: %d\nДерево: %d",Sellbenz[0],Sellugol[0],Sellderevo[0]);
 	Doki[0] = Create3DTextLabel(strings, 0xFFFF00FF,2601.7222,-2226.5867,13.3732,20.0,0,1);
-	format(strings, sizeof(strings), "Нефтезавод №1\nЦена за тонну: %d",Benzbuy[0]);
+	format(strings, sizeof (strings), "Нефтезавод №1\nЦена за тонну: %d",Benzbuy[0]);
 	GasZavod[0] = Create3DTextLabel(strings, 0xFFFF00FF,256.4736,1414.5182,10.7075,20.0,0,1);
-	format(strings, sizeof(strings), "Нефтезавод №2\nЦена за тонну: %d",Benzbuy[1]);
+	format(strings, sizeof (strings), "Нефтезавод №2\nЦена за тонну: %d",Benzbuy[1]);
 	GasZavod[1] = Create3DTextLabel(strings, 0xFFFF00FF,-1046.7723,-670.7208,32.3516,20.0,0,1);
-	format(strings, sizeof(strings), "Склад угля №1\nЦена за тонну: %d",ugolbuy[0]);
+	format(strings, sizeof (strings), "Склад угля №1\nЦена за тонну: %d",ugolbuy[0]);
 	Sklad[0] = Create3DTextLabel(strings, 0xFFFF00FF,608.7718,847.8765,-43.1532,20.0,0,1);
-	format(strings, sizeof(strings), "Лесопилка №1\nЦена за тонну: %d",Buyderevo[0]);
+	format(strings, sizeof (strings), "Лесопилка №1\nЦена за тонну: %d",Buyderevo[0]);
 	Derevobuy[0] = Create3DTextLabel(strings, 0xFFFF00FF,-449.3336,-65.9115,59.4158,20.0,0,1);
-	format(strings, sizeof(strings), "Лесопилка №2\nЦена за тонну: %d",Buyderevo[1]);
+	format(strings, sizeof (strings), "Лесопилка №2\nЦена за тонну: %d",Buyderevo[1]);
 	Derevobuy[1] = Create3DTextLabel(strings, 0xFFFF00FF,-1978.6846,-2434.8274,30.6250,20.0,0,1);
-	format(strings, sizeof(strings), "Склад угля №2\nЦена за тонну: %d",ugolbuy[1]);
+	format(strings, sizeof (strings), "Склад угля №2\nЦена за тонну: %d",ugolbuy[1]);
 	Sklad[1] = Create3DTextLabel(strings, 0xFFFF00FF,-1873.0896,-1720.2430,21.7500,20.0,0,1);
 	// Кости
 	Bone[0] = TextDrawCreate(595.147888, 142.666656, "usebox");
@@ -136,7 +147,8 @@ public OnGameModeInit()
 	TextDrawSetShadow(Speed, 0);
 	TextDrawSetOutline(Speed, 0);
 	TextDrawFont(Speed, 0);
-	/*Speed = TextDrawCreate(533.000000, 393.000000, "____");
+	/*
+    Speed = TextDrawCreate(533.000000, 393.000000, "____");
 	TextDrawBackgroundColor(Speed, 255);
 	TextDrawFont(Speed, 1);
 	TextDrawLetterSize(Speed, 1.309998, 4.499999);
@@ -146,7 +158,8 @@ public OnGameModeInit()
 	TextDrawSetShadow(Speed, 1);
 	TextDrawUseBox(Speed, 1);
 	TextDrawBoxColor(Speed, COLOR_BOX);
-	TextDrawTextSize(Speed, 348.000000, 27.000000);*/
+	TextDrawTextSize(Speed, 348.000000, 27.000000);
+    */
 	BoxPanel = TextDrawCreate(352.000000, 356.000000, "_~n~_");
 	TextDrawBackgroundColor(BoxPanel, 255);
 	TextDrawFont(BoxPanel, 1);
@@ -159,11 +172,13 @@ public OnGameModeInit()
 	TextDrawColor(URL, 0x4755B2AA);
 	TextDrawLetterSize(URL, 0.3600, 1.400000);
 	TextDrawSetOutline(URL, 1);
-	/*URL = TextDrawCreate(520.000000, 8.000000, ""NameServer"");
+	/*
+	URL = TextDrawCreate(520.000000, 8.000000, ""NameServer"");
 	TextDrawFont(URL, 2);
 	TextDrawColor(URL, 0x00FF00AA);
 	TextDrawLetterSize(URL, 0.3600, 1.400000);
-	TextDrawSetOutline(URL, 1);*/
+	TextDrawSetOutline(URL, 1);
+	*/
 	CreateObject(1569,2648.10,1185.73,9.82,0,0,0);
 	// Домик
 	modernhouse[0] = CreateObject(19462, 231.84, 1028.48, 1081.11, 0, 0, 0); // down
@@ -231,8 +246,8 @@ public OnGameModeInit()
 	SetActorHealth(ActorsRob[9], 255);
 	SetActorInvulnerable(ActorsRob[9], true);
 	
-	for(new i = 0; i < 10; i++) cdrob[i] = false;
-	SetTimer("RobbingTimer", 2000, true);
+	for (new i = 0; i < 10; i++) cdrob[i] = false;
+	SetTimer("_RobbingTimer", 2000, true);
 	
 	//=============================Nautosalon==================================
 	//AutoSalon
@@ -254,7 +269,7 @@ public OnGameModeInit()
 	AutoShopText[5] = TextDrawCreate(527.000000, 271.000000, "<");
 	TextDrawLetterSize(AutoShopText[5], 0.220000, 0.599999);
 
-	for(new s; s < 6; s++)
+	for (new s; s < 6; s++)
 	{
 		TextDrawTextSize(AutoShopText[s], 10.10, 40.40);
 		TextDrawAlignment(AutoShopText[s], 2);
@@ -286,7 +301,7 @@ public OnGameModeInit()
 	TextDrawBoxColor(AutoShopText[8], 1128481664);
 	TextDrawTextSize(AutoShopText[8], 0.000000, 105.000000);
 
-	for(new e = 6; e < 9; e++)
+	for (new e = 6; e < 9; e++)
 	{
 		TextDrawAlignment(AutoShopText[e], 2);
 		TextDrawBackgroundColor(AutoShopText[e], 255);
@@ -301,7 +316,7 @@ public OnGameModeInit()
 	AutoShopText[10] = TextDrawCreate(537.000000, 251.000000, "COLOR");
 	AutoShopText[11] = TextDrawCreate(541.000000, 165.000000, "INFO");
 
-	for(new r = 9; r < 12; r++)
+	for (new r = 9; r < 12; r++)
 	{
 		TextDrawBackgroundColor(AutoShopText[r], 255);
 		TextDrawFont(AutoShopText[r], 2);
@@ -699,16 +714,16 @@ public OnGameModeInit()
 	gettime(ghour, gminute, gsecond);
 	FixHour(ghour);
 	ghour = shifthour;
-	if(!realtime) SetWorldTime(wtime);
+	if (!realtime) SetWorldTime(wtime);
 	//==========================================================================
 	LimitPlayerMarkerRadius(100.0);
 	ManualVehicleEngineAndLights();
 	AllowInteriorWeapons(1);
 	//==========================================================================
 	//==========================================================================
-	for(new i = 0; i < sizeof(CreatedCars); i++) CreatedCars[i] = 0;
+	for (new i = 0; i < sizeof (CreatedCars); i++) CreatedCars[i] = 0;
 	//==========================================================================
-	for(new i = 0; i <= sizeof(Peds)-1; i++) AddPlayerClass(Peds[i][0],1958.3783,1343.1572,1100.3746,269.1425,-1,-1,-1,-1,-1,-1);
+	for (new i = 0; i <= sizeof (Peds)-1; i++) AddPlayerClass(Peds[i][0],1958.3783,1343.1572,1100.3746,269.1425,-1,-1,-1,-1,-1,-1);
 	//============================ Иконки на карте =============================
 	CreateDynamicMapIcon(2492.3135,-1461.1936,24.0216, 42, -1, 0, -1, -1, 400.0);//Работа автоугонщика.
 	CreateDynamicMapIcon(-2.9803,-363.4466,5.4297,51,0); // Развозчики
@@ -766,16 +781,17 @@ public OnGameModeInit()
 	AddVehicleComponent(Roadtrain[4], 1074);
 	AddVehicleComponent(Roadtrain[5], 1074);
 	//============================== Таймеры ===================================
-	SetTimer("OnCheckTrigger",250,1);
-	SetTimer("_UpdateFresh", 250,1);
-	freshtimer = SetTimer("_Fresh", 1000,1);
-	SetTimer("_UpdateSpeedometr",150,1);
-	Hptimer = SetTimer("_HPCheck", 40000, 1);
-	reklamatimer = SetTimer("ReklamaTimer",1800000,true);
-	SetTimer("_Recognition", 1500000, 1);
-	SetTimer("_GzCheck", 1000,1);
+	SetTimer("OnCheckTrigger"             ,     250, true);
+	SetTimer("_UpdateFresh"               ,     250, true);
+	freshtimer = SetTimer("_Fresh"        ,    1000, true);
+	SetTimer("_UpdateSpeedometr"          ,     150, true);
+	Hptimer = SetTimer("_HPCheck"         ,   40000, true);
+	reklamatimer = SetTimer("ReklamaTimer", 1800000, true);
+	SetTimer("_Recognition"               , 1500000, true);
+	SetTimer("_GzCheck"                   ,    1000, true);
 	//==========================================================================
-	for(new Vehicles = 0; Vehicles < MAX_VEHICLES; Vehicles++) {
+	for (new Vehicles = 0; Vehicles < MAX_VEHICLES; Vehicles++)
+	{
 		Farmcar_pickup[Vehicles] = 0;
 		CarHealth[Vehicles] = float(1000);
 		car_pickup[Vehicles] = 0;
@@ -783,7 +799,7 @@ public OnGameModeInit()
 		Fuell[Vehicles] = 200;
 		vehcreat[Vehicles] = 0;
 		SetVehicleNumberPlate(Vehicles, ""NameServer"");
-	 	SetVehicleParamsEx(Vehicles,false,false,false,false,false,false,false);
+	 	SetVehicleParamsEx(Vehicles, false, false, false, false, false, false, false);
 		SERVERCARID[Vehicles] = true;
 	}
 	//==========================================================================
@@ -834,35 +850,32 @@ public OnGameModeInit()
 	printf("Подождите, пожалуйста, идёт загрузка . . .");
 	LoadMySQLSettings();
 	//mysql_log();
-	DATABASE = mysql_connect(MySQLSettings[HOS7_HOST],MySQLSettings[HOS7_USERNAME],MySQLSettings[HOS7_DB],MySQLSettings[HOS7_PASSWORD]);
-	mysql_function_query(DATABASE,"SET NAMES cp1251",false,"","");
-	mysql_function_query(DATABASE,"SET SESSION character_set_server='utf8';",false,"","");
+	DATABASE = mysql_connect(MySQLSettings[HOS7_HOST], MySQLSettings[HOS7_USERNAME], MySQLSettings[HOS7_DB], MySQLSettings[HOS7_PASSWORD]);
+	mysql_function_query(DATABASE, "SET NAMES cp1251", false, "", "");
+	mysql_function_query(DATABASE, "SET SESSION character_set_server='utf8';", false, "", "");
 	
-	mysql_function_query(DATABASE,"SELECT * FROM `"TABLE_HOUSE"`",true,"OnMySQL_QUERY","iis",11,-1,"");
-	mysql_function_query(DATABASE,"SELECT * FROM `"TABLE_BIZZ"`",true,"OnMySQL_QUERY","iis",6,-1,"");
-	mysql_function_query(DATABASE,"SELECT * FROM `"TABLE_WORKSHOPS"`",true,"OnMySQL_QUERY","iis",7,-1,"");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_HOUSE"`"    , true, "OnMySQL_QUERY", "iis", 11, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_BIZZ"`"     , true, "OnMySQL_QUERY", "iis",  6, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_WORKSHOPS"`", true, "OnMySQL_QUERY", "iis",  7, -1, "");
 	// Бонусы
-	mysql_function_query(DATABASE,"SELECT * FROM `boost`",true,"OnMySQL_QUERY","iis",34,-1,"");
-	mysql_function_query(DATABASE,"SELECT * FROM `boost`",true,"OnMySQL_QUERY","iis",35,-1,"");
+	mysql_function_query(DATABASE, "SELECT * FROM `boost`", true, "OnMySQL_QUERY", "iis", 34, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `boost`", true, "OnMySQL_QUERY", "iis", 35, -1, "");
 	//===========
-	mysql_function_query(DATABASE,"SELECT * FROM `"TABLE_KVARTIRS"`",true,"OnMySQL_QUERY","iis",8,-1,"");
-	mysql_function_query(DATABASE,"SELECT * FROM `"TABLE_PODEZDS"`",true,"OnMySQL_QUERY","iis",9,-1,"");
-	mysql_function_query(DATABASE,"SELECT * FROM `"TABLE_CASINO"`",true,"OnMySQL_QUERY","iis",10,-1,"");
-	mysql_function_query(DATABASE,"SELECT * FROM `"TABLE_OTHERS"`",true,"OnMySQL_QUERY","iis",0,-1,"");
-	mysql_function_query(DATABASE,"SELECT * FROM `"TABLE_ATM"`",true,"OnMySQL_QUERY","iis",22,-1,"");
-	mysql_function_query(DATABASE,"SELECT * FROM `"TABLE_FARM"`",true,"OnMySQL_QUERY","iis",28,-1,"");
-	mysql_function_query(DATABASE,"SELECT * FROM `"TABLE_STALL"`",true,"OnMySQL_QUERY","iis",31,-1,"");
-	mysql_function_query(DATABASE,"SELECT * FROM `"TABLE_GANGZONE"`",true,"OnMySQL_QUERY","iis",32,-1,"");
-	mysql_function_query(DATABASE,"SELECT * FROM `grating`",true,"OnMySQL_QUERY","iis",55,-1,"");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_KVARTIRS"`", true, "OnMySQL_QUERY", "iis",  8, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_PODEZDS"`" , true, "OnMySQL_QUERY", "iis",  9, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_CASINO"`"  , true, "OnMySQL_QUERY", "iis", 10, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_OTHERS"`"  , true, "OnMySQL_QUERY", "iis",  0, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_ATM"`"     , true, "OnMySQL_QUERY", "iis", 22, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_FARM"`"    , true, "OnMySQL_QUERY", "iis", 28, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_STALL"`"   , true, "OnMySQL_QUERY", "iis", 31, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_GANGZONE"`", true, "OnMySQL_QUERY", "iis", 32, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `grating`"         , true, "OnMySQL_QUERY", "iis", 55, -1, "");
 	////////////////  Создание альтернативных команд /////////////////
 	// Разбан аккаунтов
-	mysql_function_query(DATABASE,"SELECT * FROM `"TABLE_BAN"`",true,"OnMySQL_QUERY","iis",26,-1,"");
-	mysql_function_query(DATABASE,"UPDATE `"TABLE_ACCOUNTS"` SET `progolos` = '0', pMin = '0'", false, "","");
-	if(!strcmp(GetDay(), "Понедельник", true))
-	{
-	    mysql_function_query(DATABASE,"UPDATE `"TABLE_ACCOUNTS"` SET pChas = '0'", false, "","");
-	}
-	
-	printf("Загрузка завершена!");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_BAN"`", true, "OnMySQL_QUERY", "iis", 26, -1, "");
+	mysql_function_query(DATABASE, "UPDATE `"TABLE_ACCOUNTS"` SET `progolos` = '0', pMin = '0'", false, "", "");
+
+	if (!strcmp(GetDay(), "Понедельник", true)) mysql_function_query(DATABASE,"UPDATE `"TABLE_ACCOUNTS"` SET pChas = '0'", false, "","");
+	print("Загрузка завершена!");
 	return true;
 }
