@@ -3,32 +3,39 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
     printf(">-- OnPlayerStateChange(playerid = %d, newstate = %d, oldstate = %d) -->", playerid, newstate, oldstate);
     //SendMes(playerid, COLOR_BLUE, "NEWSTATE - %i, OLDSTATE - %i", newstate, oldstate);
 
-	new tacha = GetPlayerVehicleID(playerid);
 	SetPVarInt(playerid, "GunCheckTime", 2);
-	if (newstate == 2) SetPVarInt(playerid,"AC_MCS",GetTickCount());
-	else if (oldstate == 2) if((GetTickCount() - GetPVarInt(playerid,"AC_MCS")) <= 250 && PTEMP[playerid][pAdmin] <= 0) return CheatKick(playerid,005);
-	if ((newstate == 2 && oldstate == 3) || (newstate == 3 && oldstate == 2) && PTEMP[playerid][pAdmin] <= 0) return CheatKick(playerid, 006);
+
+	if (newstate == PLAYER_STATE_DRIVER) SetPVarInt(playerid, "AC_MCS", GetTickCount());
+	else if (oldstate == PLAYER_STATE_DRIVER)
+    {
+        if ((GetTickCount() - GetPVarInt(playerid, "AC_MCS")) <= 250 && PTEMP[playerid][pAdmin] <= 0) return CheatKick(playerid, 005);
+    }
+
+	if ((newstate == PLAYER_STATE_DRIVER && oldstate == PLAYER_STATE_PASSENGER)
+        ||
+        (newstate == PLAYER_STATE_PASSENGER && oldstate == PLAYER_STATE_DRIVER)
+        &&
+        PTEMP[playerid][pAdmin] <= 0
+       )
+        return CheatKick(playerid, 006);
+
 	if (oldstate == PLAYER_STATE_ONFOOT && newstate == PLAYER_STATE_DRIVER) GetVehicleHealth(GetPlayerVehicleID(playerid), last_vehicle_health[playerid]);
 	else if (oldstate == PLAYER_STATE_DRIVER && newstate == PLAYER_STATE_ONFOOT) last_vehicle_health[playerid] = -1;
-	if (oldstate == PLAYER_STATE_DRIVER)
-	{
-		KillTimer(timer2[playerid]);
-	}
+
+	if (oldstate == PLAYER_STATE_DRIVER) KillTimer(timer2[playerid]);
 	if (SpecID[playerid] != INVALID_PLAYER_ID)
 	{
 		if (Spectate[SpecID[playerid]] == 1 && SpecAd[SpecID[playerid]] == playerid)
 		{
-			StartSpectate(SpecID[playerid],playerid);
+			StartSpectate(SpecID[playerid], playerid);
 		}
 	}
-	new caridi = GetPlayerVehicleID(playerid);
-	//if(newstate == PLAYER_STATE_DRIVER && Type == 2) Timerkk[playerid] = SetTimerEx("_UnSurfCar",1600,1, "i",GetPlayerVehicleID(playerid));
 	if (newstate == PLAYER_STATE_ONFOOT)
 	{
 		new Veh = GetPlayerVehicleID(playerid);
 		car_ex[Veh] = true;
-		GetVehiclePos(Veh,car_coord[Veh][0],car_coord[Veh][1],car_coord[Veh][2]);
-		GetVehicleZAngle(Veh,car_coord[Veh][3]);
+		GetVehiclePos(Veh, car_coord[Veh][0], car_coord[Veh][1], car_coord[Veh][2]);
+		GetVehicleZAngle(Veh, car_coord[Veh][3]);
 		if (GetPVarInt(playerid, "farm_status") == 3 || GetPVarInt(playerid, "farm_status") == 5) DisablePlayerRaceCheckpoint(playerid), DeletePVar(playerid, "farm_status");
 		if (PTEMP[playerid][pJob] == 2)
 		{
@@ -47,8 +54,10 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		{
 			SCM(playerid, 0x6495EDFF, "Прямой эфир завершён");
 			SCM(TalkingLive[playerid], 0x6495EDFF, "Прямой эфир завершён");
-			TogglePlayerControllable(playerid, 1);
-			TogglePlayerControllable(TalkingLive[playerid], 1);
+
+			TogglePlayerControllable(playerid, true);
+			TogglePlayerControllable(TalkingLive[playerid], true);
+
 			TalkingLive[TalkingLive[playerid]] = 255;
 			TalkingLive[playerid] = 255;
 			return true;
@@ -57,8 +66,10 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		{
 			SCM(playerid, 0x6495EDFF, "Прямой эфир завершён");
 			SCM(TalkingLivels[playerid], 0x6495EDFF, "Прямой эфир завершён");
-			TogglePlayerControllable(playerid, 1);
-			TogglePlayerControllable(TalkingLivels[playerid], 1);
+
+			TogglePlayerControllable(playerid, true);
+			TogglePlayerControllable(TalkingLivels[playerid], true);
+
 			TalkingLivels[TalkingLivels[playerid]] = 255;
 			TalkingLivels[playerid] = 255;
 			return true;
@@ -67,8 +78,10 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		{
 			SCM(playerid, 0x6495EDFF, "Прямой эфир завершён");
 			SCM(TalkingLivelv[playerid], 0x6495EDFF, "Прямой эфир завершён");
-			TogglePlayerControllable(playerid, 1);
-			TogglePlayerControllable(TalkingLivelv[playerid], 1);
+
+			TogglePlayerControllable(playerid, true);
+			TogglePlayerControllable(TalkingLivelv[playerid], true);
+
 			TalkingLivelv[TalkingLivelv[playerid]] = 255;
 			TalkingLivelv[playerid] = 255;
 			return true;
@@ -76,40 +89,54 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 	}
 	if (newstate == PLAYER_STATE_DRIVER)
 	{
+        new tacha = GetPlayerVehicleID(playerid);
 		if (!IsAPlane(tacha) && !IsABoat(tacha) && !IsABike(tacha) && AutoSaloon[playerid] != true)
 		{
 			if (PTEMP[playerid][pDrivingSkill] < 2) PTEMP[playerid][pDrivingSkill] = 1;
-			PlayerTextDrawSetString(playerid,LimitShow[playerid], "~r~MAX");
-			TextDrawShowForPlayer(playerid,Speed);
-			PlayerTextDrawShow(playerid,SpeedShow[playerid]);
-			PlayerTextDrawShow(playerid,FuelShow[playerid]);
-			PlayerTextDrawShow(playerid,StatusShow[playerid]);
-			PlayerTextDrawShow(playerid,KMShow[playerid]);// СПИДОМЕТР
-			PlayerTextDrawShow(playerid,LimitShow[playerid]);
-			PlayerTextDrawShow(playerid,FillShow[playerid]);
-			TextDrawShowForPlayer(playerid, BoxPanel);
-			GetVehicleParamsEx(GetPlayerVehicleID(playerid),engine,lights,alarm,doors,bonnet,boot,objective);
-			if (doors) PlayerTextDrawColor(playerid,StatusShow[playerid], -16776961), PlayerTextDrawSetString(playerid,StatusShow[playerid],"Lock"), PlayerTextDrawShow(playerid,StatusShow[playerid]);
-			else PlayerTextDrawColor(playerid,StatusShow[playerid], 0x20B220AA), PlayerTextDrawSetString(playerid,StatusShow[playerid],"Unlock"), PlayerTextDrawShow(playerid,StatusShow[playerid]);
-			if (vehicleidtp[playerid] != tacha && PTEMP[playerid][pAdmin] == 0) return 1;
+
+			PlayerTextDrawSetString(playerid, LimitShow[playerid], "~r~MAX");
+			TextDrawShowForPlayer  (playerid, Speed);
+			PlayerTextDrawShow     (playerid, SpeedShow[playerid]);
+			PlayerTextDrawShow     (playerid, FuelShow[playerid]);
+			PlayerTextDrawShow     (playerid, StatusShow[playerid]);
+			PlayerTextDrawShow     (playerid, KMShow[playerid]); // СПИДОМЕТР
+			PlayerTextDrawShow     (playerid, LimitShow[playerid]);
+			PlayerTextDrawShow     (playerid, FillShow[playerid]);
+			TextDrawShowForPlayer  (playerid, BoxPanel);
+
+			GetVehicleParamsEx(GetPlayerVehicleID(playerid), engine, lights, alarm, doors, bonnet, boot, objective);
+			if (doors)
+            {
+                PlayerTextDrawColor    (playerid, StatusShow[playerid], -16776961);
+                PlayerTextDrawSetString(playerid, StatusShow[playerid], "Lock");
+                PlayerTextDrawShow     (playerid, StatusShow[playerid]);
+            }
+            else
+            {
+                PlayerTextDrawColor    (playerid, StatusShow[playerid], 0x20B220AA);
+                PlayerTextDrawSetString(playerid, StatusShow[playerid], "Unlock");
+                PlayerTextDrawShow     (playerid, StatusShow[playerid]);
+            }
+            if (vehicleidtp[playerid] != tacha && PTEMP[playerid][pAdmin] == 0) return 1;
 			else vehicleidtp[playerid] = INVALID_VEHICLE_ID;
 		}
 	}
 	else if (newstate == PLAYER_STATE_ONFOOT)
 	{
+        new tacha = GetPlayerVehicleID(playerid);
 		if (!IsAPlane(tacha) && !IsABoat(tacha) && !IsABike(tacha))
 		{
-			TextDrawHideForPlayer(playerid,Speed);
-			PlayerTextDrawHide(playerid,SpeedShow[playerid]);
-			PlayerTextDrawHide(playerid,FuelShow[playerid]);
-			PlayerTextDrawHide(playerid,StatusShow[playerid]);
-			PlayerTextDrawHide(playerid,KMShow[playerid]);
-			PlayerTextDrawHide(playerid,LimitShow[playerid]);
-			PlayerTextDrawHide(playerid,FillShow[playerid]);
+			TextDrawHideForPlayer(playerid, Speed);
+			PlayerTextDrawHide   (playerid, SpeedShow[playerid]);
+			PlayerTextDrawHide   (playerid, FuelShow[playerid]);
+			PlayerTextDrawHide   (playerid, StatusShow[playerid]);
+			PlayerTextDrawHide   (playerid, KMShow[playerid]);
+			PlayerTextDrawHide   (playerid, LimitShow[playerid]);
+			PlayerTextDrawHide   (playerid, FillShow[playerid]);
 			TextDrawHideForPlayer(playerid, BoxPanel);
 		}
 	}
-	if (newstate == 2)
+	if (newstate == PLAYER_STATE_DRIVER)
 	{
 		if (GetPVarInt(playerid, "EnterVehTime") > GetTickCount())
 		{
@@ -127,6 +154,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 	}
 	if (newstate == PLAYER_STATE_DRIVER)
 	{
+        new caridi = GetPlayerVehicleID(playerid);
 		if (avtocar[playerid] != 0 && PTEMP[playerid][pJob] == 65)
 		{
 			if (caridi == avtocar[playerid])
@@ -152,7 +180,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		}
 		else
 		{
-			GetVehicleParamsEx(caridi,engine,lights,alarm,doors,bonnet,boot,objective);
+			GetVehicleParamsEx(caridi, engine, lights, alarm, doors, bonnet, boot, objective);
 			if (!engine && PTEMP[playerid][SalonCar] != caridi) SCM(playerid, -1, "{00AB06} Чтобы завести двигатель нажмите клавишу {FFFFFF}'2'{00AB06} или введите команду {FFFFFF}/en");
 		}
 		if (GetVehicleModel(caridi) == 482)
@@ -170,7 +198,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 	if (newstate == PLAYER_STATE_PASSENGER)
 	{
 		new vehicleid = GetPlayerVehicleID(playerid);
-		GetVehicleParamsEx(vehicleid,engine,lights,alarm,doors,bonnet,boot,objective);
+		GetVehicleParamsEx(vehicleid, engine, lights, alarm, doors, bonnet, boot, objective);
 		if (doors == 1 && house_car[playerid] != vehicleid && IsABike(playerid)) RemovePlayerFromVehicleAC(playerid);
 		foreach(i)
 		{
@@ -215,13 +243,58 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 				SetPVarInt(playerid, "farm_status", 5);
 				DeletePVar(playerid, "farm_combine");
 
+                new farm_combine = GetPVarInt(playerid, "farm_combine");
 				switch (GetPVarInt(playerid, "farm_id")){
-				case 1: SetPlayerRaceCheckpoint(playerid,0,Farmcombine_coord_one[GetPVarInt(playerid,"farm_combine")][0],Farmcar_coord_one[GetPVarInt(playerid,"farm_combine")][1],Farmcar_coord_one[GetPVarInt(playerid,"farm_combine")][2],Farmcombine_coord_one[GetPVarInt(playerid,"farm_combine")+1][0],Farmcar_coord_one[GetPVarInt(playerid,"farm_combine")+1][1],Farmcar_coord_one[GetPVarInt(playerid,"farm_combine")+1][2],5.0);
-				case 2: SetPlayerRaceCheckpoint(playerid,0,Farmcombine_coord_two[GetPVarInt(playerid,"farm_combine")][0],Farmcar_coord_two[GetPVarInt(playerid,"farm_combine")][1],Farmcar_coord_two[GetPVarInt(playerid,"farm_combine")][2],Farmcombine_coord_two[GetPVarInt(playerid,"farm_combine")+1][0],Farmcar_coord_two[GetPVarInt(playerid,"farm_combine")+1][1],Farmcar_coord_two[GetPVarInt(playerid,"farm_combine")+1][2],5.0);
-				case 3: SetPlayerRaceCheckpoint(playerid,0,Farmcombine_coord_three[GetPVarInt(playerid,"farm_combine")][0],Farmcar_coord_three[GetPVarInt(playerid,"farm_combine")][1],Farmcar_coord_three[GetPVarInt(playerid,"farm_combine")][2],Farmcombine_coord_three[GetPVarInt(playerid,"farm_combine")+1][0],Farmcar_coord_three[GetPVarInt(playerid,"farm_combine")+1][1],Farmcar_coord_three[GetPVarInt(playerid,"farm_combine")+1][2],5.0);
-				case 4: SetPlayerRaceCheckpoint(playerid,0,Farmcombine_coord_four[GetPVarInt(playerid,"farm_combine")][0],Farmcar_coord_four[GetPVarInt(playerid,"farm_combine")][1],Farmcar_coord_four[GetPVarInt(playerid,"farm_combine")][2],Farmcombine_coord_four[GetPVarInt(playerid,"farm_combine")+1][0],Farmcar_coord_four[GetPVarInt(playerid,"farm_combine")+1][1],Farmcar_coord_four[GetPVarInt(playerid,"farm_combine")+1][2],5.0);
-				case 5: SetPlayerRaceCheckpoint(playerid,0,Farmcombine_coord_five[GetPVarInt(playerid,"farm_combine")][0],Farmcar_coord_five[GetPVarInt(playerid,"farm_combine")][1],Farmcar_coord_five[GetPVarInt(playerid,"farm_combine")][2],Farmcombine_coord_five[GetPVarInt(playerid,"farm_combine")+1][0],Farmcar_coord_five[GetPVarInt(playerid,"farm_combine")+1][1],Farmcar_coord_five[GetPVarInt(playerid,"farm_combine")+1][2],5.0);
-				}
+				case 1:
+                {
+                    SetPlayerRaceCheckpoint(playerid, 0,
+                     Farmcombine_coord_one[farm_combine][0],
+                     Farmcar_coord_one[farm_combine][1], Farmcar_coord_one[farm_combine][2],
+                     Farmcombine_coord_one[farm_combine+1][0],
+                     Farmcar_coord_one[farm_combine+1][1], Farmcar_coord_one[farm_combine+1][2],
+                     5.0
+                    );
+                }
+                case 2:
+                {
+                    SetPlayerRaceCheckpoint(playerid, 0,
+                     Farmcombine_coord_two[farm_combine][0],
+                     Farmcar_coord_two[farm_combine][1], Farmcar_coord_two[farm_combine][2],
+                     Farmcombine_coord_two[farm_combine+1][0],
+                     Farmcar_coord_two[farm_combine+1][1], Farmcar_coord_two[farm_combine+1][2],
+                     5.0
+                    );
+                }
+                case 3:
+                {
+                    SetPlayerRaceCheckpoint(playerid, 0,
+                     Farmcombine_coord_three[farm_combine][0],
+                     Farmcar_coord_three[farm_combine][1], Farmcar_coord_three[farm_combine][2],
+                     Farmcombine_coord_three[farm_combine+1][0],
+                     Farmcar_coord_three[farm_combine+1][1], Farmcar_coord_three[farm_combine+1][2],
+                     5.0
+                    );
+                }
+                case 4:
+                {
+                    SetPlayerRaceCheckpoint(playerid, 0,
+                     Farmcombine_coord_four[farm_combine][0],
+                     Farmcar_coord_four[farm_combine][1], Farmcar_coord_four[farm_combine][2],
+                     Farmcombine_coord_four[farm_combine+1][0],
+                     Farmcar_coord_four[farm_combine+1][1], Farmcar_coord_four[farm_combine+1][2],
+                     5.0
+                    );
+                }
+				case 5:
+                {
+                    SetPlayerRaceCheckpoint(playerid, 0,
+                     Farmcombine_coord_five[farm_combine][0],
+                     Farmcar_coord_five[farm_combine][1], Farmcar_coord_five[farm_combine][2],
+                     Farmcombine_coord_five[farm_combine+1][0],
+                     Farmcar_coord_five[farm_combine+1][1], Farmcar_coord_five[farm_combine+1][2],
+                     5.0
+                    );
+				}}
 			}
 		}
 		if (newcar == mavlic)
