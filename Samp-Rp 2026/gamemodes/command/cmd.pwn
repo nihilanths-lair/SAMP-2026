@@ -1722,13 +1722,6 @@ CMD:tmonitor(playerid, params[])
 	ShowPlayerDialogEx(playerid,31998,0, "Сообщение",YCMDstr, "Выбрать", "Назад");
 	return true;
 }
-CMD:taxiskill(playerid)
-{
-	if(PTEMP[playerid][pLogin] == 0) return true;
-	format(YCMDstr, sizeof(YCMDstr), " Ваш уровень таксиста %i. До следующего осталось %i/%i exp",PTEMP[playerid][ptaxilvl], PTEMP[playerid][ptaxiexp], PTEMP[playerid][ptaxilvl]*8);
-	SCM(playerid, COLOR_BLUE, YCMDstr);
-	return true;
-}
 CMD:radio(playerid, params[])
 {
 	if(PTEMP[playerid][pLogin] == 0) return true;
@@ -6675,23 +6668,22 @@ CMD:arrest(playerid, params[])
 CMD:fare(playerid, params[])
 {
 	if (!PTEMP[playerid][pLogin] || PTEMP[playerid][pJob] != 4) return true;
-	if (GetPVarInt(playerid,"TaxiDuty") > 0)
+	if (GetPVarInt(playerid, "TaxiDuty") > 0)
 	{
-		Delete3DTextLabel(JobText3D[GetPVarInt(playerid,"rentcar_job")]);
-		DeletePVar(playerid,"TaxiDuty");
+		Delete3DTextLabel(JobText3D[GetPVarInt(playerid, "rentcar_job")]);
+		DeletePVar(playerid, "TaxiDuty");
 		return true;
 	}
 	new Veh = GetPlayerVehicleID(playerid);
-	if (Veh != GetPVarInt(playerid,"rentcar_job")) return SCM(playerid,COLOR_GREY," Это не ваш автомобиль");
-	if (GetPlayerState(playerid) != PLAYER_STATE_DRIVER) return SCM(playerid,COLOR_GREY," Вы должны находиться за рулем автомобиля!");
+	if (Veh != GetPVarInt(playerid, "rentcar_job")) return SCM(playerid, COLOR_GREY, " Это не ваш автомобиль");
+	if (GetPlayerState(playerid) != PLAYER_STATE_DRIVER) return SCM(playerid, COLOR_GREY, " Вы должны находиться за рулем автомобиля!");
 
-	if (Veh == taxicar || Veh == taxi5lvlcar || Veh == taxi10lvlcar || Veh == taxi40lvlcar)
+	if (Veh >= taxicar[0] && Veh <= taxicar[68] || Veh >= taxi5lvlcar[0] && Veh <= taxi5lvlcar[9] || Veh >= taxi10lvlcar[0] && Veh <= taxi10lvlcar[10] || Veh >= taxi40lvlcar[0] && Veh <= taxi40lvlcar[6])
 	{
 		SetPVarInt(playerid, "TaxiDuty", Veh);
 		JobText3D[Veh] = Create3DTextLabel("<< Бесплатное такси >>", 0xFFFF00FF, 9999.0, 9999.0, 9999.0, 30.0, 0, 1);
 		Attach3DTextLabelToVehicle(JobText3D[Veh], Veh, 0, 0, 1.5);
 	}
-    
 	return true;
 }
 CMD:inventory(playerid)
