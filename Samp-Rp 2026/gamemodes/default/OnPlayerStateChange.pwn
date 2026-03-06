@@ -511,20 +511,10 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 				}
 			}
 		}
-		if (CarLic(newcar))
-		{
-			if (PTEMP[playerid][pCarLic] == 0)
-			{
-				if (TakingLesson[playerid] != 1)
-				{
-					SCM(playerid, COLOR_GREY, " ѕрежде чем управл€ть данным видом транспорта, приобретите лицензию на вождение.");//водительское удостоверение
-					RemovePlayerFromVehicleAC(playerid);
-				}
-			}
-		}
+        // ѕрежде чем управл€ть данным видом транспорта, приобретите лицензию на вождение ?? водительское удостоверение
 		if (newcar >= lsnewscar[0] && newcar <= lsnewscar[5])
 		{
-			if (GetPVarInt(playerid,"Fraction_Duty") && PTEMP[playerid][pMember] == 16) {}
+			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 16) {}
 			else
 			{
 				SCM(playerid, COLOR_GREY, " ¬ы не работник LS News!");
@@ -533,7 +523,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		}
 		if (newcar >= lvpdcar[0] && newcar <= lvpdcar[20])
 		{
-			if (!GetPVarInt(playerid,"Fraction_Duty") || PTEMP[playerid][pMember] != 21)
+			if (!GetPVarInt(playerid, "Fraction_Duty") || PTEMP[playerid][pMember] != 21)
 			{
 				SCM(playerid, COLOR_GREY, " “ранспорт принадлежит LVPD");
 				RemovePlayerFromVehicleAC(playerid);

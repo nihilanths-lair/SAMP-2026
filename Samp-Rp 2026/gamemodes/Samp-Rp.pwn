@@ -5843,7 +5843,7 @@ IsAnAmbulance(carid)
 	return false;
 }
 
-#include "..\gamemodes\functions\CarLic.pwn"
+//#include "..\gamemodes\functions\CarLic.pwn"
 
 PlayerToKvadrat(playerid, Float:min_x, Float:min_y, Float:max_x, Float:max_y)
 {

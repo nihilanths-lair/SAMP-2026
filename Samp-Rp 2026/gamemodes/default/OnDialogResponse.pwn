@@ -7574,24 +7574,23 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			GameTextForPlayer(playerid, string, 5000, 1);
 			PTEMP[playerid][pCash] -= (strlen(ReportQ[playerid])*addd[2]);
 	    }
-	case 10093:
-	    {
-			if(!response) return true;
-			{
-				new teleport[] = "[0] LSPD [key:1]\n[1] LSPD-Тюрьма [key:2]\n[2] Мэрия [key:3]\n[3] Автовокзал ЛС [key:4]\n[4] ЛС-СФ Шоссе [key:5]\n[5] Автошкола [key:6]\n[6] ФБР [key:7]\n[7] Аэропорт СФ [key:8]\n[8] Аэропорт ЛС [key:9]\n[9] Военная база [key:10]\n[10] Цент Лас Вентурас [key:11]\n[11] Клуб Джизи [key:12]\n[12] Админ казино [key:13]\n[13] Вокзал ЛВ [key:14]\n[14] Аэро ЛС Въезд [key:15]\n[15] Вокзал СФ [key:16]\n[16] Авианосец стоянка [key:17]\n[17] Авианосец [key:18]\n>> След.страница";
-				ShowPlayerDialogEx(playerid,9000,DIALOG_STYLE_LIST, "Меню",teleport, "Выбрать", "Назад");
-			}
-		}
 	case 10092:
-		{
-			if(!response) return true;
-			useguns[playerid] = 1;
-			ShowPlayerDialogEx(playerid, 10098, DIALOG_STYLE_LIST, "Выберите работу", " Водитель автобуса (( с 2лвл ))\n Таксист (( с 2лвл ))\n Продавец хот догов (( с 2лвл ))\n Развозчик продуктов (( с 3лвл ))\n Механик (( с 3лвл ))\n Прораб (( с 5лвл ))\n Тренер (( с 6лвл ))\n Дальнобойщик (( с 6лвл ))", "Устроится", "Выйти");
-			return true;
-		}
+    {
+        if (!response) return true;
+        useguns[playerid] = 1;
+        ShowPlayerDialogEx(playerid, 10098, DIALOG_STYLE_LIST, "Список вакансий", " Таксист (( с 1-го уровня ))\n Водитель автобуса (( со 2-го уровня ))\n Продавец хот-догов (( со 2-го уровня ))\n Развозчик продуктов (( с 3-го уровня ))\n Механик (( с 3-го уровня ))\n Прораб (( с 5-го уровня ))\n Тренер (( с 6-го уровня ))\n Дальнобойщик (( с 6-го уровня ))", "Устроится", "Выйти");
+        return true;
+    }
+    case 10093:
+    {
+        if (!response) return true;
+        {
+            ShowPlayerDialogEx(playerid, 9000, DIALOG_STYLE_LIST, "Меню", "[0] LSPD [key:1]\n[1] LSPD-Тюрьма [key:2]\n[2] Мэрия [key:3]\n[3] Автовокзал ЛС [key:4]\n[4] ЛС-СФ Шоссе [key:5]\n[5] Автошкола [key:6]\n[6] ФБР [key:7]\n[7] Аэропорт СФ [key:8]\n[8] Аэропорт ЛС [key:9]\n[9] Военная база [key:10]\n[10] Цент Лас Вентурас [key:11]\n[11] Клуб Джизи [key:12]\n[12] Админ казино [key:13]\n[13] Вокзал ЛВ [key:14]\n[14] Аэро ЛС Въезд [key:15]\n[15] Вокзал СФ [key:16]\n[16] Авианосец стоянка [key:17]\n[17] Авианосец [key:18]\n>> След.страница", "Выбрать", "Назад");
+        }
+    }
 	case 70:
 		{
-			if(!response) return true;
+			if (!response) return true;
 			for(new i = 1; i <= TotalHouse; i++)
 			{
 				if (PlayerToPoint(3, playerid,HouseInfo[i][hExitx], HouseInfo[i][hExity], HouseInfo[i][hExitz]))
