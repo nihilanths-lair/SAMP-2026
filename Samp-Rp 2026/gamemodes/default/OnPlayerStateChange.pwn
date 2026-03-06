@@ -29,7 +29,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		car_ex[Veh] = true;
 		GetVehiclePos(Veh,car_coord[Veh][0],car_coord[Veh][1],car_coord[Veh][2]);
 		GetVehicleZAngle(Veh,car_coord[Veh][3]);
-		if (GetPVarInt(playerid,"farm_status") == 3 || GetPVarInt(playerid,"farm_status") == 5) DisablePlayerRaceCheckpoint(playerid), DeletePVar(playerid,"farm_status");
+		if (GetPVarInt(playerid, "farm_status") == 3 || GetPVarInt(playerid, "farm_status") == 5) DisablePlayerRaceCheckpoint(playerid), DeletePVar(playerid, "farm_status");
 		if (PTEMP[playerid][pJob] == 2)
 		{
 			if (gcontract[playerid] == 1)
