@@ -2134,8 +2134,13 @@ new legalmods[48][22] =
 
 new comptruck[10];
 new matsfuravagos[1], matsfuragrove[1], matsfuraactek[1], matsfurarifa[1], matsfura[1];
-new lsnewscar[6], lvnewscar[8], lvpdcar[21];//, rentmot[6];
-new liccar[10], hotdogcar[2];
+//, rentmot[6];
+new liccar[10];
+
+new lvnewscar[8];
+new lsnewscar[6];
+
+new hotdogcar[2];
 
 new taxicar[69];
 new taxi5lvlcar[10];
@@ -2151,12 +2156,32 @@ new medicsfc[8];
 new medicssf[15];
 new medicssf1[6];
 
-new sapdcar[27], fbicar[17], cnncar[5], sfpdcar[29], medmav, mavlic, cnnmav, armycarsf[29], yakcar[15], ruscar[15], govcar[8], lcncar[15], armcar[27], faggio[6], gunscar[NUMBER_OF_ARMYTRUCKS], grovecar[7], ballascar[7], coronoscar[7], vagoscar[7], rifacar[7];
+new fbicar[17];
+new lvpdcar[21];
+new sapdcar[27];
+new sfpdcar[29];
+
+new cnncar[5], medmav, mavlic, cnnmav, armycarsf[29];
+
+// Транспорт мафий
+new lcncar[15];
+new ruscar[15];
+new yakcar[15];
+
+new govcar[8], armcar[27], faggio[6], gunscar[NUMBER_OF_ARMYTRUCKS];
+
+// Транспорт банд
+new ballascar[7];
+new coronoscar[7];
+new grovecar[7];
+new vagoscar[7];
+new rifacar[7];
+
 new arenda[MAX_PLAYERS];
 new lsacar[16], lsacarvert[1];
 new hamccar[11], wmccar[11], pmccar[11];
 
-//////////////////////////////
+////
 
 new ebanksf[MAX_PLAYERS];
 new victim2[2];

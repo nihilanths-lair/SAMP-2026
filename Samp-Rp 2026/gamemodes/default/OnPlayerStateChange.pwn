@@ -384,12 +384,6 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 					TogglePlayerControllable(playerid, false);
 					ShowPlayerDialogEx(playerid, 32000, 0, "Аренда транспорта", "Стоимость аренды: {FFFF00}15000 вирт", "Оплатить", "Отмена");
 				}
-				else
-				{
-					SCM(playerid, COLOR_GREY, " Транспорт принадлежит RS Haul.");
-					//RemovePlayerFromVehicleAC(playerid);
-					//TogglePlayerControllable(playerid, true);
-				}
 			}
 		}
 
@@ -443,13 +437,13 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 
 		if (
          newcar >= taxicar[0] && newcar <= taxicar[68]
-          ||
+         ||
          newcar >= taxi5lvlcar[0] && newcar <= taxi5lvlcar[9]
-          ||
+         ||
          newcar >= taxi10lvlcar[0] && newcar <= taxi10lvlcar[10]
-          ||
+         ||
          newcar >= taxi40lvlcar[0] && newcar <= taxi40lvlcar[6]
-           )
+         )
 		{
 			if (PTEMP[playerid][pJob] == 4 && PTEMP[playerid][pMember] == 0)
 			{
@@ -457,11 +451,6 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 				{
 					ShowPlayerDialogEx(playerid, 9128, DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}1500 вирт", "Оплатить", "Отмена");
 				}
-			}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Транспорт принадлежит таксопарку.");
-				//RemovePlayerFromVehicleAC(playerid);
 			}
 		}
 
@@ -504,39 +493,35 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		}
 		if (newcar >= hamccar[0] && newcar <= hamccar[10])
 		{
-			if (PTEMP[playerid][pLeader] == 24 || PTEMP[playerid][pMember] == 24) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Транспорт принадлежит Hell's Angels MC");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (PTEMP[playerid][pLeader] == 24 || PTEMP[playerid][pMember] != 24)
+            {
+                SCM(playerid, COLOR_GREY, " Транспорт принадлежит Hell's Angels MC");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
 		if (newcar >= wmccar[0] && newcar <= wmccar[10])
 		{
-			if (PTEMP[playerid][pLeader] == 26 || PTEMP[playerid][pMember] == 26) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Транспорт принадлежит Warlocks MC");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (PTEMP[playerid][pLeader] == 26 || PTEMP[playerid][pMember] != 26)
+            {
+                SCM(playerid, COLOR_GREY, " Транспорт принадлежит Warlocks MC");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
 		if (newcar >= pmccar[0] && newcar <= pmccar[10])
 		{
-			if (PTEMP[playerid][pLeader] == 29 || PTEMP[playerid][pMember] == 29) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Транспорт принадлежит Pagans MC");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (PTEMP[playerid][pLeader] == 29 || PTEMP[playerid][pMember] != 29)
+            {
+                SCM(playerid, COLOR_GREY, " Транспорт принадлежит Pagans MC");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
 		if (newcar >= ruscar[0] && newcar <= ruscar[14])
 		{
-			if (PTEMP[playerid][pLeader] == 14 || PTEMP[playerid][pMember] == 14) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Вы не член Русской мафии!");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (PTEMP[playerid][pLeader] == 14 || PTEMP[playerid][pMember] != 14)
+            {
+                SCM(playerid, COLOR_GREY, " Вы не член Русской мафии!");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
 		if (newcar >= lvnewscar[0] && newcar <= lvnewscar[7])
 		{
@@ -549,21 +534,19 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		}
 		if (newcar >= lcncar[0] && newcar <= lcncar[14])
 		{
-			if (PTEMP[playerid][pLeader] == 5 || PTEMP[playerid][pMember] == 5) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Вы не член La Cosa Nostra!");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (PTEMP[playerid][pLeader] == 5 || PTEMP[playerid][pMember] != 5)
+            {
+                SCM(playerid, COLOR_GREY, " Вы не член La Cosa Nostra!");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
 		if (newcar >= yakcar[0] && newcar <= yakcar[12])
 		{
-			if (PTEMP[playerid][pLeader] == 6 || PTEMP[playerid][pMember] == 6) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Вы не член Yakuza!");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (PTEMP[playerid][pLeader] == 6 || PTEMP[playerid][pMember] != 6)
+            {
+                SCM(playerid, COLOR_GREY, " Вы не член Yakuza!");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
 		if (newcar >= cnncar[0] && newcar <= cnncar[4] || newcar == cnnmav)
 		{
