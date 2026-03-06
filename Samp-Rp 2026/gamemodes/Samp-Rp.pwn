@@ -689,7 +689,6 @@ new tipsterplayer = -1;
 new getgunsid[MAX_PLAYERS];
 new tipsterlisten[MAX_PLAYERS];
 new vehicleidtp[MAX_PLAYERS];
-new reklamatimer;
 new PlayerText:FishingText[MAX_PLAYERS];
 new Float:Sonar[MAX_PLAYERS];
 new ammonac[6];
@@ -1742,7 +1741,6 @@ enum caInfo
 }
 new CasinoInfo[3][caInfo], TOTALCASINO = 0;
 new FormaFracPic[16];
-new freshtimer;
 new war = 0;
 new rabota1;
 new IPMSG[5][] =
@@ -1814,7 +1812,6 @@ new nick[MAX_PLAYERS];
 new TicketOffer[MAX_PLAYERS];
 new TicketMoney[MAX_PLAYERS];
 new enterbiz[MAX_PLAYERS];
-new Hptimer;
 new gSpectateID[MAX_PLAYERS];
 new zvonok[3] = {-1, -1, -1};
 new PlayerDrunk[MAX_PLAYERS];
@@ -3201,51 +3198,9 @@ Vehicleforeach(vehicleid)
 	}
 	return -1;
 }
-publics:_HPCheck()
-{
-	foreach(i)
-	{
-		if(PTEMP[i][pLogin] == 0) continue;
-		GetVehicleParamsEx(GetPlayerVehicleID(i),engine,lights,alarm,doors,bonnet,boot,objective);
-		if(!IsAPlane(GetPlayerVehicleID(i)) && !IsABoat(GetPlayerVehicleID(i)) && !IsABike(GetPlayerVehicleID(i)) && IsPlayerInAnyVehicle(i) && GetPlayerState(i) == PLAYER_STATE_DRIVER && engine == 1)
-		{
-		    new h = GetPVarInt(i, "chosencar");
-			if(Vehicleforeach(GetPlayerVehicleID(i)) != -1)
-			{
-				if(GetVehicleModel(GetPlayerVehicleID(i)) >= ShopCar[0][0] && GetVehicleModel(GetPlayerVehicleID(i)) <= ShopCar[56][0])
-				{
-					switch(CarInfo[Vehicleforeach(GetPlayerVehicleID(i))][carPercent][h])
-					{
-					case 51..100: Fuell[GetPlayerVehicleID(i)] -= 1.0000;
-					case 5..50: Fuell[GetPlayerVehicleID(i)] -= 2.0000;
-					default: Fuell[GetPlayerVehicleID(i)] -= 4.0000;
-					}
-				}
-				else
-				{
-					switch(CarInfo[Vehicleforeach(GetPlayerVehicleID(i))][carPercent][h])
-					{
-					case 51..100: Fuell[GetPlayerVehicleID(i)] -= 2.0000;
-					case 5..50: Fuell[GetPlayerVehicleID(i)] -= 4.0000;
-					default: Fuell[GetPlayerVehicleID(i)] -= 8.0000;
-					}
-				}
-				CarInfo[Vehicleforeach(GetPlayerVehicleID(i))][carFuel][h] = Fuell[GetPlayerVehicleID(i)];
-			}
-			else Fuell[GetPlayerVehicleID(i)] -= 1.0000;
-		}
-		new Float:health;
-		GetPlayerHealth(i,health);
-		//if(PTEMP[i][pTut] != 0 && health <= 10.0) SCM(i, COLOR_YELLOW, " У вас сильно ухудшилось здоровье, вылечитесь у медика!");
-		if(PTEMP[i][pSatiety] > 0) PTEMP[i][pSatiety] -= 1;
-		if(PTEMP[i][pSatiety] == 49 || PTEMP[i][pSatiety] == 24) SCM(i,COLOR_LIGHTGREEN, " Вы проголодались! Посетите бар, закусочную или купите ХотДог. Узнать свою «Сытость» можно командой /satiety");
-		if(PTEMP[i][pSatiety] < 50) SetPlayerHealthAC(i, health - 1.0);
-		else if(PTEMP[i][pSatiety] < 25) SetPlayerHealthAC(i, health - 2.0);
-		PTEMP[i][pMin]++;
-		if(PTEMP[i][pMin] >= 60) PTEMP[i][pChas]++, PTEMP[i][pMin] = 0;
-	}
-	return true;
-}
+
+#include "..\gamemodes\events\_HPCheck.pwn"
+
 DollahScoreUpdate(playerid) return SetPlayerScore(playerid, PTEMP[playerid][pLevel]);
 GivePlayerPPCash(playerid, money)
 {
@@ -3671,111 +3626,9 @@ publics:_MzCheck()
 	}
 	return true;
 }
-publics:_GzCheck()
-{
-	for(new i = 1; i <= TOTALGZ; i++)
-	{
-		if(!ZoneOnBattle[i]) continue;
-		if(GZSafeTime[i] > 0) GZSafeTime[i] --;
-		foreach(x)
-		{
-			if(!PTEMP[x][pLogin]) continue;
-			new y = PTEMP[x][pMember];
-			if(y == GZInfo[i][gNapad] || y == GZInfo[i][gFrakVlad])
-			{
-				if(!GetPVarInt(x,"capture_on"))
-				{
-					PlayerTextDrawShow(x, Capture[x]);
-					SetPVarInt(x,"capture_on",1);
-					SetPlayerToTeamColor(x);
-				}
-				format(string,120,"~y~kills~n~~n~~g~%s:~w~ %i~n~~r~%s:~w~ %i",GetGangName(GZInfo[i][gFrakVlad]),CountOnZone[GZInfo[i][gFrakVlad]],GetGangName(GZInfo[i][gNapad]),CountOnZone[GZInfo[i][gNapad]]);
-				PlayerTextDrawSetString(x,Capture[x],string);
-				if(PlayerToKvadrat(x,GZInfo[i][gCoords][0], GZInfo[i][gCoords][1],GZInfo[i][gCoords][2],GZInfo[i][gCoords][3])) OnZONE[i][y] ++;
-			}
-		}
-		new asd;
-		for(new x =0;x<20;x++)
-		{
-			if(OnZONE[i][x] > 0 && IsInAllowedF(x) && GZSafeTime[i] <= 0) asd++;
-		}
-		if(asd == 1)
-		{
-			for(new x =0;x<20;x++)
-			{
-				if(OnZONE[i][x] > 0)
-				{
-					if(GZInfo[i][gFrakVlad] == x)
-					{
-						SendFamilyMessage(GZInfo[i][gFrakVlad],0x00B953AA," Вы отстояли свою территорию");
-						SendFamilyMessage(GZInfo[i][gNapad],0xC56565AA," Вам не удалось захватить территорию");
-						CountOnZone[GZInfo[i][gFrakVlad]] = 0;
-						CountOnZone[GZInfo[i][gNapad]] = 0;
-						foreach(y)
-						{
-							if(PTEMP[y][pMember] == GZInfo[i][gNapad] || PTEMP[y][pMember] == GZInfo[i][gFrakVlad])
-							{
-								DeletePVar(y,"capture_on");
-								PlayerTextDrawHide(y, Capture[y]);
-								for(new i_ = 0; i_ < 5; i_++) { SendDeathMessageToPlayer(y,INVALID_PLAYER_ID-1, INVALID_PLAYER_ID-1, 0); }
-							}
-						}
-					}
-					else
-					{
-						CountOnZone[GZInfo[i][gFrakVlad]] = 0;
-						CountOnZone[GZInfo[i][gNapad]] = 0;
-						SendFamilyMessage(GZInfo[i][gNapad], 0x00B953AA," Вы взяли под свой контроль новую территорию");
-						for(new y = 1; y <= TOTALGZ; y++)
-						{
-							if(GZInfo[y][gFrakVlad] == 12) TotalGzB++;
-							if(GZInfo[y][gFrakVlad] == 13) TotalGzV++;
-							if(GZInfo[y][gFrakVlad] == 15) TotalGzG++;
-							if(GZInfo[y][gFrakVlad] == 17) TotalGzA++;
-							if(GZInfo[y][gFrakVlad] == 18) TotalGzR++;
-						}
-						switch(GZInfo[i][gNapad])
-						{
-						case 12: format(string, 144, " Теперь ваша банда будет получать каждый час %i вирт",TotalGzB*300), gRating[Ballas] += 5000;
-						case 13: format(string, 144, " Теперь ваша банда будет получать каждый час %i вирт",TotalGzV*300), gRating[Vagos] += 5000;
-						case 15: format(string, 144, " Теперь ваша банда будет получать каждый час %i вирт",TotalGzG*300), gRating[Grove] += 5000;
-						case 17: format(string, 144, " Теперь ваша банда будет получать каждый час %i вирт",TotalGzA*300), gRating[Aztec] += 5000;
-						case 18: format(string, 144, " Теперь ваша банда будет получать каждый час %i вирт",TotalGzR*300), gRating[Rifa] += 5000;
-						}
-						SendFamilyMessage(GZInfo[i][gFrakVlad], 0xC56565AA," Вы потеряли контроль одной из своих территорий");
-						foreach(y)
-						{
-							if(PTEMP[y][pMember] == GZInfo[i][gNapad] || PTEMP[y][pMember] == GZInfo[i][gFrakVlad])
-							{
-								DeletePVar(y,"capture_on");
-								PlayerTextDrawHide(y, Capture[y]);
-								for(new i_ = 0; i_ < 5; i_++) { SendDeathMessageToPlayer(y,INVALID_PLAYER_ID-1, INVALID_PLAYER_ID-1, 0); }
-							}
-						}
-						GZInfo[i][gFrakVlad] = GZInfo[i][gNapad];
-						SendFamilyMessage(GZInfo[i][gNapad], 0x00B953AA, string);
-					}
-					ClearTotalGz();
-					ZoneOnBattle[i] = 0;
-					GangZoneStopFlashForAll(GZInfo[i][gZone]);
-					GangZoneHideForAll(GZInfo[i][gZone]);
-					GangZoneShowForAll(GZInfo[i][gZone],GetGangZoneColor(i));
-					GZInfo[i][gNapad] = 0;
-					UpdateTable(TABLE_GANGZONE,"gang_owner",GZInfo[i][gFrakVlad],"id",GZInfo[i][gID]);
-					break;
-				}
-			}
-		}
-	}
-	for(new i = 1; i <= TOTALGZ; i++)
-	{
-		for(new z = 0;z<20;z++)
-		{
-			OnZONE[i][z] =0;
-		}
-	}
-	return true;
-}
+
+#include "..\gamemodes\events\_GzCheck.pwn"
+
 IsInAllowed(playerid)
 {
 	for(new i = 0; i < sizeof(allowedfactions); i++)
@@ -4462,861 +4315,10 @@ GetPlayerSpeed(playerid)
     Coord[3] = floatsqroot(floatpower(floatabs(Coord[0]), 2.0) + floatpower(floatabs(Coord[1]), 2.0) + floatpower(floatabs(Coord[2]), 2.0)) * 213.3;
     return floatround(Coord[3]);
 }
-AntiCheats()
-{
-	foreach(playerid)
-	{
-		/******************************** Античит на рванку *******************************/
-		new Float:xw, Float:yw, Float:zw;
-		GetPlayerVelocity(playerid,xw,yw,zw);
-		if(xw > 2.0 || yw > 2.0)
-		{
-			Rvanka[playerid]++;
-			if(Rvanka[playerid] >= 3)
-			{
-				CheatKick(playerid,007);
-				Rvanka[playerid] = 0;
-			}
-		}
-		//
-		//if(GetVehicleDistanceFromPoint(GetPlayerVehicleID(playerid),car_coord[GetPlayerVehicleID(playerid)][0],car_coord[GetPlayerVehicleID(playerid)][1],car_coord[GetPlayerVehicleID(playerid)][2]) > 15 && (IsVehicleOccupied(GetPlayerVehicleID(playerid)) != -1 && IsVehicleOccupied(GetPlayerVehicleID(playerid)) == playerid && GetPlayerState(IsVehicleOccupied(GetPlayerVehicleID(playerid))) != PLAYER_STATE_DRIVER)) GameTextForPlayer(playerid,"~r~CARSHOOT",1000,3);
-		/******************************** Античит на игру без авторизации *******************************/
-		if(!PTEMP[playerid][pLogin] && (xw > 0 || yw > 0 || zw > 0))
-		{
-			CheatKick(playerid,008);
-		}
-		/********************************* Анти Разморозка **************************************/
-		if(FreezePlayer[playerid] == 0)
-		{
-			if(IsPlayerApplyAnimation(playerid, "JUMP_glide") && FreezePlayer[playerid] == 0 ||
-					IsPlayerApplyAnimation(playerid, "JUMP_land") && FreezePlayer[playerid] == 0 ||
-					IsPlayerApplyAnimation(playerid, "JUMP_launch") && FreezePlayer[playerid] == 0 ||
-					IsPlayerApplyAnimation(playerid, "JUMP_launch_R") && FreezePlayer[playerid] == 0)
-			{
-				CheatKick(playerid,009);
-			}
-		}
-		/********************************** Анти Нивидимость *************************************/
-		if(GetPlayerState(playerid) == PLAYER_STATE_SPECTATING && PTEMP[playerid][pAdmin] <= 0)
-		{
-			CheatKick(playerid,020);
-		}
-		/*********************************** Антифлуд пикапами ***********************************/
-		if(oldpickup[playerid] != -1)
-		{
-			new Float:z;
-			GetPlayerPos(playerid, z, z, z);
-			if(timepickup[playerid] > 0) timepickup[playerid]--;
-			if(!IsPlayerInRangeOfPoint(playerid,5.0,PickupX[playerid],PickupY[playerid],z) && timepickup[playerid] == 0) oldpickup[playerid] = -1;
-		}
-		/*********************************** Анти AFK ***********************************/
-		new stringF[50];
-		if(GetPVarInt(playerid,"AFK_Tick") > 10000) SetPVarInt(playerid,"AFK_Tick",1), SetPVarInt(playerid,"AFK_Check",0);
-		if(GetPVarInt(playerid,"AFK_Check") < GetPVarInt(playerid,"AFK_Tick") && GetPlayerState(playerid)) SetPVarInt(playerid,"AFK_Check",GetPVarInt(playerid,"AFK_Tick")), SetPVarInt(playerid,"AFK_Time",0);
-		if(GetPVarInt(playerid,"AFK_Check") >= GetPVarInt(playerid,"AFK_Tick") && GetPlayerState(playerid))
-		{
-			SetPVarInt(playerid,"AFK_Time",GetPVarInt(playerid,"AFK_Time") + 1);
-			if(GetPVarInt(playerid, "AFK_Time") > 2)
-			{
-				format(stringF,sizeof(stringF), "[AFK] [%s секунд]",ConvertSeconds(GetPVarInt(playerid, "AFK_Time")-2));
-				SetPlayerChatBubble(playerid, stringF, COLOR_GREEN, 30.0, 1200);
-			}
-		}
-		if(GetPVarInt(playerid,"AFK_Time") >= 900 && PTEMP[playerid][pAdmin] < 2) SCM(playerid,COLOR_LIGHTRED, " Вы были отсоеденены от сервера! (AFK)"), Kick(playerid);
 
-		/*********************************** Анти Armour ***********************************/
-		new Float:armour;
-		GetPlayerArmour(playerid, armour);
-		if(Armour[playerid] < armour) SetPlayerArmourAC(playerid, Armour[playerid]);
-		else Armour[playerid] = armour;
-		if(HealthOn[playerid] == 0)
-		{
-			new Float: Health;
-			GetPlayerHealth(playerid, Health);
-			if(PTEMP[playerid][pHP] < Health) SetPlayerHealth(playerid, PTEMP[playerid][pHP]);
-			else PTEMP[playerid][pHP] = Health;
-		}
-		else HealthOn[playerid] = 0;
-		/*********************************** Анти Телепорт ***********************************/
-		new distance2 = 400;
-		new Float:currentPos[ 3 ], distance;
-		GetPlayerPos( playerid, currentPos[ 0 ], currentPos[ 1 ], currentPos[ 2 ] );
-		if(IsPlayerInAnyVehicle(playerid)) distance2 = 500;
-		else distance2 = 200;
-		distance = floatround( GetPlayerDistanceFromPoint( playerid, PTEMP[ playerid ][ pPos_x ], PTEMP[ playerid ][ pPos_y ], PTEMP[ playerid ][ pPos_z] ) );
-		if(GetPVarInt(playerid, "AntiBreik") == 0 && GetPVarInt(playerid, "AFK_Time") < 2 && PTEMP[playerid][pAdmin] == 0)
-		{
-			if(distance > distance2)
-			{
-				CheatKick ( playerid , 022) ;
-			}
-		}
-		if(GetPVarInt(playerid, "AntiBreik") == 0)
-		{
-			PTEMP[ playerid ][ pPos_x ] = currentPos[ 0 ];
-			PTEMP[ playerid ][ pPos_y ] = currentPos[ 1 ];
-			PTEMP[ playerid ][ pPos_z ] = currentPos[ 2 ];
-		}
-		/**************************************** Античит на коорд мастер ****************************/
-		if(currentPos[2] < -1 && !GetPVarFloat(playerid,"pos_z") && !IsPlayerInRangeOfPoint(playerid, 100, -1590.8289,716.0479,-5.2422)) SetPVarFloat(playerid,"pos_z",currentPos[2]), SetPVarFloat(playerid,"pos_x",currentPos[0]);
-		else if(currentPos[2] < -1 && GetPVarFloat(playerid,"pos_z") && !IsPlayerInRangeOfPoint(playerid, 100, -1590.8289,716.0479,-5.2422) && GetPVarFloat(playerid,"pos_z") == currentPos[2] && GetPVarFloat(playerid,"pos_x") != currentPos[0] && !SpeedVehicle(playerid) && GetPlayerInterior(playerid) == 0) CheatKick(playerid, 036);
-		else DeletePVar(playerid,"pos_z");
-		/******************************** Античит на JETPACK *******************************/
-		if(GetPlayerSpecialAction(playerid) == SPECIAL_ACTION_USEJETPACK)
-		{
-			CheatKick(playerid, 002);
-		}
-		/******************************** Античит на быструю езду на мопеде *******************************/
-		if(IsPlayerInAnyVehicle(playerid) && GetVehicleModel(GetPlayerVehicleID(playerid)) == 462 && SpeedVehicle(playerid) > 110 && PTEMP[playerid][pAdmin] == 0)
-		{
-			CheatKick(playerid, 024);
-		}
-		new animlib[30], animname[30];
-		GetAnimationName(GetPlayerAnimationIndex(playerid), animlib, sizeof(animlib), animname, sizeof(animname));
-		/******************************** Античит на fly *******************************/
-		if(SpeedVehicle(playerid) > 40 && strcmp(animlib, "SWIM", true) == 0 && strcmp(animname, "SWIM_crawl", true) == 0 && PTEMP[playerid][pAdmin] == 0 && !IsPlayerInAnyVehicle(playerid))
-		{
-			CheatKick(playerid, 025);
-		}
-		new AnimLib[30], AnimName[30];
-		GetAnimationName(GetPlayerAnimationIndex(playerid), AnimLib, sizeof(AnimLib), AnimName, sizeof(AnimName));
-		if(PTEMP[playerid][pAdmin] < 2)
-		{
-			if(GetPlayerSpeed(playerid) > 60 && strcmp(AnimLib, "SWIM", true) == 0 && strcmp(AnimName, "SWIM_crawl", true) == 0)
-			{
-				if(GetPVarInt(playerid, "cheat_fly_time") == 0 || (GetPVarInt(playerid, "cheat_fly_time") + 10) > gettime())
-				{
-					if(GetPVarInt(playerid, "cheat_fly") >= 3) CheatKick(playerid, 026);
-					else
-					{
-					    SetPVarInt(playerid, "cheat_fly", (GetPVarInt(playerid, "cheat_fly") +1));
-					    SetPVarInt(playerid, "cheat_fly_time", gettime());
-					    format(string, 90, " <Warning> %s[%i]: Возможно Airbreak", PTEMP[playerid][pName], playerid);
-						ABroadCast(COLOR_REDD,string,2);
-					}
-				}
-			}
-		}
-		/******************************** Античит на fly *******************************/
-		if(SpeedVehicle(playerid) > 40 && GetPlayerWeapon(playerid) != 46 && strcmp(animname, "FALL_SKYDIVE_ACCEL", true) == 0 && PTEMP[playerid][pAdmin] <= 2 && !IsPlayerInAnyVehicle(playerid))
-		{
-			CheatKick(playerid, 026);
-		}
-		/******************************** Античит на езду без аренды *******************************/
-		new newcar = GetPlayerVehicleID(playerid);
-		if(GetPlayerState(playerid) == PLAYER_STATE_PASSENGER) return true;
-		if(newcar >= rentcarsf[0] && newcar <= rentcarsf[6])
-		{
-			if(arenda[playerid] != newcar && SpeedVehicle(playerid) > 150)
-			{
-				CheatKick(playerid, 027);
-				SetVehicleToRespawn(newcar);
-			}
-		}
-		/******************************** Античит на езду без аренды *******************************/
-		if(newcar >= rentcarls[0] && newcar <= rentcarls[8])
-		{
-			if(GetPlayerState(playerid) == PLAYER_STATE_PASSENGER) return true;
-			if(arenda[playerid] != newcar && SpeedVehicle(playerid) > 150)
-			{
-				CheatKick(playerid, 027);
-				SetVehicleToRespawn(newcar);
-			}
-		}
-		/******************************** Античит на езду без аренды *******************************/
-		if(newcar >= rentcarvip[0] && newcar <= rentcarvip[8])
-		{
-			if(GetPlayerState(playerid) == PLAYER_STATE_PASSENGER) return true;
-			if(arenda[playerid] != newcar && SpeedVehicle(playerid) > 150)
-			{
-				CheatKick(playerid, 027);
-				SetVehicleToRespawn(newcar);
-			}
-		}
-		/******************************** Античит на езду без аренды *******************************/
-		if(newcar >= rentcarlv[0] && newcar <= rentcarlv[17])
-		{
-			if(GetPlayerState(playerid) == PLAYER_STATE_PASSENGER) return true;
-			if(arenda[playerid] != newcar && SpeedVehicle(playerid) > 150)
-			{
-				CheatKick(playerid, 027);
-				SetVehicleToRespawn(newcar);
-			}
-		}
-		if(GetPlayerWeapon(playerid) > 0 && GetPlayerAmmo(playerid) == 0 && Weapons[playerid][GetPlayerWeapon(playerid)] == 0 && PTEMP[playerid][pLogin] && GetPVarInt(playerid, "GunCheckTime") == 0)
-		{
-			DelGun(playerid);
-			CheatKick(playerid, 028);
-		}
-		/******************************** Античит на езду без аренды *******************************/
-		if(newcar >= buscar[0] && newcar <= buscar[7])
-		{
-			if(GetPlayerState(playerid) == PLAYER_STATE_PASSENGER) return true;
-			if(GetPVarInt(playerid, "rentcar_job") != newcar && SpeedVehicle(playerid) > 40)
-			{
-				CheatKick(playerid, 027);
-				SetVehicleToRespawn(newcar);
-			}
-		}
-	}
-	return true;
-}
-publics:_UpdateFresh()
-{
-	foreach(i)
-	{
-	    if(IsABank(i))
-		{
-		    GameTextForPlayer(i, "~n~~n~~n~~n~~n~~n~~n~~n~~g~PRESS  ~w~~k~~VEHICLE_ENTER_EXIT~",1300,4);
-		}
-		new carid = GetPlayerVehicleID(i);
-		if(GetPVarInt(i,"BoneStol")) SelectTextDraw(i,0x33AAFFFF);
-		if(GetPVarInt(i, "SelectAvto") != -1) SelectTextDraw(i,0x0080FFFF);
-		if(GetRoulet(i) && !GetPVarInt(i,"RStol") && !GetPVarInt(i,"CasinoRank")) GameTextForPlayer(i,"~g~PRESS ENTER",1300,4);
-		if(IsPlayerNearGarage(i) && GetPlayerState(i) == PLAYER_STATE_DRIVER && IsPlayerInVehicle(i, house_car[i])) GameTextForPlayer(i,"~g~PRESS ~k~~VEHICLE_HORN~",1300,4);
-		if(!GetPVarInt(i,"BoneStol") && IsPlayerNearBone(i) != -1) GameTextForPlayer(i,"~g~PRESS ENTER",1300,4);
-		SetPVarInt(i, "NewPlayerAmmo", GetPlayerAmmo(i));
-		if(GetPVarInt(i, "NewPlayerAmmo") != GetPVarInt(i, "PlayerAmmo"))
-		{
-			OnPlayerAmmoChange(i, GetPVarInt(i, "NewPlayerAmmo"), GetPVarInt(i, "PlayerAmmo"));
-			SetPVarInt(i, "PlayerAmmo", GetPVarInt(i, "NewPlayerAmmo"));
-		}
-		if(!IsPlayerApplyAnimation(i, "KO_skid_front") && PlayerCuffedTime[i])
-		{
-		    ApplyAnimation(i,"PED","KO_skid_front",6.0,0,1,1,1,0);
-		}
-		if(Works[i])
-		{
-			if(JobCP[i] != 2 && usemesh[i] != 1) return true;
-			if(IsPlayerInAnyVehicle(i)) return true;
-			if(IsPlayerApplyAnimation(i, "FALL_back") ||
-					IsPlayerApplyAnimation(i, "FALL_collapse") ||
-					IsPlayerApplyAnimation(i, "FALL_fall") ||
-					IsPlayerApplyAnimation(i, "FALL_front") ||
-					IsPlayerApplyAnimation(i, "FALL_glide") ||
-					IsPlayerApplyAnimation(i, "FALL_land") ||
-					IsPlayerApplyAnimation(i, "FALL_skyDive"))
-			{
-				SCM(i, COLOR_LIGHTRED, " Вы уронили ящик");
-				DisablePlayerCheckpoint(i);
-				mesh[i] = 0;
-				usemesh[i] = 0;
-				if(IsPlayerAttachedObjectSlotUsed(i,1)) RemovePlayerAttachedObject(i,1);
-				SetPlayerCheckpoint(i,2230.3528,-2286.1353,14.3751,1.5);
-				JobCP[i] = 1;
-			}
-		}
-        if(GetPVarInt(i, "matovoz_rob"))
-		{
-			if(IsPlayerApplyAnimation(i, "FALL_back") ||
-					IsPlayerApplyAnimation(i, "FALL_collapse") ||
-					IsPlayerApplyAnimation(i, "FALL_fall") ||
-					IsPlayerApplyAnimation(i, "FALL_front") ||
-					IsPlayerApplyAnimation(i, "FALL_glide") ||
-					IsPlayerApplyAnimation(i, "FALL_land") ||
-					IsPlayerApplyAnimation(i, "FALL_skyDive"))
-			{
-				SCM(i, COLOR_LIGHTRED, " Вы уронили ящик");
-				DisablePlayerCheckpoint(i);
-		        MatHaul[RobbingBiker[robCar]-gunscar[0]][mLoad] += 250;
-				format(string, sizeof(string), "Кол-во груза\n%i", MatHaul[RobbingBiker[robCar]-gunscar[0]][mLoad]);
-        		UpdateDynamic3DTextLabelText(Rob3DText, 0xEDEA9FAA, string);
-				RemovePlayerAttachedObject(i, 1);
-				SetPlayerSpecialAction (i, SPECIAL_ACTION_NONE);
-				DeletePVar(i, "matovoz_rob");
-			}
-		}
-		new currentveh;
-		currentveh = GetPlayerVehicleID(i);
-		new Float:vehx, Float:vehy, Float:vehz;
-		GetVehiclePos(currentveh, vehx, vehy, vehz);
-		new vehicleid = GetPlayerVehicleID(i);
-		new vehiclemodel = GetVehicleModel(vehicleid);
-		if(vehiclemodel == 514 || vehiclemodel == 515 || vehiclemodel == 403)
-		{
-			if(GetVehicleTrailer(GetPlayerVehicleID(i)) != 0 && GetPlayerState(i) == PLAYER_STATE_DRIVER && vehz < 0)
-			{
-				SCM(i, 0xFF6347AA, " Вы потеряли свой грузовик");
-				SCM(i, 0xFF6347AA, " Вы потеряли свой груз");
-				peremennn[i] = 0;
-				SetVehicleToRespawn(GetPlayerVehicleID(i));
-				DestroyVehicle(GetVehicleTrailer(GetPlayerVehicleID(i)));
-				DriverJob[i] = false;
-				PTEMP[i][pDgruz] = 0;
-				Gruz[i] = 0;
-				bGruz[i] = 0;
-			}
-		}
-		if(vehiclemodel == 514 || vehiclemodel == 515 || vehiclemodel == 403)
-		{
-			if(GetVehicleTrailer(GetPlayerVehicleID(i)) == 0 && GetPlayerState(i) == PLAYER_STATE_DRIVER && vehz < 0)
-			{
-				SCM(i, 0xFF6347AA, " Вы потеряли свой грузовик");
-				SetVehicleToRespawn(GetPlayerVehicleID(i));
-				DriverJob[i] = false;
-			}
-		}
-		GetVehicleParamsEx(carid,engine,lights,alarm,doors,bonnet,boot,objective);
-		new Keys,ud;
-		new up,dn;
-		GetPlayerKeys(i,Keys,up,dn);
-		if(GetPVarInt(i,"RStol") && !GetPVarInt(i,"RStavka"))
-		{
-			new Float:p;
-			GetPlayerFacingAngle(i,p);
-			switch(GetPVarInt(i,"RStol"))
-			{
-			case 1..4:
-				{
-					if(p >= 0 && p <= 190)
-					{
-						if(dn < 0) Down(i);
-						else if(dn > 0) Up(i);
-						else if(up < 0) Left(i);
-						else if(up > 0) Right(i);
-					}
-					else
-					{
-						if(dn > 0) Down(i);
-						else if(dn < 0) Up(i);
-						else if(up > 0) Left(i);
-						else if(up < 0) Right(i);
-					}
-				}
-			default:
-				{
-					if(p >= 0 && p <= 130 || p >= 290 && p <= 360)
-					{
-						if(dn > 0) Down(i);
-						else if(dn < 0) Up(i);
-						else if(up > 0) Left(i);
-						else if(up < 0) Right(i);
-					}
-					else
-					{
-						if(dn < 0) Down(i);
-						else if(dn > 0) Up(i);
-						else if(up < 0) Left(i);
-						else if(up > 0) Right(i);
-					}
-				}
-			}
-		}
-		if(IsAAntidm(i) && GetPlayerWeapon(i) > 1)
-		{
-		    if(!IsAArm(i) && !IsACop(i) && PTEMP[i][pAdmin] < 1)
-			SetPlayerArmedWeapon(i,0);
-		}
-		if(Spectate[i] && ud == KEY_DOWN && !LastReconClick[i][0])
-		{
-			PlayerPlaySound(i, 1083, 0.0, 0.0, 0.0);
-			LastReconClick[i][0] = ud;
-			if(ReconSelectSub[i] == INVALID_TEXT_DRAW)
-			{
-				DisableEnableReconButton(i, ReconSelect[i], 0);
-				if(ReconSelect[i] >= 15)
-				{
-					ReconSelect[i] = 7;
-					DisableEnableReconButton(i, ReconSelect[i], 1);
-				}
-				else
-				{
-					ReconSelect[i]++;
-					DisableEnableReconButton(i, ReconSelect[i], 1);
-				}
-				return 1;
-			}
-			else
-			{
-				DisableEnableReconButton(i, ReconSelectSub[i], 0);
-				if(ReconSelectSub[i] >= ReconBounds[i][1])
-				{
-					ReconSelectSub[i] = ReconBounds[i][0];
-					DisableEnableReconButton(i, ReconSelectSub[i], 1);
-				}
-				else
-				{
-					ReconSelectSub[i]++;
-					DisableEnableReconButton(i, ReconSelectSub[i], 1);
-				}
-			}
-		}
-		if(Spectate[i] && SpecAd[i] != INVALID_PLAYER_ID) return PlayerTextDrawShow(i, ReconPlayer[34]);
-		if(SERVERTEST)
-		{
-			SendMes(i,COLOR_BLUE,"i - %i, CAMERAMODE - %i",i,GetPlayerCameraMode(i));
-			new Float:XS, Float:YS, Float:ZS;
-			GetPlayerPos(i,XS,YS,ZS);
-			SendMes(i,COLOR_BLUE,"i - %i, X - %.1f, Y - %.1f, Z - %.1f",i,XS,YS,ZS);
-			new Float:xw, Float:yw, Float:zw;
-			GetPlayerVelocity(i,xw,yw,zw);
-			SendMes(i,COLOR_BLUE,"i - %i, X - %.1f, Y - %.1f, Z - %.1f",i,xw,yw,zw);
-		}
-		if(Sounds == 1)
-		{
-			new distance = floatround( GetPlayerDistanceFromPoint( i, streampos[0], streampos[1], streampos[2]) );
-			if(UseSound[i] == 0 && distance <= rads)
-			{
-				PlayAudioStreamForPlayer(i, stream, streampos[0], streampos[1], streampos[2], rads, 1);
-				UseSound[i] = 1;
-			}
-			if(UseSound[i] == 1 && distance > rads)
-			{
-				UseSound[i] = 0;
-			}
-		}
-		if(IsPlayerInAnyVehicle(i)) SetPlayerArmedWeapon(i,0);
-		if(GetPlayerState(i) == PLAYER_STATE_DRIVER && (GetPlayerWeapon(i) == WEAPON_DEAGLE || GetPlayerWeapon(i) == WEAPON_SHOTGSPA || GetPlayerWeapon(i) == WEAPON_SAWEDOFF || GetPlayerWeapon(i) == WEAPON_MINIGUN || GetPlayerWeapon(i) == WEAPON_MP5  )) SetPlayerArmedWeapon(i,0);
-	}
-	return true;
-}
-publics:_Fresh()
-{
-	if(players > 1000) return SendRconCommand("exit");
-	new hour, minute, second;
-	gettime(hour, minute, second);
-	FixHour(hour);
-	hour = shifthour;
-	for(new i = GetVehiclePoolSize(); i >= 0; i--)
-	{
-		if(!GetVehicleModel(i)) continue;
-		new Float:health;
-		GetVehicleHealth(i, health);
-		if(health != 1000 && health < CarHealth[i]) CarHealth[i] = health;
-		if(CarHealth[i] < health && CarHealth[i] != 0 && !TimeHealth[i]) SetVehHealth(i,CarHealth[i]);
-		if(TimeHealth[i]) TimeHealth[i]--;
-	}
-	for(new i;i<MAX_BONE;i++)
-	{
-		if(BoneInfo[i][GameStart] > 0)
-		{
-			BoneInfo[i][GameStart] --;
-			foreach(g)
-			{
-				if(GetPVarInt(g,"BoneStol")-1 == i && (GetPVarInt(g,"BoneStol_") || BoneInfo[i][Crupie] == g))
-				{
-					if(BoneInfo[i][GameStart] == 0 && GetPVarInt(g,"BoneStol_") == 1) SetPVarInt(g,"BoneStol_",random(11) + 2), UpdateBone(i);
-					else if(BoneInfo[i][GameStart] > 0)
-					{
-						format(YCMDstr,18,"~g~%i",BoneInfo[i][GameStart]);
-						GameTextForPlayer(g,YCMDstr,1200,6);
-					}
-				}
-			}
-			if(BoneInfo[i][GameStart] == 0) return ShowItog(i);
-		}
-	}
-	if(random(5) == 1) {
-		for(new i = 1; i <= TOTALATM; i++)
-		{
-			if(!LABELATM_) UpdateDynamic3DTextLabelText(LABELATM[i],COLOR_LIGHTBLUE,"Введите: \"/ATM\"");
-			else UpdateDynamic3DTextLabelText(LABELATM[i],0x00D900FF,"Нажмите: \"ENTER\"");
-		}
-		if(!LABELATM_) LABELATM_ = true;
-		else LABELATM_ = false; }
-	foreach(i)
-	{
-		if(!PTEMP[i][pLogin])
-		{
-			if(GetPVarInt(i,"time_logged") > 0)
-			{
-				SetPVarInt(i,"time_logged",GetPVarInt(i,"time_logged")-1);
-				if(GetPVarInt(i,"time_logged") == 0)
-				{
-					SCM(i, COLOR_LIGHTRED," Время на ввод пароля ограничено!");
-					ShowPlayerDialogEx(i, -1, 0, "f", "f", "f", "");
-					Kick(i);
-				}
-			}
-		}
-		else
-		{
-			if(GetPVarInt(i,"h_stall") && !IsPlayerInRangeOfPoint(i, 5, StallInfo[GetPVarInt(i,"h_stall")][stPos][0], StallInfo[GetPVarInt(i,"h_stall")][stPos][1], StallInfo[GetPVarInt(i,"h_stall")][stPos][2]))
-			{
-				UpdateDynamic3DTextLabelText(StallInfo[GetPVarInt(i,"h_stall")][stText], 0xFF8C37FF,"Не работает");
-				DeletePVar(i,"h_stall");
-				SetPlayerSkin(i,PTEMP[i][pChar][0]);
-			}
-			if(PTEMP[i][pNarcoLomka] > 0) { new ttt = random(2); if(ttt == 1) { ApplyAnimation(i, "CRACK", "crckdeth1", 4.0, 0, 0, 1, 1, 1); } else { ApplyAnimation(i, "CRACK", "crckdeth3", 4.0, 0, 0, 1, 1, 1); } }
-			onCheckAirBrk(i);
-			if(Spectate[i] && SpecAd[i] != INVALID_PLAYER_ID)
-			{
-				//***********************************************
-				new thewarns = 0;
-				new sid = SpecAd[i];
-				if(PTEMP[sid][pWarns] == 0) thewarns = 0;
-				if(PTEMP[sid][pWarns] != 0 && PTEMP[sid][pWarns] != 0) thewarns = thewarns-PTEMP[sid][pWarns];
-				if(PTEMP[sid][pWarns] != 0 && PTEMP[sid][pWarns] == 0) thewarns = PTEMP[sid][pWarns];
-				new tttgtg;
-				tttgtg = GetPlayerAmmo(SpecAd[i]);
-				//EngineStatus(GetPlayerVehicleID(SpecAd[i])
-				//new sobtest[20];
-				//format(sobtest,sizeof(sobtest),"~n~%s / %s",(ACCCheck[SpecAd[i]] == 10 ? ("On"):("Off")),(PTEMP[SpecAd[i]][Rassa] == 16 ? ("On"):("Off")));
-				new Float:health;
-				GetVehicleHealth(GetPlayerVehicleID(SpecAd[i]),health);
-				new Float:hppp;
-				new Float:aermor;
-				GetPlayerArmour(SpecAd[i],aermor);
-				GetPlayerHealth(SpecAd[i],hppp);
-				//			new afktext[7];
+#include "..\gamemodes\events\_UpdateFresh.pwn"
+#include "..\gamemodes\events\_Fresh.pwn"
 
-				new Float:onepercent = NumberShot[SpecAd[i]]/100;
-				new percentshot = floatround(onepercent)*NumberShotTarget[SpecAd[i]];
-
-				new Float:tonepercent = TimeNumberShot[SpecAd[i]]/100;
-				new tpercentshot = floatround(tonepercent)*TimeNumberShotTarget[SpecAd[i]];
-				new sname[MAX_PLAYER_NAME], httpquery[250];
-				GetPlayerName(SpecAd[i], sname, sizeof(sname));
-				if(GetPVarInt(SpecAd[i], "AFK_Time") > 2)
-				{
-					format(httpquery, sizeof(httpquery), "%s~n~ID: %i  ~r~AFK",sname,SpecAd[i]);
-					PlayerTextDrawSetString(i, ReconPlayer[6],httpquery);
-				}
-				else
-				{
-					format(httpquery, sizeof(httpquery), "%s~n~ID: %i",sname,SpecAd[i]);
-					PlayerTextDrawSetString(i, ReconPlayer[6],httpquery);
-				}
-				/*new sobtest[20];
-				format(sobtest,sizeof(sobtest),"~n~%s / %s",(ACCCheck[SpecAd[i]] == 10 ? ("On"):("Off")),(PTEMP[SpecAd[i]][Rassa] == 16 ? ("On"):("Off")));*/
-				new e_status[25];
-				if(GetPlayerState(SpecAd[i]) == PLAYER_STATE_DRIVER) GetVehicleParamsEx(GetPlayerVehicleID(SpecAd[i]), engine, lights, alarm, doors, bonnet, boot, objective);
-				if(GetPlayerState(SpecAd[i]) != PLAYER_STATE_DRIVER) e_status = "-";
-				else if(engine) e_status = "On";
-				else e_status = "Off";
-				new maxspeed = 0;
-				if(IsPlayerInAnyVehicle(SpecAd[i])) maxspeed = MaxSpeedCar[GetVehicleModel(GetPlayerVehicleID(SpecAd[i]))-400];
-				//format(sobtest,sizeof(sobtest),"~n~%s / %s",(ACCCheck[SpecAd[i]] == 10 ? ("On"):("Off")),(PTEMP[SpecAd[i]][Rassa] == 16 ? ("On"):("Off")));
-				format(httpquery, sizeof(httpquery), "~n~%i : %i / %i~n~%i~n~%.0f~n~%.0f~n~%.0f~n~%i / %i~n~%i~n~%i : %i~n~%i / %i : %i%%~n~%i / %i : %i%%~n~%i : %i~n~%s",
-				PTEMP[SpecAd[i]][pLevel], PTEMP[SpecAd[i]][pExp], (PTEMP[SpecAd[i]][pLevel]+1)*4, thewarns, aermor,hppp,health,SpeedVehicle(SpecAd[i]), maxspeed,GetPlayerPing(SpecAd[i]),tttgtg,Weapons[SpecAd[i]][GetPlayerWeapon(SpecAd[i])],NumberShot[SpecAd[i]],NumberShotTarget[SpecAd[i]],percentshot,TimeNumberShot[SpecAd[i]],TimeNumberShotTarget[SpecAd[i]],tpercentshot,GetPVarInt(SpecAd[i], "AFK_Time"), 1000, e_status);
-				PlayerTextDrawSetString(i, ReconPlayer[5],httpquery);
-				//format(strr1, sizeof(strr1), "%s~n~(%i)  %s~n~~n~~r~]Armour: ~w~%.0f~n~~g~]Hp: ~w~%.0f~n~~g~]CarHp: ~w~%.0f~n~~r~]Money: ~w~%i~n~~b~]Ammo: ~w~%i~n~~p~]Warns: ~w~%i~n~~y~]Ping: ~w~%i~n~~b~]Speed: ~w~%i",getName(SpecAd[i]),SpecAd[i],afktext,aermor,hppp,health,PTEMP[SpecAd[i]][Cash],tttgtg,thewarns,GetPlayerPing(SpecAd[i]),SpeedVehicle(SpecAd[i]));
-				//PlayerTextDrawSetString(i, NikPlayer,strr1);
-			}
-			if(GetPVarInt(i, "w_time") < gettime() && GetPVarInt(i,"w_id") && !GetPVarInt(i,"InWorkshop"))
-			{
-				new x = GetPVarInt(i,"w_id");
-				for(new x_ = 0; x_ < 9; x_++)
-				{
-					WorkshopList[x_][x][wlID] = WorkshopList[x_+1][x][wlID];
-					strmid(WorkshopList[x_][x][wlName],WorkshopList[x_+1][x][wlName],0,strlen(WorkshopList[x_][x][wlName]), MAX_PLAYER_NAME);
-					WorkshopList[x_+1][x][wlID] = -1;
-					strmid(WorkshopList[x_+1][x][wlName],"", 0, strlen(""), 5);
-				}
-				if(WorkshopList[0][x][wlID] != -1 && strlen(WorkshopList[0][x][wlName]))
-				{
-					SCM(WorkshopList[0][x][wlID],COLOR_BLUE,"Подошла ваша очередь. У вас есть 2 минуты что бы прибыть к гаражу!");
-					SetPVarInt(WorkshopList[0][x][wlID],"w_time", gettime() + 120);
-					SetPlayerCheckpoint(WorkshopList[0][x][wlID],WorkshopInfo[x][wMenu][0],WorkshopInfo[x][wMenu][1],WorkshopInfo[x][wMenu][2], 10.0);
-				}
-				DisablePlayerCheckpoint(i);
-				DeletePVar(i,"w_time");
-				DeletePVar(i,"w_id");
-			}
-			if(GetPVarInt(i, "AntiBreik") > 0) SetPVarInt(i, "AntiBreik", GetPVarInt(i, "AntiBreik") - 1);
-			if(timecar[i] > 0)
-			{
-				timecar[i]--;
-				if(nachalvzlom[i] == 0) format(YCMDstr,10,"~r~%s",Convert(timecar[i]));
-				else format(YCMDstr,10,"~g~BREAK");
-				GameTextForPlayer(i, YCMDstr, 2000, 6);
-				if(timecar[i] == 1)
-				{
-					if(PTEMP[i][pSkilla] > 0) PTEMP[i][pSkilla]--;
-					SCM(i, COLOR_BLUE, " SMS: Ты нас разочаровал! Миссия провалена");
-					avtocar[i] = 0;
-					rabotaon[i] = 0;
-					GangZoneDestroy(gangzonesa[i]);
-				}
-			}
-			if(TriggerStatus[i] != 0) if(!PlayerToPoint(2.0,i,TriggerPos[i][0],TriggerPos[i][1],TriggerPos[i][2])) TriggerStatus[i] = 0; // Устанавливаем 0 что бы снова взять триггер
-			if(sms_timer[i] > 0) sms_timer[i]--;
-			if(GetPVarInt(i,"fish_ready") == 3 && GetPVarInt(i,"fish_began") && GetPVarInt(i,"fish_time") < gettime())
-			{
-				ApplyAnimation(i,"SWORD","sword_IDLE",50.0,0,1,1,1,1);
-				if(Sonar[IsAtFishPlace(i)] > 0) SetPVarInt(i,"fish_chanse",random(20));
-				if(IsABoat(i)) SetPVarInt(i,"fish_chanse",random(10));
-				if(GetPVarInt(i,"fish_chanse") == 0) GameTextForPlayer(i,"~g~~n~!", 5000, 6), SetPVarInt(i,"fish_time", gettime() + random(5) + 2);
-				else if(GetPVarInt(i,"fish_chanse") == 1) GameTextForPlayer(i,"~n~~n~~y~!", 5000, 6), SetPVarInt(i,"fish_time", gettime() + random(5) + 2);
-				else if(GetPVarInt(i,"fish_chanse") == 2) GameTextForPlayer(i,"~n~~n~~r~~n~!", 5000, 6), SetPVarInt(i,"fish_time", gettime() + random(3) + 2);
-				else GameTextForPlayer(i,"~b~!",11000,6);
-			}
-			if(startaddiction[i] == 1 && PTEMP[i][pAddiction] > 2000 && PTEMP[i][pNarcoLomka] == 0)
-			{
-				if(GetPVarInt(i,"player_paint") == 2) return true;
-				SCM(i, 0x9F0000AA, " ~~~~~~~~ У вас началась ломка ~~~~~~~~");
-				SCM(i, -1, " (( Вызвать медика - /call => [2] Скорая помощь || Принять наркотик - /usedrugs ))");
-				PTEMP[i][pNarcoLomka] = 1;
-			}
-			//
-			if(PTEMP[i][pDrivingSkill] > 1 && GetPlayerState(i) == PLAYER_STATE_DRIVER && !IsANoLimiter(GetPlayerVehicleID(i)))
-			{
-				PTEMP[i][pDrivingSkill]--;
-				switch(PTEMP[i][pDrivingSkill])
-				{
-				case 1: SCM(i, COLOR_GREEN, " Ваш навык вождения повышен. (( Нажмите клавишу \"CTRL\" для выключения ограничителя скорости ))"),accept_car_damage[i] = 0;
-				case 300,600,900,1200: SCM(i, COLOR_GREEN, " Ваш навык вождения повышен."),accept_car_damage[i] = 0;
-				}
-			}
-			if(PTEMP[i][pDrivingSkill] > 0 && GetPlayerState(i) == PLAYER_STATE_DRIVER && !IsANoLimiter(GetPlayerVehicleID(i)))
-			{
-				new Float:veh[3];
-				GetVehicleVelocity(GetPlayerVehicleID(i),veh[0],veh[1],veh[2]);
-				switch(PTEMP[i][pDrivingSkill])
-				{
-				case 1..300: if(SpeedVehicle(i) > 50) setVehicleSpeed(GetPlayerVehicleID(i),50);
-				case 301..600: if(SpeedVehicle(i) > 45) setVehicleSpeed(GetPlayerVehicleID(i),45);
-				case 601..900: if(SpeedVehicle(i) > 40) setVehicleSpeed(GetPlayerVehicleID(i),40);
-				case 901..1200: if(SpeedVehicle(i) > 35) setVehicleSpeed(GetPlayerVehicleID(i),35);
-				}
-			}
-			if(CellTime[i] > 0)
-			{
-				if (CellTime[i] == cchargetime)
-				{
-					CellTime[i] = 1;
-					if(Mobile[Mobile[i]] == i) PTEMP[i][pMobile] = PTEMP[i][pMobile]+callcost;
-					CellTime[i] = CellTime[i] +1;
-					if (Mobile[Mobile[i]] == 999 && CellTime[i] == 5)
-					{
-						if(IsPlayerConnected(Mobile[i]))
-						{
-							format(string, 90, "У %s звонит мобильник",Name(Mobile[i]));
-							ProxDetector(30.0, Mobile[i], string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
-						}
-					}
-				}
-				if(CellTime[i] == 0 && PTEMP[i][pMobile] > 0)
-				{
-					format(string, 64, "~w~Phone~n~~r~%i", PTEMP[i][pMobile]);
-					GameTextForPlayer(i, string, 5000, 1);
-				}
-			}
-			if(IsTrailerAttachedToVehicle(GetPlayerVehicleID(i)) && peremennn[i] == 0) // если  прицеп есть
-			{
-				peremennn[i] = 1;
-			}
-			else if(!IsTrailerAttachedToVehicle(GetPlayerVehicleID(i)) && peremennn[i] == 1)
-			{
-				if(bGruz[i] == 0) return true;
-				PTEMP[i][pDgruz] -= 3;
-				SCM(i, 0xFF6347AA, " Вы потеряли часть груза");
-				peremennn[i] = 0;
-				if(PTEMP[i][pDgruz] < 0) PTEMP[i][pDgruz] = 1;
-			}
-			if(GetPVarInt(i, "GunCheckTime") == 0 && PTEMP[i][pAdmin] == 0)
-			{
-				new weaponid, ammo;
-				for (new it = 1; it < 11; it++)
-				{
-					GetPlayerWeaponData(i, it, weaponid, ammo);
-					if(ammo > Weapons[i][weaponid] && weaponid != 46)
-					{
-						DelGun(i);
-						CheatKick(i, 029);
-					}
-					else if(PTEMP[i][pLogin]) Weapons[i][weaponid] = ammo;
-				}
-			}
-			if(GetPVarInt(i, "GunCheckTime") > 0) SetPVarInt(i, "GunCheckTime", GetPVarInt(i, "GunCheckTime") - 1);
-			if(PTEMP[i][pSatiety] > 100) PTEMP[i][pSatiety] = 100;
-			if(PTEMP[i][pWantedLevel] > 6) PTEMP[i][pWantedLevel] = 6, SetPlayerWantedLevel(i,PTEMP[i][pWantedLevel] );
-			if(PTEMP[i][pZakonp] > 100) PTEMP[i][pZakonp] = 100;
-			if(PTEMP[i][pZakonp] < -100) PTEMP[i][pZakonp] = -100;
-			if(LabelOn[i] == 0 && PTEMP[i][pWantedLevel] >= 0)
-			{
-				LabelOn[i] = 1;
-    			LabelRecognition[i] = Create3DTextLabel("Преступник!",0xFF000044, 30.0, 40.0, 50.0, 40.0,0);
-				Attach3DTextLabelToPlayer(LabelRecognition[i], i, 0.0, 0.0, 0.4);
-			}
-			if(PTEMP[i][pWantedLevel] >= 0)
-			{
-				switch(PTEMP[i][pWantedLevel])
-				{
-						case 0..2:Update3DTextLabelText(LabelRecognition[i], 0xFF000044, "Преступник!");
-						case 3..4:Update3DTextLabelText(LabelRecognition[i], 0xFF000099, "Преступник!");
-						case 5..6:Update3DTextLabelText(LabelRecognition[i], 0xFF0000FF, "Преступник!");
-				}
-			}
-			if(LabelOn[i] == 1 && PTEMP[i][pWantedLevel] <= 1) Delete3DTextLabel(LabelRecognition[i]), LabelOn[i] = 0;
-			if(GetPVarInt(i, "BusTime") > 0)
-			{
-				SetPVarInt(i, "BusTime", GetPVarInt(i, "BusTime") - 1);
-				format(string,10,"~r~%i",GetPVarInt(i, "BusTime"));
-				GameTextForPlayer(i, string, 2000, 6);
-				if(GetPVarInt(i, "BusTime") == 0)
-				{
-					if(GetPVarInt(i,"BusRepairMoney") > GetPVarInt(i, "BusMoney")) SetPVarInt(i,"BusRepairMoney",PTEMP[i][pPayCheck]);
-					format(YCMDstr, sizeof(YCMDstr), " Вы закончили свой рабочий день. Заработано $%i. За ремонт -$%i", GetPVarInt(i, "BusMoney"), GetPVarInt(i,"BusRepairMoney"));
-					SCM(i, 0x26bf99aa, YCMDstr);
-					SCM(i, -1, " Деньги будут перечислены на ваш счёт во время зарплаты");
-					SetVehicleToRespawn(GetPVarInt(i, "rentcar_job"));
-					Delete3DTextLabel(JobText3D[GetPVarInt(i,"rentcar_job")]);
-					DisablePlayerRaceCheckpoint(i);
-					PTEMP[i][pPayCheck] -= GetPVarInt(i,"BusRepairMoney");
-					DeletePVar(i, "BusTime");
-					DeletePVar(i, "TypeBus");
-					DeletePVar(i, "BusStop");
-					DeletePVar(i, "BusMoney");
-					DeletePVar(i, "BusRepairMoney");
-					DeletePVar(i, "rentcar_job");
-					pPressed[i] = 0;
-				}
-			}
-			if(GetPVarInt(i, "TimeBus") > 0)
-			{
-				SetPVarInt(i, "TimeBus", GetPVarInt(i, "TimeBus") - 1);
-				format(string,32,"~r~%i",GetPVarInt(i, "TimeBus"));
-				GameTextForPlayer(i, string, 2000, 6);
-				if(GetPVarInt(i, "TimeBus") == 0)
-				{
-					DeletePVar(i, "TimeBus");
-					new type = GetPVarInt(i, "TypeBus"), p = pPressed[i];
-					SetPVarInt(i, "BusStop", 1);
-					if(type == 1) SetPlayerRaceCheckpoint(i,0,BusCityLS[p][0],BusCityLS[p][1],BusCityLS[p][2],BusCityLS[p][3],BusCityLS[p][4],BusCityLS[p][5],5.0);
-					if(type == 2) SetPlayerRaceCheckpoint(i,0,BusCitySF[p][0],BusCitySF[p][1],BusCitySF[p][2],BusCitySF[p][3],BusCitySF[p][4],BusCitySF[p][5],5.0);
-					if(type == 3) SetPlayerRaceCheckpoint(i,0,BusCityLV[p][0],BusCityLV[p][1],BusCityLV[p][2],BusCityLV[p][3],BusCityLV[p][4],BusCityLV[p][5],5.0);
-					if(type == 4) SetPlayerRaceCheckpoint(i,0,BusSchool[p][0],BusSchool[p][1],BusSchool[p][2],BusSchool[p][3],BusSchool[p][4],BusSchool[p][5],5.0);
-					if(type == 5) SetPlayerRaceCheckpoint(i,0,BusLSLV[p][0],BusLSLV[p][1],BusLSLV[p][2],BusLSLV[p][3],BusLSLV[p][4],BusLSLV[p][5],5.0);
-					if(type == 6) SetPlayerRaceCheckpoint(i,0,BusLSZavodi[p][0],BusLSZavodi[p][1],BusLSZavodi[p][2],BusLSZavodi[p][3],BusLSZavodi[p][4],BusLSZavodi[p][5],5.0);
-				}
-			}
-			if(IsSmoking[i] == 1)
-			{
-				format(YCMDstr, sizeof(YCMDstr), " %s докуривает сигарету.", Name(i));
-				ProxDetector(30.0, i, YCMDstr, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
-				new Float:PlayerHeal;
-				GetPlayerHealth(i, PlayerHeal);
-				if(PlayerHeal < 120) SetPlayerHealth(i, PlayerHeal+3);
-				SetPlayerSpecialAction(i,SPECIAL_ACTION_NONE);
-			}
-			if(IsSmoking[i] == 51 || IsSmoking[i] == 31 || IsSmoking[i] == 11)
-			{
-				format(YCMDstr, sizeof(YCMDstr), " %s курит сигарету.", Name(i));
-				ProxDetector(30.0, i, YCMDstr, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE);
-				new Float:PlayerHeal;
-				GetPlayerHealth(i, PlayerHeal);
-				if(PlayerHeal < 120) SetPlayerHealthAC(i, PlayerHeal+3);
-			}
-			if(IsSmoking[i] > 0) IsSmoking[i] -= 1;
-			if(Works[i] == true && JobCP[i] == 2) if(usemesh[i] == 1) mesh[i] +=1;
-			if(Flood[i] > 0) Flood[i] -=1;
-			if(hour >= 12 && minute == 10 && second == 0) startaddiction[i] = 1;
-			if(PTEMP[i][pMuted] > 1) PTEMP[i][pMuted] --;
-			if(PTEMP[i][pMuted] == 1) PTEMP[i][pMuted] = 0, SCM(i,COLOR_LIGHTRED, " Вам включили чат. Пожалуйста соблюдайте правила");
-			if(PTEMP[i][pJailTime] > 0)
-			{
-				if(PTEMP[i][pJailTime] > 1) PTEMP[i][pJailTime]--;
-				if(PTEMP[i][pJailTime] == 1)
-				{
-					if(PTEMP[i][pMestoJail] == 1) SetPlayerInterior(i, 0), SetPlayerPos(i,1553.4962,-1675.2714,16.1953), SetPlayerFacingAngle(i, 95.0636);
-					if(PTEMP[i][pMestoJail] == 2) SetPlayerInterior(i, 0), SetPlayerPos(i,-1607.1873,721.3649,12.2721), SetPlayerFacingAngle(i, 2.3026);
-					if(PTEMP[i][pMestoJail] == 3) SetPlayerInterior(i, 0), SetPlayerPos(i,2334.8467,2454.9456,14.9688), SetPlayerFacingAngle(i, 115.7874);
-					if(PTEMP[i][pMestoJail] == 4) SetPlayerWorldBounds(i,20000.0000,-20000.0000,20000.0000,-20000.0000), SetPlayerInterior(i, 0), SetPlayerPos(i, 86.9821,1181.0541,18.6641);
-					PTEMP[i][pJailTime] = 0;
-					PlayerCuffed[i] = 0;
-					SCM(i, COLOR_GREEN, " Вы заплатили ваш долг обществу");
-					PTEMP[i][pMestoJail] = 0;
-					PTEMP[i][pWantedLevel] = 0;
-					SetPlayerWantedLevel(i, 0);
-					SetPlayerVirtualWorld(i, 0);
-					GameTextForPlayer(i,"~g~Freedom", 5000, 1);
-				}
-			}
-			if(PlayerTazeTime[i] >= 1) PlayerTazeTime[i] += 1;
-			if(PlayerTazeTime[i] >= 10) PlayerTazeTime[i] = 0, TogglePlayerControllable(i, 1);
-			if(TieTime[i] > 0) TieTime[i]--;
-			if(PlayerCuffed[i] == 1)
-			{
-				if(PlayerCuffedTime[i] <= 0)
-				{
-					TogglePlayerControllable(i, 1);
-					PlayerCuffed[i] = 0;
-					PlayerCuffedTime[i] = 0;
-					PlayerTazeTime[i] = 1;
-					ClearAnimations(i);
-				}
-				else PlayerCuffedTime[i] -= 1;
-			}
-			if(PlayerCuffed[i] == 2)
-			{
-				if(PlayerCuffedTime[i] <= 0)
-				{
-					TogglePlayerControllable(i, 1);
-					PlayerCuffed[i] = 0;
-					PlayerCuffedTime[i] = 0;
-				}
-				else PlayerCuffedTime[i] -= 1;
-			}
-		}
-	}
-	GetMoney();
-	if(paint_info[0] > 0) GetPaintball();
-	if(race_info[0] > 0) GetRace();
-	if(WarStart > 0) WarStart--;
-	for(new i = 0; i < 20; i++)
-	{
-		if(MFrakCD[i] > 1)
-		{
-			MFrakCD[i] --;
-			if(MFrakCD[i] == 900) SendFamilyMessage(i,0x114D71AA, " У вас осталось 15 минут на подготовку!");
-			else if(MFrakCD[i] == 600) SendFamilyMessage(i,0x114D71AA, " У вас осталось 10 минут на подготовку!");
-			else if(MFrakCD[i] == 180) SendFamilyMessage(i,COLOR_RED, " Пора решать кому будет пренадлежать бизнес. Осталось 3 минуты");
-		}
-	}
-	if(war > 0) war -=1;
-	if ((hour > ghour) || (hour == 0 && ghour == 23))
-	{
-		format(string, 90, " Сейчас времени %i:00 часов",hour);
-		BroadCast(-1,string);
-		ghour = hour;
-		PayDay();
-		SaveMySQL(0);
-		for(new i = 1; i <= TOTALCASINO; i++) SaveMySQL(1,i);
-		for(new i = 1; i <= TOTALSHOPS; i++) SaveMySQL(3,i);
-		for(new i = 1; i <= TotalBizz; i++) SaveMySQL(4,i);
-		for(new i = 1; i <= TotalHouse; i++) SaveMySQL(5,i);
-		for(new i = 1; i <= ALLKVARTIRI; i++) SaveMySQL(6,i);
-		for(new i = 1; i <= AllPODEZD; i++) SaveMySQL(7,i);
-		for(new i = 1; i <= TOTALATM; i++) SaveMySQL(8,i);
-		for(new i = 0; i <= TOTALFARM; i++) SaveMySQL(9,i);
-		for(new i = 0; i < 20; i++) strmid(ATMADVERTISE[i],"", 0, strlen(""),150);
-		for(new i = 1; i < MAX_PLAYERS; i++) Sonar[i] = random(2000);
-		if (realtime) SetWorldTime(hour);
-	}
-	if (hour == 4 && minute == 59 && second == 20) PayDay();
-	if (hour == 00 && minute == 01 && second == 00)
-	{
-		if (serverRestart) restartServer(1);
-		else serverRestart = true;
-	}
-	if (hour == 00 && minute == 01 && second == 10)
-	{
-		if (rr) SendRconCommand("gmx");
-	}
-	if (paint_info[1] == 0)
-	{
-		if (hour == 16 && minute == 10  || hour == 13 && minute == 10  || hour == 14 && minute == 10  || hour == 22 && minute == 10 || hour == 01 && minute == 30 || hour == 03 && minute == 15 )
-		{
-			SendClientMessageToAll(0xffaaffff, " Внимание! Начало пейнтбола через 5 минут. Место проведения: военный завод K.A.C.C.");
-			paint_info[0] = 300;
-			paint_info[1] = 1;
-			foreach(i) DeletePVar(i, "player_paint");
-		}
-	}
-	if (race_info[1] == 0)
-	{
-		if (hour == 12 && minute == 10  || hour == 18 && minute == 10  || hour == 21 && minute == 10  || hour == 15 && minute == 10 || hour == 23 && minute == 10 )
-		{
-			SendClientMessageToAll(0xb9b900aa, " Внимание! Начало гонок через 5 минут. Трасса: Аэропорт Лос Сантос. Регистрация у въезда");
-			race_info[0] = 300;
-			race_info[1] = 1;
-			foreach(i) DeletePVar(i, "gonka");
-		}
-	}
-	AntiCheats();
-	return true;
-}
 LeaderList(playerid)
 {
 	ShowPlayerDialogEx(playerid, 22813, DIALOG_STYLE_MSGBOX, "ID FRACTION", "[0] Гражданский\n[1] LSPD\n[2] FBI\n[3] ARMY SF\n[4] MEDIC SF\n[5] LCN\n[6] YAKUZA\n[7] MAYOR\n[8] CASINO CALIGULA\n[9] SFN\n[10] SFPD\n[11] INSTRUCTOR\n[12] BALLAS\n[13] VAGOS\n[14] RUS MAFIA\n[15] GROVE\n[16] LSN\n[17] AZTEC\n[18] RIFA\n[19] LVA\n[20] LVN\n[21] LVPD\n[22] MEDIC LS\n[23-32] BIKERS\n[23] MEDIC LV", "Закрыть", "");
@@ -5325,162 +4327,158 @@ kShowStats(playerid, targetid)
 {
 	new tempstring[100];
 	new httpquery[2500];
-	format(httpquery, sizeof(httpquery),"");
-	new stringersqw[30],stringersqx[35],teampstringds[30],teampstringd[30],teampstring[70];
-	format(stringersqw,sizeof(stringersqw),"Имя:\t\t\t\t%s\n\n",Name(targetid));
-	strcat(httpquery,stringersqw);
+	format(httpquery, sizeof (httpquery), "");
+	new stringersqw[30], stringersqx[35], teampstringds[30], teampstringd[30], teampstring[70];
+	format(stringersqw, sizeof (stringersqw),"Имя:\t\t\t\t%s\n\n", Name(targetid));
+	strcat(httpquery, stringersqw);
 
-	format(stringersqx,sizeof(stringersqx),"Уровень:\t\t\t%d\n",PTEMP[targetid][pLevel]);
+	format(stringersqx, sizeof (stringersqx),"Уровень:\t\t\t%d\n", PTEMP[targetid][pLevel]);
 	strcat(httpquery,stringersqx);
 	new nxtlevlel = PTEMP[targetid][pLevel]+1;
 	new expert = nxtlevlel*4;
-	format(teampstringds,sizeof(teampstringds),"Exp:\t\t\t\t%d/%d\n",PTEMP[targetid][pExp],expert);
-	strcat(httpquery,teampstringds);
+	format(teampstringds, sizeof (teampstringds),"Exp:\t\t\t\t%d/%d\n", PTEMP[targetid][pExp],expert);
+	strcat(httpquery, teampstringds);
 
-	format(teampstringd,sizeof(teampstringd),"Деньги:\t\t\t%d",PTEMP[targetid][pCash]);
-	strcat(httpquery,teampstringd);
+	format(teampstringd, sizeof (teampstringd),"Деньги:\t\t\t%d", PTEMP[targetid][pCash]);
+	strcat(httpquery, teampstringd);
 
-	format(teampstring,sizeof(teampstring),"\nВарнов:\t\t\t%d",PTEMP[targetid][pWarns]);
-	strcat(httpquery,teampstring);
+	format(teampstring, sizeof (teampstring),"\nВарнов:\t\t\t%d", PTEMP[targetid][pWarns]);
+	strcat(httpquery, teampstring);
 
-	if(PTEMP[targetid][OffWarns] && PTEMP[targetid][pWarns])
+	if (PTEMP[targetid][OffWarns] && PTEMP[targetid][pWarns])
 	{
 		new strisaq[35];
-		format(strisaq,sizeof(strisaq),"\nВарн до: %s",date("%dd/%mm/%yyyy  %hh:%ii",PTEMP[targetid][OffWarns]));
+		format(strisaq, sizeof (strisaq),"\nВарн до: %s",date("%dd/%mm/%yyyy  %hh:%ii",PTEMP[targetid][OffWarns]));
 		strcat(httpquery,strisaq);
 	}
 
-	new qdqwdsds[35],tempstringessrd[35],tempstringessr[35],tempstringesdr[35],tempstringesr[35];
-	new tempstringe[35],tempstrings[35],tempstringq[35],tempstringqs[35],tempstringer[35];
-	format(qdqwdsds,sizeof(qdqwdsds),"\nЗаконопослушность:\t\t%d\n",PTEMP[targetid][pZakonp]);
-	strcat(httpquery,qdqwdsds);
+	new qdqwdsds[35], tempstringessrd[35], tempstringessr[35], tempstringesdr[35], tempstringesr[35];
+	new tempstringe[35], tempstrings[35], tempstringq[35], tempstringqs[35], tempstringer[35];
+	format(qdqwdsds, sizeof (qdqwdsds),"\nЗаконопослушность:\t\t%d\n",PTEMP[targetid][pZakonp]);
+	strcat(httpquery, qdqwdsds);
 
-	format(tempstringessr,sizeof(tempstringessr),"Преступлений:\t\t%d\n",PTEMP[targetid][pCrimes]);
+	format(tempstringessr, sizeof (tempstringessr),"Преступлений:\t\t%d\n",PTEMP[targetid][pCrimes]);
 	strcat(httpquery,tempstringessr);
 
-	format(tempstringesdr,sizeof(tempstringesdr),"Смертей в розыске:\t\t%d\n",PTEMP[targetid][pWantedDeaths]);
+	format(tempstringesdr, sizeof (tempstringesdr),"Смертей в розыске:\t\t%d\n",PTEMP[targetid][pWantedDeaths]);
 	strcat(httpquery,tempstringesdr);
 
-	format(tempstringesr,sizeof(tempstringesr),"Арестов:\t\t\t%d\n",PTEMP[targetid][pArrested]);
+	format(tempstringesr, sizeof (tempstringesr),"Арестов:\t\t\t%d\n",PTEMP[targetid][pArrested]);
 	strcat(httpquery,tempstringesr);
 
-	format(tempstringer,sizeof(tempstringer),"Уровень розыска:\t\t%d\n",PTEMP[targetid][pWantedLevel]);
+	format(tempstringer, sizeof (tempstringer),"Уровень розыска:\t\t%d\n",PTEMP[targetid][pWantedLevel]);
 	strcat(httpquery,tempstringer);
 
-	format(tempstringqs,sizeof(tempstringqs),"Дата регистрации:\t\t%s\n",PTEMP[targetid][pDataReg]);
-	strcat(httpquery,tempstringqs);
+	format(tempstringqs, sizeof (tempstringqs),"Дата регистрации:\t\t%s\n",PTEMP[targetid][pDataReg]);
+	strcat(httpquery, tempstringqs);
 
-	format(tempstringq,sizeof(tempstringq),"Зависимость:\t\t\t%d\n",PTEMP[targetid][pAddiction]);
-	strcat(httpquery,tempstringq);
+	format(tempstringq, sizeof (tempstringq),"Зависимость:\t\t\t%d\n",PTEMP[targetid][pAddiction]);
+	strcat(httpquery, tempstringq);
 
-	format(tempstringe,sizeof(tempstringe),"Наркотики:\t\t\t%d\n",PTEMP[targetid][pDrugs]);
-	strcat(httpquery,tempstringe);
+	format(tempstringe, sizeof (tempstringe),"Наркотики:\t\t\t%d\n",PTEMP[targetid][pDrugs]);
+	strcat(httpquery, tempstringe);
 
-	format(tempstrings,sizeof(tempstrings),"Материалы:\t\t\t%d\n",PTEMP[targetid][pMats]);
-	strcat(httpquery,tempstrings);
+	format(tempstrings, sizeof(tempstrings),"Материалы:\t\t\t%d\n",PTEMP[targetid][pMats]);
+	strcat(httpquery, tempstrings);
 
-	format(tempstringessrd,sizeof(tempstringessrd),"Рыбы поймано:\t\t\t%.2f кг\n",PTEMP[targetid][pFishes]);
-	strcat(httpquery,tempstringessrd);
+	format(tempstringessrd, sizeof (tempstringessrd),"Рыбы поймано:\t\t\t%.2f кг\n",PTEMP[targetid][pFishes]);
+	strcat(httpquery, tempstringessrd);
 
 	new tempisoo[70];
-	switch(PTEMP[targetid][pMember])
-	{
-	case 0: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tНет\n");
-	case 1: strcat(httpquery,"Организиция:\t\t\tPolice LS\n");
-	case 2: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tFBI\n");
-	case 3: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tArmy SF\n");
-	case 4: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tМедики SF\n");
-	case 5: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tLa Cosa Nostra\n");
-	case 6: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tYakuza\n");
-	case 7: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tМэрия\n");
-	case 8: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tCasino\n");
-	case 9: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tSF News\n");
-	case 10: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tPolice SF\n");
-	case 11: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tИнструкторы\n");
-	case 12: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tBallas Gang\n");
-	case 13: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tVagos Gang\n");
-	case 14: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tРусская Мафия\n");
-	case 15: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tGrove Street\n");
-	case 16: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tLS News\n");
-	case 17: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tAztecas Gang\n");
-	case 18: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tRifa Gang\n");
-	case 19: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tArmy LV\n");
-	case 20: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tLV News\n");
-	case 21: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tPolice LV\n");
-	case 24: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tHell's Angels MC\n");
-	case 26: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tWarlocks MC\n");
-	case 29: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tPagans MC\n");
-	case 22: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tМедики LS\n");
-	case 33: format(tempisoo,sizeof(tempisoo),"Организиция:\t\t\tМедики ЛВ\n");
+
+	switch (PTEMP[targetid][pMember]){
+	case 0: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tНет\n");
+	case 1: strcat(httpquery, "Организиция:\t\t\tPolice LS\n");
+	case 2: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tFBI\n");
+	case 3: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tArmy SF\n");
+	case 4: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tМедики SF\n");
+	case 5: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tLa Cosa Nostra\n");
+	case 6: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tYakuza\n");
+	case 7: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tМэрия\n");
+	case 8: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tCasino\n");
+	case 9: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tSF News\n");
+	case 10: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tPolice SF\n");
+	case 11: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tИнструкторы\n");
+	case 12: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tBallas Gang\n");
+	case 13: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tVagos Gang\n");
+	case 14: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tРусская Мафия\n");
+	case 15: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tGrove Street\n");
+	case 16: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tLS News\n");
+	case 17: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tAztecas Gang\n");
+	case 18: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tRifa Gang\n");
+	case 19: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tArmy LV\n");
+	case 20: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tLV News\n");
+	case 21: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tPolice LV\n");
+	case 24: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tHell's Angels MC\n");
+	case 26: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tWarlocks MC\n");
+	case 29: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tPagans MC\n");
+	case 22: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tМедики LS\n");
+	case 33: format(tempisoo, sizeof (tempisoo), "Организиция:\t\t\tМедики ЛВ\n");
 	}
-	strcat(httpquery,tempisoo);
+	strcat(httpquery, tempisoo);
 
-	switch(PTEMP[targetid][pMember])
+	switch (PTEMP[targetid][pMember]){
+	case 0: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\t-\n");
+	case 1, 10, 21:
 	{
-	case 0: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\t-\n");
-	case 1,10,21:
-		{
-			switch(PTEMP[targetid][pRank])
-			{
-			case 1: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tКадет\n");
-			case 2: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tОфицер\n");
-			case 3: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tМл. Сержант\n");
-			case 4: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tСержант\n");
-			case 5: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tПрапорщик\n");
-			case 6: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tСт. Прапорщик\n");
-			case 7: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tМл. Лейтенант\n");
-			case 8: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tЛейтенант\n");
-			case 9: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tСт. Лейтенант\n");
-			case 10: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tКапитан\n");
-			case 11: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tМайор\n");
-			case 12: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tПодполковник\n");
-			case 13: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tПолковник\n");
-			case 14: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tШериф\n");
+		switch (PTEMP[targetid][pRank]){
+		case 1: format(tempstring, sizeof(tempstring), "Должность:\t\t\t\tКадет\n");
+		case 2: format(tempstring, sizeof(tempstring), "Должность:\t\t\t\tОфицер\n");
+		case 3: format(tempstring, sizeof(tempstring), "Должность:\t\t\t\tМл. Сержант\n");
+		case 4: format(tempstring, sizeof(tempstring), "Должность:\t\t\t\tСержант\n");
+		case 5: format(tempstring, sizeof(tempstring), "Должность:\t\t\t\tПрапорщик\n");
+		case 6: format(tempstring, sizeof(tempstring), "Должность:\t\t\t\tСт. Прапорщик\n");
+		case 7: format(tempstring, sizeof(tempstring), "Должность:\t\t\t\tМл. Лейтенант\n");
+		case 8: format(tempstring, sizeof(tempstring), "Должность:\t\t\t\tЛейтенант\n");
+		case 9: format(tempstring, sizeof(tempstring), "Должность:\t\t\t\tСт. Лейтенант\n");
+		case 10: format(tempstring, sizeof(tempstring), "Должность:\t\t\t\tКапитан\n");
+		case 11: format(tempstring, sizeof(tempstring), "Должность:\t\t\t\tМайор\n");
+		case 12: format(tempstring, sizeof(tempstring), "Должность:\t\t\t\tПодполковник\n");
+		case 13: format(tempstring, sizeof(tempstring), "Должность:\t\t\t\tПолковник\n");
+		case 14: format(tempstring, sizeof(tempstring), "Должность:\t\t\t\tШериф\n");
 
-			}
 		}
+	}
 	case 19:
-		{
-			switch(PTEMP[targetid][pRank])
-			{
-			case 1: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tРядовой\n");
-			case 2: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tЕфрейтор\n");
-			case 3: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tМл. Сержант\n");
-			case 4: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tСержант\n");
-			case 5: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tСтаршина\n");
-			case 6: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tПрапорщик\n");
-			case 7: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tСт. Прапорщик\n");
-			case 8: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tМл. Лейтенант\n");
-			case 9: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tЛейтенант\n");
-			case 10: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tСт. Лейтенант\n");
-			case 11: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tКапитан\n");
-			case 12: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tМайор\n");
-			case 13: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tПодполковник\n");
-			case 14: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tПолковник\n");
-			case 15: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tГенерал\n");
-			}
+	{
+		switch (PTEMP[targetid][pRank]){
+		case 1: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tРядовой\n");
+		case 2: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tЕфрейтор\n");
+		case 3: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tМл. Сержант\n");
+		case 4: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tСержант\n");
+		case 5: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tСтаршина\n");
+		case 6: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tПрапорщик\n");
+		case 7: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tСт. Прапорщик\n");
+		case 8: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tМл. Лейтенант\n");
+		case 9: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tЛейтенант\n");
+		case 10: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tСт. Лейтенант\n");
+		case 11: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tКапитан\n");
+		case 12: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tМайор\n");
+		case 13: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tПодполковник\n");
+		case 14: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tПолковник\n");
+		case 15: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tГенерал\n");
 		}
+	}
 	case 3:
-		{
-			switch(PTEMP[targetid][pRank])
-			{
-			case 1: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tЮнга\n");
-			case 2: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tМатрос\n");
-			case 3: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tСт. Матрос\n");
-			case 4: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tСтаршина\n");
-			case 5: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tМл.Мичман\n");
-			case 6: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tМичман\n");
-			case 7: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tCт.Мичман\n");
-			case 8: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tМл.Лейтенант\n");
-			case 9: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tЛейтенант\n");
-			case 10: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tСт. Лейтенант\n");
-			case 11: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tКапитан-Лейтенант\n");
-			case 12: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tКапитан 1-го ранга\n");
-			case 13: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tКонтр-Адмирал\n");
-			case 14: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tВице-Адмирал\n");
-			case 15: format(tempstring,sizeof(tempstring),"Должность:\t\t\t\tАдмирал\n");
-			}
+	{
+		switch(PTEMP[targetid][pRank]){
+		case 1: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tЮнга\n");
+		case 2: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tМатрос\n");
+		case 3: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tСт. Матрос\n");
+		case 4: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tСтаршина\n");
+		case 5: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tМл.Мичман\n");
+		case 6: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tМичман\n");
+		case 7: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tCт.Мичман\n");
+		case 8: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tМл.Лейтенант\n");
+		case 9: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tЛейтенант\n");
+		case 10: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tСт. Лейтенант\n");
+		case 11: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tКапитан-Лейтенант\n");
+		case 12: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tКапитан 1-го ранга\n");
+		case 13: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tКонтр-Адмирал\n");
+		case 14: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tВице-Адмирал\n");
+		case 15: format(tempstring, sizeof (tempstring), "Должность:\t\t\t\tАдмирал\n");
 		}
+	}
 	case 9,16,20:
 		{
 			switch(PTEMP[targetid][pRank])
@@ -7010,57 +6008,13 @@ SpeedVehicle(playerid)
 	ST[3] = floatsqroot(floatpower(floatabs(ST[0]), 2.0) + floatpower(floatabs(ST[1]), 2.0) + floatpower(floatabs(ST[2]), 2.0)) * 100.3;
 	return floatround(ST[3]);
 }
-publics:_UpdateSpeedometr()
-{
-	foreach(playerid)
-	{
-		new vehicleid = GetPlayerVehicleID(playerid);
-		if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER) continue;
-		if(IsAPlane(GetPlayerVehicleID(playerid)) || IsABoat(GetPlayerVehicleID(playerid)) || IsABike(GetPlayerVehicleID(playerid))) continue;
-		GetVehicleParamsEx(vehicleid,engine,lights,alarm,doors,bonnet,boot,objective);
-		_UnSurfCar(vehicleid);
-		format(str1,5,"%i",SpeedVehicle(playerid));
-		if(PTEMP[playerid][pDrivingSkill] > 0 && !IsANoLimiter(vehicleid))
-		{
-			switch(PTEMP[playerid][pDrivingSkill])
-			{
-			case 1..300: if(SpeedVehicle(playerid) > 50) format(str1, 5, "50");
-			case 301..600: if(SpeedVehicle(playerid) > 45) format(str1, 5, "45");
-			case 601..900: if(SpeedVehicle(playerid) > 40) format(str1, 5, "40");
-			case 901..1200: if(SpeedVehicle(playerid) > 35) format(str1, 5, "35");
-			}
-		}
-		PlayerTextDrawSetString(playerid,SpeedShow[playerid],str1);
-		if(Fuell[vehicleid] <= 0 && engine)
-		{
-			Fuell[vehicleid] = 0;
-			GetVehicleParamsEx(vehicleid,engine,lights,alarm,doors,bonnet,boot,objective);
-			SetVehicleParamsEx(vehicleid,false,false,alarm,doors,bonnet,boot,objective);
-			GameTextForPlayer(playerid,"~r~FUEL HAS ENDED", 5000, 3);
-			SCM(playerid, COLOR_GREEN, " {00A86B}Используйте телефон {FFFFFF}(( /call )) {00A86B}чтобы вызвать механика / таксиста");
-			SCM(playerid, COLOR_GREEN, " {00A86B}Если у вас есть канистра с бензином, введите {FFFFFF}(( /fillcar ))");
-		}
-		if(Fuell[vehicleid] <= 45) format(str2, sizeof(str2), "~r~%.0f", Fuell[vehicleid]);
-		else if(Fuell[vehicleid] <= 100) format(str2, sizeof(str2), "~y~%.0f", Fuell[vehicleid]);
-		else format(str2, sizeof(str2), "~g~%.0f", Fuell[vehicleid]);
-		PlayerTextDrawSetString(playerid,FuelShow[playerid],str2);
-		if(vehicleid == house_car[playerid]) CarInfo[playerid][carFuel][GetPVarInt(playerid, "chosencar")] = Fuell[vehicleid];
-		if(!engine && SpeedVehicle(playerid) > 20 && GetPVarInt(playerid,"not_engine") < gettime() && GetPVarInt(playerid, "AFK_Time") < 2)
-		{
-			if(GetPVarInt(playerid,"not_engine") > 0 && GetPVarInt(playerid,"not_engine_") < SpeedVehicle(playerid))
-			{
-				return CheatKick(playerid, 033);
-			}
-			SetPVarInt(playerid,"not_engine", gettime() + 5);
-			SetPVarInt(playerid,"not_engine_", SpeedVehicle(playerid));
-		}
-	}
-	return true;
-}
+
+#include "..\gamemodes\events\_UpdateSpeedometr.pwn"
+
 new WebSites[][] = {".ws", ".ru", ".tk", ".com", "www.", ".org", ".net", ".cc", ".рф", ".by", ".biz", ".su", ".info"};
 CheckString(str[])
 {
-	for(new i = 0;i<sizeof(WebSites);i++) if(strfind(str,WebSites[i],true) != -1) return true;
+	for(new i = 0;i < sizeof (WebSites); i++) if (strfind(str,WebSites[i],true) != -1) return true;
 	return false;
 }
 new delimiters[] = {'.', ' ', ',', '*', '/', ';', '\\', '|'};
@@ -7796,72 +6750,9 @@ publics:_AntiNopResetPlayerWeapon(playerid)
 		}
 	}
 }
-publics:_Recognition()
-{
-	for(new i = 0; i < SLOTVIBROS; i++)
-	{
-		if(GetTickCount()-VibrosInfo[i][vTime] <= 60000*20)
-		{
-			DestroyDynamic3DTextLabel(VibrosInfo[i][vPodnyat]);
-			DestroyObject(VibrosInfo[i][vObject]);
-			for(new ix = i; ix < SLOTVIBROS-1; ix++)
-			{
-				VibrosInfo[ix][vModel] = VibrosInfo[ix+1][vModel];
-				VibrosInfo[ix][vTime] = VibrosInfo[ix+1][vTime];
-				VibrosInfo[ix][vX] = VibrosInfo[ix+1][vX];
-				VibrosInfo[ix][vY] = VibrosInfo[ix+1][vY];
-				VibrosInfo[ix][vZ] = VibrosInfo[ix+1][vZ];
-				DestroyDynamic3DTextLabel(VibrosInfo[ix+1][vPodnyat]);
-				DestroyObject(VibrosInfo[ix+1][vObject]);
-				if(VibrosInfo[ix][vModel] == 1)
-				{
-					VibrosInfo[ix][vPodnyat] = CreateDynamic3DTextLabel("Наркотики\nПоднять: {ffffff}/pick", COLOR_GREEN, VibrosInfo[ix][vX], VibrosInfo[ix][vY], VibrosInfo[ix][vZ], 10.0);
-					VibrosInfo[ix][vObject] = CreateObject(1485,VibrosInfo[ix][vX],VibrosInfo[ix][vY],VibrosInfo[ix][vZ],0.00,0.00,0.00);
-				}
-				else
-				{
-					VibrosInfo[ix][vPodnyat] = CreateDynamic3DTextLabel("Материалы\nПоднять: {ffffff}/pick", COLOR_GREEN, VibrosInfo[ix][vX], VibrosInfo[ix][vY], VibrosInfo[ix][vZ], 10.0);
-					VibrosInfo[ix][vObject] = CreateObject(1210,VibrosInfo[ix][vX],VibrosInfo[ix][vY],VibrosInfo[ix][vZ],0.00,0.00,0.00);
-				}
-			}
-			SLOTVIBROS--;
-		}
-	}
-	new Float:x,Float:y,Float:z;
-	foreach(i)
-	{
-		if(!PTEMP[i][pWantedLevel] || !PTEMP[i][pLogin]) continue;
-		recognition[i] = 0;
-		GetPlayerPos(i,x,y,z);
-		for(new idx=0;idx<players;idx++)
-		{
-			if(IsPlayerInRangeOfPoint(Players[idx],150,x,y,z) && IsACop(Players[idx]) && Players[idx] != i) recognition[i]++;
-		}
-		if(!recognition[i])
-		{
-			SCM(i,-1," Ваша узнаваемость понизилась");
-			PTEMP[i][pWantedLevel]--, SetPlayerWantedLevel(i,PTEMP[i][pWantedLevel] );
-			if(!PTEMP[i][pWantedLevel])
-			{
-				if(LabelOn[i] == 1)
-				{
-					LabelOn[i] = 0;
-					Delete3DTextLabel(LabelRecognition[i]);
-				}
-				PTEMP[i][pRecognition] = 0;
-			}
-			else
-			{
-				if(PTEMP[i][pRecognition] > 0) PTEMP[i][pRecognition]--;
-			}
-		}
-		else
-		{
-			SCM(i,-1," Ваша узнаваемость повысилась");
-			if(PTEMP[i][pRecognition] < 3) PTEMP[i][pRecognition]++;
-		}
-	}
-}
+
+#include "..\gamemodes\events\_Recognition.pwn"
+
 ClearReconnect()
 {
 	for(new i=0; i<MAX_PLAYERS; i++) strmid(ExitInfo[i][ExitIP],"None", 0, strlen("None"), 32), ExitInfo[i][ExitTime] = 0;
@@ -8127,13 +7018,9 @@ SetPosAutos(playerid,Float:x,Float:y,Float:z,Float:angle,Interiorid,worldid)
 	SetCameraBehindPlayer(playerid);
 	return 1;
 }
-publics:ReklamaTimer()
-{
-	SendClientMessageToAll(0x8bb717aa," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-	SendClientMessageToAll(0x2cc72caa," Задайте ваш вопрос в поддержку сервера - /question");
-	SendClientMessageToAll(0x2cc72caa," Ознакомьтесь с правилами игры на сайте meltrune.com");
-	SendClientMessageToAll(0x8bb717aa," ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-}
+
+#include "..\gamemodes\events\_Advertising.pwn"
+
 DisableEnableReconButton(playerid, button, enable, show = 1)
 {
 	PlayerTextDrawHide(playerid, ReconPlayer[button]);
@@ -10298,26 +9185,28 @@ GetRace()
 }
 UpdateTable(table[], set[], set_, where[], where_)
 {
-	mysql_format(DATABASE,QUERY,300,"UPDATE `%s` SET %s = %i WHERE %s = %i",table,set,set_,where,where_);
-	return mysql_function_query(DATABASE,QUERY,false,"","");
+	mysql_format(DATABASE, QUERY, 300, "UPDATE `%s` SET %s = %i WHERE %s = %i", table, set, set_, where, where_);
+	return mysql_function_query(DATABASE, QUERY, false, "", "");
 }
 Now()
 {
-	new hour,minute,second;
-	new year, month,day;
+	new hour, minute, second;
+	new year, month, day;
 	gettime(hour, minute, second);
 	getdate(year, month, day);
-	return mktimes(hour,minute,second,day,month,year);
+	return mktimes(hour, minute, second, day, month, year);
 }
-#include "..\gamemodes\custom\OnCheckTrigger.pwn"
-publics:RobTickRTSC(playerid, tip ,member, Robsid, act)
+
+#include "..\gamemodes\events\_CheckTrigger.pwn"
+
+publics:_RobTickRTSC(playerid, tip, member, Robsid, act)
 {
-	if(RobTickRTC[playerid] != -1)
+	if (RobTickRTC[playerid] != -1)
 	{
         RobTickRTC[playerid]--;
-        if(RobTickRTC[playerid] == -1)
+        if (RobTickRTC[playerid] == -1)
         {
-		    if(robscdtimer[playerid] != -1)
+		    if (robscdtimer[playerid] != -1)
 		    {
 			    KillTimer(robscdtimer[playerid]);
 			    robscdtimer[playerid] = -1;
@@ -10330,38 +9219,37 @@ publics:RobTickRTSC(playerid, tip ,member, Robsid, act)
         {
             PlayerTextDrawShow(playerid,robsdraw[playerid]);
             ApplyActorAnimation(act, "INT_HOUSE", "wash_up",4.1,0,0,0,1,0);
-			switch(RobTickRTC[playerid])
-			{
-                case 29: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIIIIIIIIIIII~w~I~b~]");
-                case 28: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIIIIIIIIIII~w~II~b~]");
-                case 27: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIIIIIIIIII~w~III~b~]");
-                case 26: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIIIIIIIII~w~IIII~b~]");
-                case 25: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIIIIIIII~w~IIIII~b~]");
-                case 24: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIIIIIII~w~IIIIII~b~]");
-                case 23: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIIIIII~w~IIIIIII~b~]");
-                case 22: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIIIII~w~IIIIIIII~b~]");
-                case 21: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIIII~w~IIIIIIIII~b~]");
-                case 20: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIII~w~IIIIIIIIII~b~]");
-                case 19: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIII~w~IIIIIIIIIII~b~]");
-                case 18: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIII~w~IIIIIIIIIIII~b~]");
-                case 17: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIII~w~IIIIIIIIIIIII~b~]");
-                case 16: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIII~w~IIIIIIIIIIIIII~b~]");
-                case 15: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIII~w~IIIIIIIIIIIIIII~b~]");
-                case 14: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIII~w~IIIIIIIIIIIIIIII~b~]");
-                case 13: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIII~w~IIIIIIIIIIIIIIIII~b~]");
-                case 12: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIII~w~IIIIIIIIIIIIIIIIII~b~]");
-                case 11: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIII~w~IIIIIIIIIIIIIIIIIII~b~]");
-                case 10: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIII~w~IIIIIIIIIIIIIIIIIIII~b~]");
-                 case 9: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIII~w~IIIIIIIIIIIIIIIIIIIII~b~]");
-                 case 8: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIII~w~IIIIIIIIIIIIIIIIIIIIII~b~]");
-                 case 7: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIII~w~IIIIIIIIIIIIIIIIIIIIIII~b~]");
-                 case 6: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIII~w~IIIIIIIIIIIIIIIIIIIIIIII~b~]");
-                 case 5: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIII~w~IIIIIIIIIIIIIIIIIIIIIIIII~b~]");
-                 case 4: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIII~w~IIIIIIIIIIIIIIIIIIIIIIIIII~b~]");
-                 case 3: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[III~w~IIIIIIIIIIIIIIIIIIIIIIIIIII~b~]");
-                 case 2: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[II~w~IIIIIIIIIIIIIIIIIIIIIIIIIIII~b~]");
-                 case 1: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[I~w~IIIIIIIIIIIIIIIIIIIIIIIIIIIII~b~]");
-                 case 0: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[~w~IIIIIIIIIIIIIIIIIIIIIIIIIIIIII~b~]");
+			switch (RobTickRTC[playerid]){
+			case 29: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIIIIIIIIIIII~w~I~b~]");
+			case 28: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIIIIIIIIIII~w~II~b~]");
+			case 27: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIIIIIIIIII~w~III~b~]");
+			case 26: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIIIIIIIII~w~IIII~b~]");
+			case 25: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIIIIIIII~w~IIIII~b~]");
+			case 24: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIIIIIII~w~IIIIII~b~]");
+			case 23: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIIIIII~w~IIIIIII~b~]");
+			case 22: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIIIII~w~IIIIIIII~b~]");
+			case 21: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIIII~w~IIIIIIIII~b~]");
+			case 20: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIIII~w~IIIIIIIIII~b~]");
+			case 19: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIIII~w~IIIIIIIIIII~b~]");
+			case 18: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIIII~w~IIIIIIIIIIII~b~]");
+			case 17: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIIII~w~IIIIIIIIIIIII~b~]");
+			case 16: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIIII~w~IIIIIIIIIIIIII~b~]");
+			case 15: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIIII~w~IIIIIIIIIIIIIII~b~]");
+			case 14: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIIII~w~IIIIIIIIIIIIIIII~b~]");
+			case 13: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIIII~w~IIIIIIIIIIIIIIIII~b~]");
+			case 12: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIIII~w~IIIIIIIIIIIIIIIIII~b~]");
+			case 11: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIIII~w~IIIIIIIIIIIIIIIIIII~b~]");
+			case 10: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIIII~w~IIIIIIIIIIIIIIIIIIII~b~]");
+			case  9: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIIII~w~IIIIIIIIIIIIIIIIIIIII~b~]");
+			case  8: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIIII~w~IIIIIIIIIIIIIIIIIIIIII~b~]");
+			case  7: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIIII~w~IIIIIIIIIIIIIIIIIIIIIII~b~]");
+			case  6: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIIII~w~IIIIIIIIIIIIIIIIIIIIIIII~b~]");
+			case  5: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIIII~w~IIIIIIIIIIIIIIIIIIIIIIIII~b~]");
+			case  4: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[IIII~w~IIIIIIIIIIIIIIIIIIIIIIIIII~b~]");
+			case  3: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[III~w~IIIIIIIIIIIIIIIIIIIIIIIIIII~b~]");
+			case  2: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[II~w~IIIIIIIIIIIIIIIIIIIIIIIIIIII~b~]");
+			case  1: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[I~w~IIIIIIIIIIIIIIIIIIIIIIIIIIIII~b~]");
+			case  0: PlayerTextDrawSetString(playerid,robsdraw[playerid], "~b~[~w~IIIIIIIIIIIIIIIIIIIIIIIIIIIIII~b~]");
             }
         }
     }
@@ -10370,48 +9258,48 @@ publics:RobTickRTSC(playerid, tip ,member, Robsid, act)
 RobSuccessFilly(pids, tip ,member, robin, act)
 {
     ClearActorAnimations(ActorsRob[act]);
-	if(tip == 0)
+	if (tip == 0)
 	{
 		new maxform;
 		foreach(i)
 		{
-			if(maxform >= 4) break;
-		    else if(PlayerToPoint(30,i,204.8515,-8.1603,1001.2109) && PTEMP[i][pMember] == member && RobInts[i] == robin)
+			if (maxform >= 4) break;
+		    else if (PlayerToPoint(30,i,204.8515,-8.1603,1001.2109) && PTEMP[i][pMember] == member && RobInts[i] == robin)
 		    {
-	            if(PTEMP[i][pSex] == 2) SetPlayerSkin(i, 191);
+	            if (PTEMP[i][pSex] == 2) SetPlayerSkin(i, 191);
 	            else SetPlayerSkin(i, 287);
 	            proverkaforma[i] = 1;
 	            maxform++;
 			}
 		}
 	}
-	else if(tip == 1)
+	else if (tip == 1)
 	{
-		if(PTEMP[pids][pMember] == 5)
+		if (PTEMP[pids][pMember] == 5)
 		{
 			lcnmats += 2500;
-			if(lcnmats > 100000) lcnmats = 100000;
+			if (lcnmats > 100000) lcnmats = 100000;
 		}
-		else if(PTEMP[pids][pMember] == 6)
+		else if (PTEMP[pids][pMember] == 6)
 		{
 			yakuzamats += 2500;
-			if(yakuzamats > 100000) yakuzamats = 100000;
+			if (yakuzamats > 100000) yakuzamats = 100000;
 		}
-		else if(PTEMP[pids][pMember] == 14)
+		else if (PTEMP[pids][pMember] == 14)
 		{
 			rmmats += 2500;
-			if(rmmats > 100000) rmmats = 100000;
+			if (rmmats > 100000) rmmats = 100000;
 		}
 		SendClientMessage(pids, -1, " На склад вашей мафии добавлено 2500 материалов");
 	}
-	else if(tip == 2)
+	else if (tip == 2)
 	{
 	    foreach(i)
 		{
-		    if(PlayerToPoint(30,i,298.4895,180.3188,1214.7949) && PTEMP[i][pMember] == member && RobInts[i] == robin)
+		    if (PlayerToPoint(30,i,298.4895,180.3188,1214.7949) && PTEMP[i][pMember] == member && RobInts[i] == robin)
 		    {
 				PTEMP[i][pDrugs] = 150;
-				SCM(i, 0x6495EDFF, " Вы получили 150 грам наркотиков");
+				SCM(i, 0x6495EDFF, " Вы получили 150 грамм наркотиков");
 			}
 		}
 	}
@@ -10419,7 +9307,7 @@ RobSuccessFilly(pids, tip ,member, robin, act)
 }
 publics:RobsEnabledCD(ids)
 {
-    if(cdrob[ids] != true) return 0;
+    if (cdrob[ids] != true) return 0;
     cdrob[ids] = false;
     return 0;
 }
@@ -10520,637 +9408,9 @@ wantedsrobfriend(fraks, reason, introb)
 	}
 	return 0;
 }
-publics:RobbingTimer()
-{
-	for(new ac = 0; ac < 9; ac++) SetActorHealth(ActorsRob[ac], 255);
-    new pl[10][8];
-	foreach(i)
-	{
-		if(GetPlayerInterior(i) == 5)
-		{
-			if(PlayerToPoint(30,i,204.8515,-8.1603,1001.2109) && RobInts[i] == 3)// Victim SF
-			{
-           	 	if(cdrob[1] == false)
-                {
-            		switch(PTEMP[i][pMember])
-            		{
-						case 12: pl[1][0]++;
-						case 13: pl[1][1]++;
-						case 15: pl[1][2]++;
-						case 17: pl[1][3]++;
-						case 18: pl[1][4]++;
-						default: continue;
-            		}
-		    		new PTA = GetPlayerCameraTargetActor(i),
-						keys,
-						updown,
-						leftright;
-                	GetPlayerKeys(i, keys, updown, leftright);
-    	    		if(PTA != INVALID_ACTOR_ID && keys & KEY_AIM)
-    	    		{
-						if(PTA != ActorsRob[4]) continue;
-                		new PW = GetPlayerWeapon(i);
-                		if(PW == 23 || PW == 24 || PW == 25 || PW == 29 || PW == 30 || PW == 31 || PW == 32)
-                		{
-							if(pl[1][0] > 1)
-							{
-                        		ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            	cdrob[1] = true;
-                            	SetTimerEx("RobsEnabledCD", 1800000, false, "d",1);
-                            	RobTickRTC[i] = 30;
-                            	robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 0, PTEMP[i][pMember], 3, ActorsRob[4]);
-                            	wantedsrobfriend(PTEMP[i][pMember], 1, 3);
-                        	}
-							else if(pl[1][1] > 1)
-							{
-                        		ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            	cdrob[1] = true;
-                            	SetTimerEx("RobsEnabledCD", 1800000, false, "d",1);
-                            	RobTickRTC[i] = 30;
-                            	robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 0, PTEMP[i][pMember], 3, ActorsRob[4]);
-                            	wantedsrobfriend(PTEMP[i][pMember], 1, 3);
-                        	}
-							else if(pl[1][2] > 1)
-							{
-                        		ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            	cdrob[1] = true;
-                            	SetTimerEx("RobsEnabledCD", 1800000, false, "d",1);
-                            	RobTickRTC[i] = 30;
-                            	robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 0, PTEMP[i][pMember], 3, ActorsRob[4]);
-                            	wantedsrobfriend(PTEMP[i][pMember], 1, 3);
-                        	}
-							else if(pl[1][3] > 1)
-							{
-                        		ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            	cdrob[1] = true;
-                            	SetTimerEx("RobsEnabledCD", 1800000, false, "d",1);
-                            	RobTickRTC[i] = 30;
-                            	robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 0, PTEMP[i][pMember], 3, ActorsRob[4]);
-                            	wantedsrobfriend(PTEMP[i][pMember], 1, 3);
-                        	}
-							else if(pl[1][4] > 1)
-							{
-                        		ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            	cdrob[1] = true;
-                            	SetTimerEx("RobsEnabledCD", 1800000, false, "d",1);
-                            	RobTickRTC[i] = 30;
-                            	robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 0, PTEMP[i][pMember], 3, ActorsRob[4]);
-                            	wantedsrobfriend(PTEMP[i][pMember], 1, 3);
-                        	}
-                        	else
-                        	{
-                        		SendClientMessage(i, COLOR_GREY, " Для начала ограбления нужно минимум 2 напарника");
-                        	}
-                		}
-            		}
-            	}
-            	continue;
-			}
-			else if(PlayerToPoint(30,i,204.8515,-8.1603,1001.2109) && RobInts[i] == 4) // Victim LS
-			{
-                if(cdrob[0] == false)
-                {
-            		switch(PTEMP[i][pMember])
-            		{
-						case 12: pl[0][0]++;
-						case 13: pl[0][1]++;
-						case 15: pl[0][2]++;
-						case 17: pl[0][3]++;
-						case 18: pl[0][4]++;
-						default: continue;
-            		}
-		    		new PTA = GetPlayerCameraTargetActor(i),
-		    		    keys,
-						updown,
-						leftright;
-                	GetPlayerKeys(i, keys, updown, leftright);
-    	    		if(PTA != INVALID_ACTOR_ID && keys & KEY_AIM)
-    	    		{
-                        if(PTA != ActorsRob[3]) continue;
-                		new PW = GetPlayerWeapon(i);
-                		if(PW == 23 || PW == 24 || PW == 25 || PW == 29 || PW == 30 || PW == 31 || PW == 32)
-                		{
-							if(pl[0][0] > 1)
-							{
-                        		ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            	cdrob[0] = true;
-                            	SetTimerEx("RobsEnabledCD", 1800000, false, "d",0);
-                            	RobTickRTC[i] = 30;
-                            	robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 0, PTEMP[i][pMember], 4, ActorsRob[3]);
-                            	wantedsrobfriend(PTEMP[i][pMember], 0, 4);
-                        	}
-							else if(pl[0][1] > 1)
-							{
-                        		ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            	cdrob[0] = true;
-                            	SetTimerEx("RobsEnabledCD", 1800000, false, "d",0);
-                            	RobTickRTC[i] = 30;
-                            	robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 0, PTEMP[i][pMember], 4, ActorsRob[3]);
-                            	wantedsrobfriend(PTEMP[i][pMember], 0, 4);
-                        	}
-							else if(pl[0][2] > 1)
-							{
-                        		ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            	cdrob[0] = true;
-                            	SetTimerEx("RobsEnabledCD", 1800000, false, "d",0);
-                            	RobTickRTC[i] = 30;
-                            	robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 0, PTEMP[i][pMember], 4, ActorsRob[3]);
-                            	wantedsrobfriend(PTEMP[i][pMember], 0, 4);
-                        	}
-							else if(pl[0][3] > 1)
-							{
-                        		ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            	cdrob[0] = true;
-                            	SetTimerEx("RobsEnabledCD", 1800000, false, "d",0);
-                            	RobTickRTC[i] = 30;
-                            	robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 0, PTEMP[i][pMember], 4, ActorsRob[3]);
-                            	wantedsrobfriend(PTEMP[i][pMember], 0, 4);
-                        	}
-							else if(pl[0][4] > 1)
-							{
-                        		ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            	cdrob[0] = true;
-                            	SetTimerEx("RobsEnabledCD", 1800000, false, "d",0);
-                            	RobTickRTC[i] = 30;
-                            	robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 0, PTEMP[i][pMember], 4, ActorsRob[3]);
-                            	wantedsrobfriend(PTEMP[i][pMember], 0, 4);
-                        	}
-                        	else
-                        	{
-                        		SendClientMessage(i, COLOR_GREY, " Для начала ограбления нужно минимум 2 напарника");
-                        	}
-                		}
-            		}
-            	}
-            	continue;
-			}
-		}
-		else if(PlayerToPoint(30,i,316.1089,-133.7254,999.6016) && RobInts[i] == 0)
-		{
-            if(cdrob[2] == false)
-            {
-            	switch(PTEMP[i][pMember])
-            	{
-					case 5: pl[2][5]++;
-					case 6: pl[2][6]++;
-					case 14: pl[2][7]++;
-					default: continue;
-            	}
-		    	new PTA = GetPlayerCameraTargetActor(i),
-		    		keys,
-					updown,
-					leftright;
-                GetPlayerKeys(i, keys, updown, leftright);
-    	    	if(PTA != INVALID_ACTOR_ID && keys & KEY_AIM)
-    	    	{
-                    if(PTA != ActorsRob[2]) continue;
-                	new PW = GetPlayerWeapon(i);
-                	if(PW == 23 || PW == 24 || PW == 25 || PW == 29 || PW == 30 || PW == 31 || PW == 32)
-                	{
-						if(pl[2][5] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[2] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",2);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 1, PTEMP[i][pMember], 0, ActorsRob[2]);
-                            wantedsrobfriend(PTEMP[i][pMember], 2, 0);
-                        }
-						else if(pl[2][6] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[2] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",2);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 1, PTEMP[i][pMember], 0, ActorsRob[2]);
-                            wantedsrobfriend(PTEMP[i][pMember], 2, 0);
-                        }
-						else if(pl[2][7] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[2] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",2);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 1, PTEMP[i][pMember], 0, ActorsRob[2]);
-                            wantedsrobfriend(PTEMP[i][pMember], 2, 0);
-                        }
-                        else
-                        {
-                        	SendClientMessage(i, COLOR_GREY, " Для начала ограбления нужно минимум 2 напарника");
-                        }
-                	}
-            	}
-            }
-            continue;
-		}
-		else if(PlayerToPoint(30,i,295.4810,-40.2167,1001.5156) && RobInts[i] == 1)
-		{
-            if(cdrob[3] == false)
-            {
-            	switch(PTEMP[i][pMember])
-            	{
-					case 5: pl[3][5]++;
-					case 6: pl[3][6]++;
-					case 14: pl[3][7]++;
-					default: continue;
-            	}
-		    	new PTA = GetPlayerCameraTargetActor(i),
-		    		keys,
-					updown,
-					leftright;
-                GetPlayerKeys(i, keys, updown, leftright);
-    	    	if(PTA != INVALID_ACTOR_ID && keys & KEY_AIM)
-    	    	{
-                    if(PTA != ActorsRob[1]) continue;
-                	new PW = GetPlayerWeapon(i);
-                    if(PW == 23 || PW == 24 || PW == 25 || PW == 29 || PW == 30 || PW == 31 || PW == 32)
-                	{
-						if(pl[3][5] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[3] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",3);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 1, PTEMP[i][pMember], 1, ActorsRob[1]);
-                            wantedsrobfriend(PTEMP[i][pMember], 3, 1);
-                        }
-						else if(pl[3][6] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[3] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",3);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 1, PTEMP[i][pMember], 1, ActorsRob[1]);
-                            wantedsrobfriend(PTEMP[i][pMember], 3, 1);
-                        }
-						else if(pl[3][7] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[3] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",3);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 1, PTEMP[i][pMember], 1, ActorsRob[1]);
-                            wantedsrobfriend(PTEMP[i][pMember], 3, 1);
-                        }
-                        else
-                        {
-                        	SendClientMessage(i, COLOR_GREY, " Для начала ограбления нужно минимум 2 напарника");
-                        }
-                	}
-            	}
-            }
-            continue;
-		}
-		else if(PlayerToPoint(30,i,296.8526,-82.5276,1001.5156) && RobInts[i] == 2)
-		{
-            if(cdrob[4] == false)
-            {
-            	switch(PTEMP[i][pMember])
-            	{
-					case 5: pl[4][5]++;
-					case 6: pl[4][6]++;
-					case 14: pl[4][7]++;
-					default: continue;
-            	}
-		    	new PTA = GetPlayerCameraTargetActor(i),
-		    		keys,
-					updown,
-					leftright;
-                GetPlayerKeys(i, keys, updown, leftright);
-    	    	if(PTA != INVALID_ACTOR_ID && keys & KEY_AIM)
-    	    	{
-                    if(PTA != ActorsRob[0]) continue;
-                	new PW = GetPlayerWeapon(i);
-                	if(PW == 23 || PW == 24 || PW == 25 || PW == 29 || PW == 30 || PW == 31 || PW == 32)
-                	{
-						if(pl[4][5] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[4] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",4);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 1, PTEMP[i][pMember], 2, ActorsRob[0]);
-                            wantedsrobfriend(PTEMP[i][pMember], 4, 2);
-                        }
-						else if(pl[4][6] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[4] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",4);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 1, PTEMP[i][pMember], 2, ActorsRob[0]);
-                            wantedsrobfriend(PTEMP[i][pMember], 4, 2);
-                        }
-						else if(pl[4][7] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[4] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",4);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 1, PTEMP[i][pMember], 2, ActorsRob[0]);
-                            wantedsrobfriend(PTEMP[i][pMember], 4, 2);
-                        }
-                        else
-                        {
-                        	SendClientMessage(i, COLOR_GREY, " Для начала ограбления нужно минимум 2 напарника");
-                        }
-                	}
-            	}
-            }
-            continue;
-		}
-		else if(PlayerToPoint(30,i,298.4895,180.3188,1214.7949) && RobInts[i] == 5) // [Bikers] - Medic SF
-		{
-            if(cdrob[5] == false)
-            {
-            	switch(PTEMP[i][pMember])
-            	{
-					case 24: pl[5][5]++;
-					case 26: pl[5][6]++;
-					case 29: pl[5][7]++;
-					default: continue;
-            	}
-		    	new PTA = GetPlayerCameraTargetActor(i),
-		    		keys,
-					updown,
-					leftright;
-                GetPlayerKeys(i, keys, updown, leftright);
-    	    	if(PTA != INVALID_ACTOR_ID && keys & KEY_AIM)
-    	    	{
-                    if(PTA != ActorsRob[5]) continue;
-                	new PW = GetPlayerWeapon(i);
-                	if(PW == 23 || PW == 24 || PW == 25 || PW == 29 || PW == 30 || PW == 31 || PW == 32)
-                	{
-						if(pl[5][5] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[5] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",5);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 2, PTEMP[i][pMember], 5, PTA);
-                            wantedsrobfriend(PTEMP[i][pMember], 5, 5);
-                        }
-						else if(pl[5][6] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[5] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",5);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 2, PTEMP[i][pMember], 5, PTA);
-                            wantedsrobfriend(PTEMP[i][pMember], 5, 5);
-                        }
-						else if(pl[5][7] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[5] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",5);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 2, PTEMP[i][pMember], 5, PTA);
-                            wantedsrobfriend(PTEMP[i][pMember], 5, 5);
-                        }
-                        else
-                        {
-                        	SendClientMessage(i, COLOR_GREY, " Для начала ограбления нужно минимум 2 напарника");
-                        }
-                	}
-            	}
-            }
-            continue;
-		}
-		else if(PlayerToPoint(30,i,298.4895,180.3188,1214.7949) && RobInts[i] == 6) // [Bikers] - Medic LS
-		{
-            if(cdrob[6] == false)
-            {
-            	switch(PTEMP[i][pMember])
-            	{
-					case 24: pl[6][5]++;
-					case 26: pl[6][6]++;
-					case 29: pl[6][7]++;
-					default: continue;
-            	}
-		    	new PTA = GetPlayerCameraTargetActor(i),
-		    		keys,
-					updown,
-					leftright;
-                GetPlayerKeys(i, keys, updown, leftright);
-    	    	if(PTA != INVALID_ACTOR_ID && keys & KEY_AIM)
-    	    	{
-                    if(PTA != ActorsRob[6]) continue;
-                	new PW = GetPlayerWeapon(i);
-                	if(PW == 23 || PW == 24 || PW == 25 || PW == 29 || PW == 30 || PW == 31 || PW == 32)
-                	{
-						if(pl[6][5] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[6] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",6);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 2, PTEMP[i][pMember], 6, PTA);
-                            wantedsrobfriend(PTEMP[i][pMember], 6, 6);
-                        }
-						else if(pl[6][6] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[6] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",6);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 2, PTEMP[i][pMember], 6, PTA);
-                            wantedsrobfriend(PTEMP[i][pMember], 6, 6);
-                        }
-						else if(pl[6][7] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[6] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",6);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 2, PTEMP[i][pMember], 6, PTA);
-                            wantedsrobfriend(PTEMP[i][pMember], 6, 6);
-                        }
-                        else
-                        {
-                        	SendClientMessage(i, COLOR_GREY, " Для начала ограбления нужно минимум 2 напарника");
-                        }
-                	}
-            	}
-            }
-            continue;
-		}
-		else if(PlayerToPoint(30,i,298.4895,180.3188,1214.7949) && RobInts[i] == 7) // [Bikers] - Medic LV
-		{
-            if(cdrob[7] == false)
-            {
-            	switch(PTEMP[i][pMember])
-            	{
-					case 24: pl[7][5]++;
-					case 26: pl[7][6]++;
-					case 29: pl[7][7]++;
-					default: continue;
-            	}
-		    	new PTA = GetPlayerCameraTargetActor(i),
-		    		keys,
-					updown,
-					leftright;
-                GetPlayerKeys(i, keys, updown, leftright);
-    	    	if(PTA != INVALID_ACTOR_ID && keys & KEY_AIM)
-    	    	{
-                    if(PTA != ActorsRob[7]) continue;
-                	new PW = GetPlayerWeapon(i);
-                	if(PW == 23 || PW == 24 || PW == 25 || PW == 29 || PW == 30 || PW == 31 || PW == 32)
-                	{
-						if(pl[7][5] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[7] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",7);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 2, PTEMP[i][pMember], 7, PTA);
-                            wantedsrobfriend(PTEMP[i][pMember], 7, 7);
-                        }
-						else if(pl[7][6] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[7] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",7);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 2, PTEMP[i][pMember], 7, PTA);
-                            wantedsrobfriend(PTEMP[i][pMember], 7, 7);
-                        }
-						else if(pl[7][7] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[7] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",7);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 2, PTEMP[i][pMember], 7, PTA);
-                            wantedsrobfriend(PTEMP[i][pMember], 7, 7);
-                        }
-                        else
-                        {
-                        	SendClientMessage(i, COLOR_GREY, " Для начала ограбления нужно минимум 2 напарника");
-                        }
-                	}
-            	}
-            }
-            continue;
-		}
-		else if(PlayerToPoint(30,i,298.4895,180.3188,1214.7949) && RobInts[i] == 8) // [Bikers] - Medic FC
-		{
-            if(cdrob[8] == false)
-            {
-            	switch(PTEMP[i][pMember])
-            	{
-					case 24: pl[8][5]++;
-					case 26: pl[8][6]++;
-					case 29: pl[8][7]++;
-					default: continue;
-            	}
-		    	new PTA = GetPlayerCameraTargetActor(i),
-		    		keys,
-					updown,
-					leftright;
-                GetPlayerKeys(i, keys, updown, leftright);
-    	    	if(PTA != INVALID_ACTOR_ID && keys & KEY_AIM)
-    	    	{
-                    if(PTA != ActorsRob[8]) continue;
-                	new PW = GetPlayerWeapon(i);
-                	if(PW == 23 || PW == 24 || PW == 25 || PW == 29 || PW == 30 || PW == 31 || PW == 32)
-                	{
-						if(pl[8][5] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[8] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",8);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 2, PTEMP[i][pMember], 8, PTA);
-                            wantedsrobfriend(PTEMP[i][pMember], 8, 8);
-                        }
-						else if(pl[8][6] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[8] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",8);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 2, PTEMP[i][pMember], 8, PTA);
-                            wantedsrobfriend(PTEMP[i][pMember], 8, 8);
-                        }
-						else if(pl[8][7] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[8] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",8);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 2, PTEMP[i][pMember], 8, PTA);
-                            wantedsrobfriend(PTEMP[i][pMember], 8, 8);
-                        }
-                        else
-                        {
-                        	SendClientMessage(i, COLOR_GREY, " Для начала ограбления нужно минимум 2 напарника");
-                        }
-                	}
-            	}
-            }
-            continue;
-		}
-		else if(PlayerToPoint(30,i,298.4895,180.3188,1214.7949) && RobInts[i] == 9) // [Bikers] - Medic LS Ghetto
-		{
-            if(cdrob[9] == false)
-            {
-            	switch(PTEMP[i][pMember])
-            	{
-					case 24: pl[9][5]++;
-					case 26: pl[9][6]++;
-					case 29: pl[9][7]++;
-					default: continue;
-            	}
-		    	new PTA = GetPlayerCameraTargetActor(i),
-		    		keys,
-					updown,
-					leftright;
-                GetPlayerKeys(i, keys, updown, leftright);
-    	    	if(PTA != INVALID_ACTOR_ID && keys & KEY_AIM)
-    	    	{
-                    if(PTA != ActorsRob[9]) continue;
-                	new PW = GetPlayerWeapon(i);
-                	if(PW == 23 || PW == 24 || PW == 25 || PW == 29 || PW == 30 || PW == 31 || PW == 32)
-                	{
-						if(pl[9][5] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[9] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",9);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 2, PTEMP[i][pMember], 9, PTA);
-                            wantedsrobfriend(PTEMP[i][pMember], 9, 9);
-                        }
-						else if(pl[9][6] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[9] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",9);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 2, PTEMP[i][pMember], 9, PTA);
-                            wantedsrobfriend(PTEMP[i][pMember], 9, 9);
-                        }
-						else if(pl[9][7] > 1)
-						{
-                        	ApplyActorAnimation(PTA, "SHOP", "SHP_HandsUp_Scr",4.1,0,0,0,1,0);
-                            cdrob[9] = true;
-                            SetTimerEx("RobsEnabledCD", 1800000, false, "d",9);
-                            RobTickRTC[i] = 30;
-                            robscdtimer[i] = SetTimerEx("RobTickRTSC", 1000, true, "ddddi", i, 2, PTEMP[i][pMember], 9, PTA);
-                            wantedsrobfriend(PTEMP[i][pMember], 9, 9);
-                        }
-                        else
-                        {
-                        	SendClientMessage(i, COLOR_GREY, " Для начала ограбления нужно минимум 2 напарника");
-                        }
-                	}
-            	}
-            }
-            continue;
-		}
-	}
-}
+
+#include "..\gamemodes\events\_Robbing.pwn"
+
 LoadMySQLSettings()
 {
 	new FileID = ini_openFile("mysql_settings.ini"), errCode;

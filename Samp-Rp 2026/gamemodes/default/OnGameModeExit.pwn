@@ -11,10 +11,7 @@ public OnGameModeExit()
 	for (new i = 1; i <= TOTALATM; i++) SaveMySQL(8,i);
 	for (new i = 0; i <= TOTALFARM; i++) SaveMySQL(9,i);
 	ClearReconnect();
-	
-	KillTimer(Hptimer);
-	KillTimer(freshtimer);
-	KillTimer(reklamatimer);
+
 	GameModeExit();
 	//mysql_close(connectionHandle);
 	return true;

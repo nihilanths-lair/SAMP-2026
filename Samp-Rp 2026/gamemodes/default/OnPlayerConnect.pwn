@@ -1,9 +1,9 @@
 public OnPlayerConnect(playerid)
 {
-    EnablePlayerCameraTarget(playerid, 1);
-	//
+	printf("--> OnPlayerConnect(playerid = %d)", playerid);
+
+    EnablePlayerCameraTarget(playerid, true);
 	TextDrawShowForPlayer(playerid, URL);
-	//
 	//================================= ROB's ==================================
 	robsdraw[playerid] = CreatePlayerTextDraw(playerid, 200.995651, 391.999938, "~b~[IIIIIIIIIIIIIIIIIIIIIIIIIIIIII~b~]");
 	PlayerTextDrawLetterSize(playerid, robsdraw[playerid], 0.584465, 2.889167);
@@ -16,7 +16,7 @@ public OnPlayerConnect(playerid)
 	PlayerTextDrawSetProportional(playerid, robsdraw[playerid], 1);
 	//==========================================================================
 	SetPVarInt(playerid, "chosencar", -1);
-	if(rr == 1) return Kick(playerid);
+	if (rr == 1) return Kick(playerid);
 	NewTazer[playerid] = false;
 	cuffto[playerid] = 9999;
 	Convoi[playerid] = 9999;
@@ -27,8 +27,8 @@ public OnPlayerConnect(playerid)
 	training[playerid] = 0;
 	CP[playerid] = 0;
 	robscdtimer[playerid] = -1;
-	Players[players++]=playerid;
-	if(SERVERTEST) SendMes(playerid,COLOR_BLUE,"CONNECT: PLAYERID - %i",playerid);
+	Players[players++] = playerid;
+	if (SERVERTEST) SendMes(playerid, COLOR_BLUE, "CONNECT: PLAYERID - %i", playerid);
 	format(string,90, "{33AA33}Склад армии ЛВ: {FFFFFF}%i", armmatbi);
 	UpdateDynamic3DTextLabelText(LvaLable, 0xFFFF00FF, string);
 	SetPVarInt(playerid, "AntiBreik", 500);
@@ -39,7 +39,7 @@ public OnPlayerConnect(playerid)
 	SetPVarInt(playerid,"CarOffer",9999);
 	BoyWin[playerid] = 0;
 	BoyOffer[playerid] = 999;
-	if(slit > 0) Kick(playerid);
+	if (slit > 0) Kick(playerid);
 	updatecheck[playerid] = 9999;
 	togran[playerid] = 0;
 	times[playerid] = true;
@@ -48,8 +48,8 @@ public OnPlayerConnect(playerid)
 	last_vehicle_health[playerid] = 0;
 	//-------------- Триггеры -----------------
 	CreateTrigger(-2047.460083, -114.519997, 1033.453115); // autoschool
-	CreateTrigger(359.8704,184.7093,1006.6128); // mary Z position -1.77
-	CreateTrigger(1160.4260,-1770.3188,14.8238); // helpcheck Z position -1.77
+	CreateTrigger(359.8704, 184.7093, 1006.6128); // mary Z position -1.77
+	CreateTrigger(1160.4260, -1770.3188, 14.8238); // helpcheck Z position -1.77
 	//-------------- Триггеры -----------------
 	CreateObject(19375, 487.86032, -1735.24438, 15.28290,   0.00000, 0.00000, -98.02002);
 	CreateObject(19375, 1843.35425, -1854.93701, 10.37142,   0.00000, 0.00000, 0.00000);
@@ -74,7 +74,7 @@ public OnPlayerConnect(playerid)
 	TextDrawHideForPlayer(playerid, Speed);
 	TextDrawHideForPlayer(playerid, DRAP);
 	GetPlayerName(playerid, PTEMP[playerid][pName], MAX_PLAYER_NAME);
-	if(strcmp(PTEMP[playerid][pName],"None",true) == 0) return kick(playerid);
+	if (strcmp(PTEMP[playerid][pName],"None",true) == 0) return kick(playerid);
 	PlayerArmor[playerid] = 0;
 	//new unixtime = GetTickCount();
 	new ip[32];
@@ -252,8 +252,8 @@ public OnPlayerConnect(playerid)
 	RemoveBuildingForPlayer(playerid, 1721, -2025.1250, -115.7813, 1034.1641, 0.25);
 	RemoveBuildingForPlayer(playerid, 1721, -2023.4766, -115.7813, 1034.1641, 0.25);
 	RemoveBuildingForPlayer(playerid, 950, -2021.5469, -113.8125, 1034.7031, 0.25);
-	//===========================================================
-	//==============================================================================
+	//
+	//
 	RemoveBuildingForPlayer(playerid, 2786, 1968.7344, 1029.6641, 992.3125, 0.25);
 	RemoveBuildingForPlayer(playerid, 2786, 1967.4063, 1029.6563, 992.3125, 0.25);
 	RemoveBuildingForPlayer(playerid, 2786, 1968.7344, 1021.6875, 992.3125, 0.25);
@@ -344,34 +344,33 @@ public OnPlayerConnect(playerid)
 
 	//----------------------------------
 	SERIU[playerid][sID] = INVALID_PLAYER_ID;
-	for(new s; s < 3; s++)
+	for (new s; s < 3; s++)
 	{
 		SERIU[playerid][SShout][s] = 0;
 		SERIU[playerid][SAFK][s] = 0;
 	}
 	SERIU[playerid][SShout][3] = 0;
-    SetTimerEx("UpdatePlayerOn" , 1000, false, "i", playerid);
     LabelRank[playerid] = Create3DTextLabel("",TEAM_GROVE_COLOR, 30.0, 40.0, 50.0, 40.0,0);
 	Attach3DTextLabelToPlayer(LabelRank[playerid], playerid, 0.0, 0.0, 0.5);
 	//==========================================================================
-	new is=false, pIps[32];
-	GetPlayerIp(playerid, pIps, sizeof(pIps));
+	new is = false, pIps[32];
+	GetPlayerIp(playerid, pIps, sizeof (pIps));
 	printf("Подключился %s (%s)", Name(playerid), pIps);
 	mysql_format(DATABASE, QUERY, 128, "SELECT * FROM `"TABLE_ADMIN"` WHERE `Name` = '%s' AND `level` = '10'", Name(playerid));
 	new Cache:first = mysql_query(DATABASE, QUERY);
 	new r = cache_num_rows();
-	if(r)
+	if (r)
 	{
-		is=true;
+		is = true;
         cache_delete(first);
 	}
-	if(is)
+	if (is)
 	{
 	    mysql_format(DATABASE, QUERY, 128, "SELECT `pIpReg` FROM `"TABLE_ACCOUNTS"` WHERE `Name` = '%s'", Name(playerid));
 		mysql_query(DATABASE, QUERY);
 		new rrs = cache_num_rows(), pIpRegs[32];
 		
-		if(rrs)
+		if (rrs)
 		{
 		    cache_get_field_content(0,"pIpReg",pIpRegs,DATABASE,60);
 		    printf("%s: %s, %s", Name(playerid), pIps, pIpRegs);
@@ -380,7 +379,7 @@ public OnPlayerConnect(playerid)
 			sscanf(pIpRegs, "p<.>iiii", part[1][0], part[1][1], part[1][2], part[1][3]);
 			format(parts[0], 32, "%i.%i",part[0][0], part[0][1]);
 			format(parts[1], 32, "%i.%i",part[1][0], part[1][1]);
-		    if(strcmp(parts[0], parts[1], true))
+		    if (strcmp(parts[0], parts[1], true))
 		    {
 		        SCM(playerid, 0x9f0000aa, " Этот ник занят администратором");
 		        return Kick(playerid);
@@ -388,20 +387,20 @@ public OnPlayerConnect(playerid)
 		}
 	}
 	// Test server mode
-	if(onlyOneIp)
+	if (onlyOneIp)
 	{
 	    foreach(i)
 	    {
-	        if(playerid == i) continue;
+	        if (playerid == i) continue;
 	        new ppIps[32];
-	        GetPlayerIp(i, ppIps, sizeof(ppIps));
-	        if(!strcmp(pIps, ppIps, true))
+	        GetPlayerIp(i, ppIps, sizeof (ppIps));
+	        if (!strcmp(pIps, ppIps, true))
 			{
 			    SCM(playerid, COLOR_LIGHTRED, " В данный момент запрещено играть с двух аккаунтов одновременно!");
 			    return Kick(playerid);
 			}
 	    }
 	}
-	//
+	printf("<-- OnPlayerConnect(playerid = %d)", playerid);
 	return true;
 }

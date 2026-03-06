@@ -1,5 +1,7 @@
 public OnGameModeInit()
 {
+    print("/-- OnGameModeInit() -->");
+
 	SendRconCommand("hostname Mod name: Entropy-Rp | Room: "NumberServer"");
 	SendRconCommand("gamemodetext RolePlay");
 	SendRconCommand("language Russian");
@@ -247,10 +249,9 @@ public OnGameModeInit()
 	SetActorInvulnerable(ActorsRob[9], true);
 	
 	for (new i = 0; i < 10; i++) cdrob[i] = false;
-	SetTimer("_RobbingTimer", 2000, true);
 	
-	//=============================Nautosalon==================================
-	//AutoSalon
+	// Nautosalon
+	// AutoSalon
 	AutoShopText[0] = TextDrawCreate(527.000000, 230.000000, "<<");
 	TextDrawLetterSize(AutoShopText[0], 0.220000, 1.199999);
 
@@ -781,14 +782,15 @@ public OnGameModeInit()
 	AddVehicleComponent(Roadtrain[4], 1074);
 	AddVehicleComponent(Roadtrain[5], 1074);
 	//============================== Таймеры ===================================
-	SetTimer("OnCheckTrigger"             ,     250, true);
-	SetTimer("_UpdateFresh"               ,     250, true);
-	freshtimer = SetTimer("_Fresh"        ,    1000, true);
-	SetTimer("_UpdateSpeedometr"          ,     150, true);
-	Hptimer = SetTimer("_HPCheck"         ,   40000, true);
-	reklamatimer = SetTimer("ReklamaTimer", 1800000, true);
-	SetTimer("_Recognition"               , 1500000, true);
-	SetTimer("_GzCheck"                   ,    1000, true);
+    SetTimer("_Robbing"         ,     2_000, true);
+	SetTimer("_CheckTrigger"    ,       250, true);
+	SetTimer("_UpdateFresh"     ,       250, true);
+	SetTimer("_Fresh"           ,     1_000, true);
+	SetTimer("_UpdateSpeedometr",       150, true);
+	SetTimer("_HPCheck"         ,    40_000, true);
+	SetTimer("_Advertising"     , 1_800_000, true); // Реклама
+	SetTimer("_Recognition"     , 1_500_000, true);
+	SetTimer("_GzCheck"         ,     1_000, true);
 	//==========================================================================
 	for (new Vehicles = 0; Vehicles < MAX_VEHICLES; Vehicles++)
 	{
@@ -845,9 +847,7 @@ public OnGameModeInit()
 	AddMenuItem(bomj[1], 0, ">> Next>");
 	AddMenuItem(bomj[1], 0, "<< Previous");
 	AddMenuItem(bomj[1], 0, "Save");
-	/////////////// MySQL загрузка мода ///////////////
-	//
-	printf("Подождите, пожалуйста, идёт загрузка . . .");
+
 	LoadMySQLSettings();
 	//mysql_log();
 	DATABASE = mysql_connect(MySQLSettings[HOS7_HOST], MySQLSettings[HOS7_USERNAME], MySQLSettings[HOS7_DB], MySQLSettings[HOS7_PASSWORD]);
@@ -870,12 +870,14 @@ public OnGameModeInit()
 	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_STALL"`"   , true, "OnMySQL_QUERY", "iis", 31, -1, "");
 	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_GANGZONE"`", true, "OnMySQL_QUERY", "iis", 32, -1, "");
 	mysql_function_query(DATABASE, "SELECT * FROM `grating`"         , true, "OnMySQL_QUERY", "iis", 55, -1, "");
-	////////////////  Создание альтернативных команд /////////////////
+	// Создание альтернативных команд
 	// Разбан аккаунтов
 	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_BAN"`", true, "OnMySQL_QUERY", "iis", 26, -1, "");
 	mysql_function_query(DATABASE, "UPDATE `"TABLE_ACCOUNTS"` SET `progolos` = '0', pMin = '0'", false, "", "");
 
-	if (!strcmp(GetDay(), "Понедельник", true)) mysql_function_query(DATABASE,"UPDATE `"TABLE_ACCOUNTS"` SET pChas = '0'", false, "","");
-	print("Загрузка завершена!");
+	if (!strcmp(GetDay(), "Понедельник", true)) mysql_function_query(DATABASE, "UPDATE `"TABLE_ACCOUNTS"` SET pChas = '0'", false, "", "");
+    
+    print("<-- OnGameModeInit() --/");
+
 	return true;
 }
