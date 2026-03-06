@@ -7578,7 +7578,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
     {
         if (!response) return true;
         useguns[playerid] = 1;
-        ShowPlayerDialogEx(playerid, 10098, DIALOG_STYLE_LIST, "Список вакансий", " Таксист (( с 1-го уровня ))\n Водитель автобуса (( со 2-го уровня ))\n Продавец хот-догов (( со 2-го уровня ))\n Развозчик продуктов (( с 3-го уровня ))\n Механик (( с 3-го уровня ))\n Прораб (( с 5-го уровня ))\n Тренер (( с 6-го уровня ))\n Дальнобойщик (( с 6-го уровня ))", "Устроится", "Выйти");
+        ShowPlayerDialogEx(playerid, 10098, DIALOG_STYLE_LIST, "Список вакансий", " Таксист\n Водитель автобуса\n Продавец хот-догов\n Развозчик продуктов\n Механик\n Прораб\n Тренер\n Дальнобойщик", "Принять", "Отказ");
         return true;
     }
     case 10093:
