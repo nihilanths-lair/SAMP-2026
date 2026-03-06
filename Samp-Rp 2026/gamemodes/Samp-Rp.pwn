@@ -5839,31 +5839,23 @@ GiveMoney(playerid, amount)
 }
 IsAnAmbulance(carid)
 {
-	if(carid >= medicssf[0] && carid <= medicssf[7] || carid >= medicssf1[0] || carid == medmav || carid >= medicsls[0] && carid <= medicsls[9] || carid >= medicsls1[0] && carid <= medicsls1[5] || carid >= medicslv[0] && carid <= medicslv[7] || carid >= medicsfc[0] && carid <= medicsfc[7]) return true;
+	if (carid >= medicssf[0] && carid <= medicssf[7] || carid >= medicssf1[0] || carid == medmav || carid >= medicsls[0] && carid <= medicsls[9] || carid >= medicsls1[0] && carid <= medicsls1[5] || carid >= medicslv[0] && carid <= medicslv[7] || carid >= medicsfc[0] && carid <= medicsfc[7]) return true;
 	return false;
 }
-CarLic(carid)
+
+#include "..\gamemodes\functions\CarLic.pwn"
+
+PlayerToKvadrat(playerid, Float:min_x, Float:min_y, Float:max_x, Float:max_y)
 {
-	switch (GetVehicleModel(carid))
-	{
-	case 400..416,418..424,426..429,431..445,449,451,455,456,458,459,461: return true;
-	case 463,466..468,470,471,474,475,477..480,482,483,485,486,489..492,494..496,498..508: return true;
-	case 514..518,521..531,533..537,539..547,549..551,554..562,564..568,572..576,578..583,585..589,596..605,609: return true;
-	}
-	return false;
-}
-PlayerToKvadrat(playerid,Float:min_x,Float:min_y,Float:max_x,Float:max_y)
-{
-	new Float:xxp,Float:yyp,Float:zzp;
+	new Float:xxp, Float:yyp, Float:zzp;
 	GetPlayerPos(playerid, xxp, yyp, zzp);
-	if((xxp <= max_x && xxp >= min_x) && (yyp <= max_y && yyp >= min_y)) return true;
+	if ((xxp <= max_x && xxp >= min_x) && (yyp <= max_y && yyp >= min_y)) return true;
 	return false;
 }
 GetGangZoneColor(gangzonex)
 {
 	new zx;
-	switch(GZInfo[gangzonex][gFrakVlad])
-	{
+	switch (GZInfo[gangzonex][gFrakVlad]){
 	case 12: zx = 0xd200ff99;
 	case 13: zx = 0xcfbe0899;
 	case 15: zx = 0x06b50699;

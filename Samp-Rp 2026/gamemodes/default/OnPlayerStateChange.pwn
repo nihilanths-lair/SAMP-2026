@@ -504,8 +504,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		{
 			if (PTEMP[playerid][pFlyLic] < 1)
 			{
-				if (TakingLesson[playerid] == 1) {}
-				else
+				if (TakingLesson[playerid] != 1)
 				{
 					SCM(playerid, COLOR_GREY, " У вас нет лицензии. Вы не можете управлять данным транспортом");
 					RemovePlayerFromVehicleAC(playerid);
@@ -518,14 +517,14 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			{
 				if (TakingLesson[playerid] != 1)
 				{
-					SCM(playerid, COLOR_GREY, " У вас нет лицензии. Вы не можете управлять данным транспортом");
+					SCM(playerid, COLOR_GREY, " Прежде чем управлять данным видом транспорта, приобретите лицензию на вождение.");//водительское удостоверение
 					RemovePlayerFromVehicleAC(playerid);
 				}
 			}
 		}
 		if (newcar >= lsnewscar[0] && newcar <= lsnewscar[5])
 		{
-			if (GetPVarInt(playerid,"Fraction_Duty") && PTEMP[playerid][pMember] == 16) { }
+			if (GetPVarInt(playerid,"Fraction_Duty") && PTEMP[playerid][pMember] == 16) {}
 			else
 			{
 				SCM(playerid, COLOR_GREY, " Вы не работник LS News!");
