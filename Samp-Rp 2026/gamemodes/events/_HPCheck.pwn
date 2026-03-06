@@ -1,6 +1,6 @@
 publics:_HPCheck()
 {
-    print("--> _HPCheck()");
+    //print(">-- _HPCheck() -->");
 
 	foreach(i)
 	{
@@ -44,7 +44,7 @@ publics:_HPCheck()
 		if(PTEMP[i][pMin] >= 60) PTEMP[i][pChas]++, PTEMP[i][pMin] = 0;
 	}
 
-    print("<-- _HPCheck()");
+    //print("<-- _HPCheck() --<");
 
 	return true;
 }
