@@ -8264,22 +8264,21 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		useguns[playerid] = 0;
 		if (PTEMP[playerid][pMember] != 0 && GetPVarInt(playerid, "Fraction_Duty")) return SCM(playerid, COLOR_GRAD1, " Вы состоите в организации!");
 		switch (listitem){
-		case 0:
+        case 0:
 		{
-			if (PTEMP[playerid][pLevel] < 2) return	SCM(playerid, COLOR_GRAD1, " Необходим 2 уровень.");
+			PTEMP[playerid][pJob] = 4;
+			SCM(playerid, 0x6495EDFF, " Вы приняты на работу в такси.");
+            SCM(playerid, 0x6495EDFF, " (( Команды: /fare - начать рабочий день ))");
+			return true;
+		}
+		case 1:
+		{
 			PTEMP[playerid][pJob] = 1;
 			SCM(playerid, 0x6495EDFF, " Вы приняты на работу водителем автобуса.");
 			SCM(playerid, 0x6495EDFF, " (( Команды: /route - закончить работу водителя автобуса ))");
 		}
-		case 1:
-		{
-			PTEMP[playerid][pJob] = 4;
-			SCM(playerid, 0x6495EDFF, " Вы приняты на работу водителем такси.");
-			return true;
-		}
 		case 2:
 		{
-			if (PTEMP[playerid][pLevel] < 3) return	SCM(playerid, COLOR_GRAD1, " Необходим 3 уровень.");
 			PTEMP[playerid][pJob] = 3;
 			SCM(playerid, 0x6495EDFF, " Вы приняты на работу продавцом хот-догов.");
 			SCM(playerid, 0x6495EDFF, " (( Используйте /gps чтобы найти стоянку машин хот-догов ))");
@@ -8289,7 +8288,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		}
 		case 3:
 		{
-			if (PTEMP[playerid][pLevel] < 3) return	SCM(playerid, COLOR_GRAD1, " Необходим 3 уровень.");
 			PTEMP[playerid][pJob] = 5;
 			if (PTEMP[playerid][pPSkill] == 0) PTEMP[playerid][pPSkill] = 1;
 			if (PTEMP[playerid][pPSkill] == 1) PTEMP[playerid][pPMGruz] = 200;
@@ -8299,7 +8297,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		}
 		case 4:
 		{
-			if (PTEMP[playerid][pLevel] < 3) return SCM(playerid, COLOR_GRAD1, " Необходим 3 уровень.");
 			PTEMP[playerid][pJob] = 2;
 			SCM(playerid, 0x6495EDFF, " Вы приняты на работу автомехаником.");
 			SCM(playerid, 0x6495EDFF, " (( Команды: /refill - заправить, /repair - починить, /fillGarage, /mcontract - подписать контракт с Бензозаправкой ))");
@@ -8307,7 +8304,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		}
 		case 5:
 		{
-			if (PTEMP[playerid][pLevel] < 5) return	SCM(playerid, COLOR_GRAD1, " Необходим 5 уровень.");
 			PTEMP[playerid][pJob] = 9;
 			SCM(playerid, 0x6495EDFF, " Вы приняты на работу прорабом.");
 			SCM(playerid, 0x6495EDFF, " (( Ваш заработок зависит от того сколько у вас рабочих, и как они работают ))");
@@ -8317,7 +8313,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		}
 		case 6:
 		{
-			if (PTEMP[playerid][pLevel] < 6) return	SCM(playerid, COLOR_GRAD1, " Необходим 6 уровень.");
 			PTEMP[playerid][pJob] = 6;
 			SCM(playerid, 0x6495EDFF, " Вы приняты на работу тренером.");
 			SCM(playerid, 0x6495EDFF, " (( Команды: /fgstyle - обучение стилям боя ))");
@@ -8325,7 +8320,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		}
 		case 7:
 		{
-			if (PTEMP[playerid][pLevel] < 6) return SCM(playerid, COLOR_GRAD1, " Необходим 6 уровень.");
 			PTEMP[playerid][pJob] = 99;
 			if (PTEMP[playerid][pDLevel] == 1) PTEMP[playerid][pDMgruz] = 7;
 			SCM(playerid, 0x6495EDFF, " Вы приняты на работу водителем по перевозке грузов.");
@@ -8336,7 +8330,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	}
 	case 1010:
 		{
-			if(!response) return true;
+			if (!response) return true;
 			SCM(playerid, COLOR_BLUE, " Рабочий день начат");
 			SetPlayerSkin(playerid, PTEMP[playerid][pModel]);
 			SetPlayerToTeamColor(playerid);
