@@ -46,16 +46,17 @@ new RulesMSGG[22][] =
 
 public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 {
+    printf(">-- OnDialogResponse(playerid = %d, dialogid = %d, response = %d, listitem = %d, inputtext = \"%s\") -->", playerid, dialogid, response, listitem, inputtext);
+
 	//if(GetPVarInt(playerid,"USEDIALOGID") != dialogid) return Kick(playerid);
-	while (strfind(inputtext, "%s",true) !=-1) strdel(inputtext,strfind(inputtext, "%s",true),strfind(inputtext, "%s",true)+2);
-	while (strfind(inputtext, "%",true) !=-1) strdel(inputtext,strfind(inputtext, "%",true),strfind(inputtext, "%",true)+2);
+	while (strfind(inputtext, "%s", true) != -1) strdel(inputtext, strfind(inputtext, "%s", true), strfind(inputtext, "%s", true) + 2);
+	while (strfind(inputtext, "%", true) != -1) strdel(inputtext, strfind(inputtext, "%", true), strfind(inputtext, "%", true) + 2);
 
 	new gun,ammo;
 	new gunname[32];
 
 	SetPVarInt(playerid, "USEDIALOGID", 0);
-	switch (dialogid)
-	{
+	switch (dialogid){
 	case 2:
     {
         if (response)
@@ -8259,83 +8260,81 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			SendMes(idd, COLOR_LIGHTBLUE, " %s Выдал вам лицензию на бизнес",Name(playerid));
 		}
 	case 10098:
+	{
+		if (!response) return useguns[playerid] = 0;
+		useguns[playerid] = 0;
+		if (PTEMP[playerid][pMember] != 0 && GetPVarInt(playerid, "Fraction_Duty")) return SCM(playerid, COLOR_GRAD1, " Вы состоите в организации!");
+		switch (listitem){
+		case 0:
 		{
-			if(!response) return useguns[playerid] = 0;
-			useguns[playerid] = 0;
-			if(PTEMP[playerid][pMember] != 0 && GetPVarInt(playerid, "Fraction_Duty")) return SCM(playerid, COLOR_GRAD1, " Вы состоите в организации");
-			switch(listitem)
-			{
-			case 0:
-				{
-					if(PTEMP[playerid][pLevel] < 2) return	SCM(playerid, COLOR_GRAD1, " Вам требуется 2 лвл");
-					PTEMP[playerid][pJob] = 1;
-					SCM(playerid, 0x6495EDFF, " Вас успешно приняли на работу Водителя автобуса");
-					SCM(playerid, 0x6495EDFF, " (( Команды: /route - закончить работу водителя автобуса ))");
-				}
-			case 1:
-				{
-					if(PTEMP[playerid][pLevel] < 2) return SCM(playerid, COLOR_GRAD1, " Вам требуется 2 лвл");
-					PTEMP[playerid][pJob] = 4;
-					SCM(playerid, 0x6495EDFF, " Вас успешно приняли на работу Таксиста");
-					return true;
-				}
-			case 2:
-				{
-					if(PTEMP[playerid][pLevel] < 2) return	SCM(playerid, COLOR_GRAD1, " Вам требуется 2 лвл");
-					PTEMP[playerid][pJob] = 3;
-					SCM(playerid, 0x6495EDFF, " Вас успешно приняли на работу Продавца хот догов (( Используйте /gps чтобы найти стоянку машин Хот Догов ))");
-					SCM(playerid, 0x6495EDFF, " (( Команды: /hcontract - подписать контракт с закусочной,  /selleat - продать хот дог ))");
-					SCM(playerid, 0x6495EDFF, " (( Команды: /hcounter - начать работу за прилавком на вокзале ))");
-					SCM(playerid, 0x6495EDFF, " (( Чтобы подписать контракт с закусочной, подойдите ко входу Burger, Pizza, Cluc и введите команду /hcontract ))");
-				}
-			case 3:
-				{
-					if(PTEMP[playerid][pLevel] < 3) return	SCM(playerid, COLOR_GRAD1, " Вам требуется 3 лвл");
-					PTEMP[playerid][pJob] = 5;
-					if(PTEMP[playerid][pPSkill] == 0) PTEMP[playerid][pPSkill] = 1;
-					if(PTEMP[playerid][pPSkill] == 1) PTEMP[playerid][pPMGruz] = 200;
-					SCM(playerid, 0x6495EDFF, " Вас успешно приняли на работу Развозчика продуктов");
-					SCM(playerid, 0x6495EDFF, " (( Команды: /prodmenu ))");
-					return true;
-				}
-			case 4:
-				{
-					if(PTEMP[playerid][pLevel] < 3) return SCM(playerid, COLOR_GRAD1, " Вам требуется 3 лвл");
-					PTEMP[playerid][pJob] = 2;
-					SCM(playerid, 0x6495EDFF, " Вас успешно приняли на работу Механика");
-					SCM(playerid, 0x6495EDFF, " (( Команды: /refill - заправить, /repair - починить, /fillGarage, /mcontract - подписать контракт с Бензозаправкой ))");
-					return true;
-				}
-			case 5:
-				{
-					if(PTEMP[playerid][pLevel] < 5) return	SCM(playerid, COLOR_GRAD1, " Вам требуется 5 лвл");
-					PTEMP[playerid][pJob] = 9;
-					SCM(playerid, 0x6495EDFF, " Вас успешно приняли на работу Прораба");
-					SCM(playerid, 0x6495EDFF, " (( Ваш заработок зависит от того сколько у вас рабочих, и как они работают ))");
-					SCM(playerid, 0x6495EDFF, " (( За 1 ящик, перетащенный рабочим, вы получаете 25 вирт ))");
-					SCM(playerid, 0x6495EDFF, " (( Команды: /gcontract - предложить работу,  /getpayday - получения прибыли с рабочего ))");
-					return true;
-				}
-			case 6:
-				{
-					if(PTEMP[playerid][pLevel] < 6) return	SCM(playerid, COLOR_GRAD1, " Вам требуется 6 лвл");
-					PTEMP[playerid][pJob] = 6;
-					SCM(playerid, 0x6495EDFF, " Вас успешно приняли на работу Тренера");
-					SCM(playerid, 0x6495EDFF, " (( Команды: /fgstyle - обучение стилям боя ))");
-					return true;
-				}
-			case 7:
-				{
-					if(PTEMP[playerid][pLevel] < 6) return SCM(playerid, COLOR_GRAD1, " Вам требуется 6 лвл");
-					PTEMP[playerid][pJob] = 99;
-					if(PTEMP[playerid][pDLevel] == 1) PTEMP[playerid][pDMgruz] = 7;
-					SCM(playerid, 0x6495EDFF, " Вас успешно приняли на работу Дальнобойщика");
-					SCM(playerid, 0x6495EDFF, " Чтобы начать работы, езжайте на стоянку аренды машин (( /gps ))");
-					SCM(playerid, 0x6495EDFF, " (( Команды: /truck ))");
-					return true;
-				}
-			}
+			if (PTEMP[playerid][pLevel] < 2) return	SCM(playerid, COLOR_GRAD1, " Необходим 2 уровень.");
+			PTEMP[playerid][pJob] = 1;
+			SCM(playerid, 0x6495EDFF, " Вы приняты на работу водителем автобуса.");
+			SCM(playerid, 0x6495EDFF, " (( Команды: /route - закончить работу водителя автобуса ))");
 		}
+		case 1:
+		{
+			PTEMP[playerid][pJob] = 4;
+			SCM(playerid, 0x6495EDFF, " Вы приняты на работу водителем такси.");
+			return true;
+		}
+		case 2:
+		{
+			if (PTEMP[playerid][pLevel] < 3) return	SCM(playerid, COLOR_GRAD1, " Необходим 3 уровень.");
+			PTEMP[playerid][pJob] = 3;
+			SCM(playerid, 0x6495EDFF, " Вы приняты на работу продавцом хот-догов.");
+			SCM(playerid, 0x6495EDFF, " (( Используйте /gps чтобы найти стоянку машин хот-догов ))");
+			SCM(playerid, 0x6495EDFF, " (( Команды: /hcontract - подписать контракт с закусочной,  /selleat - продать хот дог ))");
+			SCM(playerid, 0x6495EDFF, " (( Команды: /hcounter - начать работу за прилавком на вокзале ))");
+			SCM(playerid, 0x6495EDFF, " (( Чтобы подписать контракт с закусочной, подойдите ко входу Burger, Pizza, Cluc и введите команду /hcontract ))");
+		}
+		case 3:
+		{
+			if (PTEMP[playerid][pLevel] < 3) return	SCM(playerid, COLOR_GRAD1, " Необходим 3 уровень.");
+			PTEMP[playerid][pJob] = 5;
+			if (PTEMP[playerid][pPSkill] == 0) PTEMP[playerid][pPSkill] = 1;
+			if (PTEMP[playerid][pPSkill] == 1) PTEMP[playerid][pPMGruz] = 200;
+			SCM(playerid, 0x6495EDFF, " Вы приняты на работу развозчиком продуктов.");
+			SCM(playerid, 0x6495EDFF, " (( Команды: /prodmenu ))");
+			return true;
+		}
+		case 4:
+		{
+			if (PTEMP[playerid][pLevel] < 3) return SCM(playerid, COLOR_GRAD1, " Необходим 3 уровень.");
+			PTEMP[playerid][pJob] = 2;
+			SCM(playerid, 0x6495EDFF, " Вы приняты на работу автомехаником.");
+			SCM(playerid, 0x6495EDFF, " (( Команды: /refill - заправить, /repair - починить, /fillGarage, /mcontract - подписать контракт с Бензозаправкой ))");
+			return true;
+		}
+		case 5:
+		{
+			if (PTEMP[playerid][pLevel] < 5) return	SCM(playerid, COLOR_GRAD1, " Необходим 5 уровень.");
+			PTEMP[playerid][pJob] = 9;
+			SCM(playerid, 0x6495EDFF, " Вы приняты на работу прорабом.");
+			SCM(playerid, 0x6495EDFF, " (( Ваш заработок зависит от того сколько у вас рабочих, и как они работают ))");
+			SCM(playerid, 0x6495EDFF, " (( За 1 ящик, перетащенный рабочим, вы получаете 25 вирт ))");
+			SCM(playerid, 0x6495EDFF, " (( Команды: /gcontract - предложить работу, /getpayday - получения прибыли с рабочего ))");
+			return true;
+		}
+		case 6:
+		{
+			if (PTEMP[playerid][pLevel] < 6) return	SCM(playerid, COLOR_GRAD1, " Необходим 6 уровень.");
+			PTEMP[playerid][pJob] = 6;
+			SCM(playerid, 0x6495EDFF, " Вы приняты на работу тренером.");
+			SCM(playerid, 0x6495EDFF, " (( Команды: /fgstyle - обучение стилям боя ))");
+			return true;
+		}
+		case 7:
+		{
+			if (PTEMP[playerid][pLevel] < 6) return SCM(playerid, COLOR_GRAD1, " Необходим 6 уровень.");
+			PTEMP[playerid][pJob] = 99;
+			if (PTEMP[playerid][pDLevel] == 1) PTEMP[playerid][pDMgruz] = 7;
+			SCM(playerid, 0x6495EDFF, " Вы приняты на работу водителем по перевозке грузов.");
+			SCM(playerid, 0x6495EDFF, " Чтобы начать работы, езжайте на стоянку аренды машин (( /gps ))");
+			SCM(playerid, 0x6495EDFF, " (( Команды: /truck ))");
+			return true;
+		}}
+	}
 	case 1010:
 		{
 			if(!response) return true;
@@ -12105,38 +12104,36 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	            }
 	        }
 	    }
-	case 9001:
-		{
-			if(!response) return true;
-			if(listitem == 10)
-			{
-				new teleport[] = "[0] LSPD [key:1]\n[1] LSPD-Тюрьма [key:2]\n[2] Мэрия [key:3]\n[3] Автовокзал ЛС [key:4]\n[4] ЛС-СФ Шоссе [key:5]\n[5] Автошкола [key:6]\n[6] ФБР [key:7]\n[7] Аэропорт СФ [key:8]\n[8] Аэропорт ЛС [key:9]\n[9] Военная база [key:10]\n[10] Цент Лас Вентурас [key:11]\n[11] Клуб Джизи [key:12]\n[12] Админ казино [key:13]\n[13] Вокзал ЛВ [key:14]\n[14] Аэро ЛС Въезд [key:15]\n[15] Вокзал СФ [key:16]\n[16] Авианосец стоянка [key:17]\n[17] Авианосец [key:18]\n>> След.страница";
-				ShowPlayerDialogEx(playerid,9000,DIALOG_STYLE_LIST, "Меню",teleport, "Выбрать", "Назад");
-			}
-			else
-			{
-				format(string, sizeof(string), "/tp %i", listitem+19);
-				CallLocalFunction("OnPlayerCommandText", "is", playerid, string);
-			}
-		}
 	case 9000:
-		{
-			if(!response) return true;
-            if(listitem == 18)
-			{
-				new teleport[] = "[18] Зона 51 склад [key:19]\n[19] Форт карсон [key:20]\n[20] Гетто [key:21]\n[21] Тюрьма ЛВ [key:22]\n[22] Тюрьма СФ [key:23]\n[23] Работа прораба [key:24]\n[24] За рестораном [key:25]\n[25] Дракона [key:26]\n[26] Калигула [key:27]\n[27] ЖД - ЛС [key:28]\n<< Пред.страница";
-				ShowPlayerDialogEx(playerid,9001,DIALOG_STYLE_LIST, "Меню",teleport, "Выбрать", "Назад");
-			}
-			else
-			{
-				format(string, sizeof(string), "/tp %i", listitem+1);
-				CallLocalFunction("OnPlayerCommandText", "is", playerid, string);
-			}
-		}
-	}
-	while(strfind(inputtext, "%s",true)!=-1)
+    {
+        if (!response) return true;
+        if (listitem == 18){
+            ShowPlayerDialogEx(playerid, 9001, DIALOG_STYLE_LIST, "Меню", "[18] Зона 51 склад [key:19]\n[19] Форт карсон [key:20]\n[20] Гетто [key:21]\n[21] Тюрьма ЛВ [key:22]\n[22] Тюрьма СФ [key:23]\n[23] Работа прораба [key:24]\n[24] За рестораном [key:25]\n[25] Дракона [key:26]\n[26] Калигула [key:27]\n[27] ЖД - ЛС [key:28]\n<< Пред.страница", "Выбрать", "Назад");
+        }
+        else
+        {
+            format(string, sizeof (string), "/tp %i", listitem + 1);
+            CallLocalFunction("OnPlayerCommandText", "is", playerid, string);
+        }
+    }
+    case 9001:
+    {
+        if (!response) return true;
+        if (listitem == 10){
+            ShowPlayerDialogEx(playerid, 9000, DIALOG_STYLE_LIST, "Меню", "[0] LSPD [key:1]\n[1] LSPD-Тюрьма [key:2]\n[2] Мэрия [key:3]\n[3] Автовокзал ЛС [key:4]\n[4] ЛС-СФ Шоссе [key:5]\n[5] Автошкола [key:6]\n[6] ФБР [key:7]\n[7] Аэропорт СФ [key:8]\n[8] Аэропорт ЛС [key:9]\n[9] Военная база [key:10]\n[10] Цент Лас Вентурас [key:11]\n[11] Клуб Джизи [key:12]\n[12] Админ казино [key:13]\n[13] Вокзал ЛВ [key:14]\n[14] Аэро ЛС Въезд [key:15]\n[15] Вокзал СФ [key:16]\n[16] Авианосец стоянка [key:17]\n[17] Авианосец [key:18]\n>> След.страница", "Выбрать", "Назад");
+        }
+        else
+        {
+            format(string, sizeof (string), "/tp %i", listitem+19);
+            CallLocalFunction("OnPlayerCommandText", "is", playerid, string);
+        }
+    }}
+	while (strfind(inputtext, "%s", true) != -1)
 	{
-		strdel(inputtext,strfind(inputtext, "%s",true),strfind(inputtext, "%s",true)+2);
+		strdel(inputtext, strfind(inputtext, "%s", true), strfind(inputtext, "%s", true) + 2);
 	}
+
+    printf("<-- OnDialogResponse(playerid = %d, dialogid = %d, response = %d, listitem = %d, inputtext = \"%s\") --<", playerid, dialogid, response, listitem, inputtext);
+
 	return true;
 }
