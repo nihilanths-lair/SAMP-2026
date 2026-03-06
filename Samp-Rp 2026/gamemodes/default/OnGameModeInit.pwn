@@ -1,6 +1,6 @@
 public OnGameModeInit()
 {
-    print("/-- OnGameModeInit() -->");
+    print(">-- OnGameModeInit() -->");
 
 	SendRconCommand("hostname Mod name: Entropy-Rp | Room: "NumberServer"");
 	SendRconCommand("gamemodetext RolePlay");
@@ -877,7 +877,7 @@ public OnGameModeInit()
 
 	if (!strcmp(GetDay(), "Понедельник", true)) mysql_function_query(DATABASE, "UPDATE `"TABLE_ACCOUNTS"` SET pChas = '0'", false, "", "");
     
-    print("<-- OnGameModeInit() --/");
+    print("<-- OnGameModeInit() --<");
 
 	return true;
 }

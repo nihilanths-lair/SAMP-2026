@@ -1,6 +1,6 @@
 publics:_GzCheck()
 {
-    print("/-- _GzCheck() -->");
+    //print(">-- _GzCheck() -->");
 
 	for (new i = 1; i <= TOTALGZ; i++)
 	{
@@ -104,7 +104,7 @@ publics:_GzCheck()
 		}
 	}
 
-    print("<-- _GzCheck() --/");
+    //print("<-- _GzCheck() --<");
 
 	return true;
 }
