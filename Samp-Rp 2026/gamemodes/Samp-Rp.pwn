@@ -1,16 +1,6 @@
 #pragma warning disable 214
 #pragma warning disable 239
-//==========================================
-AntiDeAMX2()
-{
-	new a[][] =
-	{
-		"Unarmed (Fist)",
-		"Brass K"
-	};
-	#pragma unused a
-}
-//==========================================
+
 #include  <a_samp>
 #include  <a_mail>
 #include  <a_mysql>
@@ -29,7 +19,7 @@ AntiDeAMX2()
 
 #define SCM SendClientMessage
 new format_string[128];
-#define SendMes(%0,%1,%2,%3)    format(format_string, sizeof(format_string),%2,%3) && SCM(%0, %1, format_string)
+#define SendMes(%0,%1,%2,%3)    format(format_string, sizeof (format_string), %2, %3) && SCM(%0, %1, format_string)
 
 //==========================================
 new bool:SERVERTEST = false;
@@ -5148,7 +5138,7 @@ PayDay()
 		{
 		    // #promo
 			mysql_format(DATABASE,QUERY, 256, "SELECT pDrug FROM `"TABLE_ACCOUNTS"` WHERE name = '%s'",PTEMP[i][pName]);
-			mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",13,i,"");
+			mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",13,i,"");
 			if(strcmp(PTEMP[i][pDrug], "#newlife", true) == 0)
 			{
 				SCM(i,COLOR_BLUE," Спасибо за то, что приняли участие в развитии проекта");
@@ -7859,7 +7849,7 @@ Down(playerid)
 	return SetPlayerCameraLookAt(playerid,GetPVarFloat(playerid,"RX"),GetPVarFloat(playerid,"RY"),GetPVarFloat(playerid,"RZ"));
 }
 
-#include "..\gamemodes\OnMySQL_QUERY.pwn"
+#include "..\gamemodes\events\_MySQL_QUERY.pwn"
 
 SpawnCarOne(playerid, Float:x, Float:y, Float:z, Float:range)
 {
@@ -7951,27 +7941,27 @@ setVehicleSpeed(vehicleid, speed_mph)
 		return;
 	}
 	new Float: vMultiplier = float(speed_mph) / float(cur_speed_mph);
-	SetVehicleVelocity(vehicleid, v[0] *vMultiplier, v[1] *vMultiplier, v[2] *vMultiplier);
+	SetVehicleVelocity(vehicleid, v[0]*vMultiplier, v[1]*vMultiplier, v[2]*vMultiplier);
 }
 publics:DellAccount(playerid, stringg[])
 {
 	new r, f, null = 0;
 	cache_get_data(r, f);
-	if(!r) return SCM(playerid,COLOR_GREY," Аккаунт не найден");
-	for(new i = 1; i <= TotalHouse;i++) if(strcmp(HouseInfo[i][hOwner],stringg,false) == 0 && strcmp(HouseInfo[i][hOwner],"None",true) != 0) null = i;
-	if(null != 0)
+	if (!r) return SCM(playerid, COLOR_GREY," Аккаунт не найден");
+	for (new i = 1; i <= TotalHouse;i++) if (strcmp(HouseInfo[i][hOwner], stringg, false) == 0 && strcmp(HouseInfo[i][hOwner], "None", true) != 0) null = i;
+	if (null != 0)
 	{
 		HouseInfo[null][hTakings] = 0;
-		strmid(HouseInfo[null][hOwner],"None",0,strlen("None"),MAX_PLAYER_NAME);
+		strmid(HouseInfo[null][hOwner], "None", 0, strlen("None"), MAX_PLAYER_NAME);
 		HouseInfo[null][hLock] = 1;
 		HouseInfo[null][hHel] = 0;
 	}
 	null = 0;
-	for(new i = 1; i <= TotalBizz;i++) if(strcmp(BizzInfo[i][bOwner],stringg,false) == 0 && strcmp(BizzInfo[i][bOwner],"None",true) != 0) null = i;
-	if(null != 0) ClearBizz(null);
+	for (new i = 1; i <= TotalBizz; i++) if (strcmp(BizzInfo[i][bOwner], stringg, false) == 0 && strcmp(BizzInfo[i][bOwner], "None", true) != 0) null = i;
+	if (null != 0) ClearBizz(null);
 	null = 0;
-	for(new i = 1; i <= ALLKVARTIRI; i++) if(strcmp(kvartinfo[i][vladelec],stringg,false) == 0) null = i;
-	if(null != 0)
+	for (new i = 1; i <= ALLKVARTIRI; i++) if (strcmp(kvartinfo[i][vladelec], stringg, false) == 0) null = i;
+	if (null != 0)
 	{
 		kvartinfo[null][aptek] = 0;
 		kvartinfo[null][lock] = 0;
@@ -7980,18 +7970,19 @@ publics:DellAccount(playerid, stringg[])
 		updatekvar(null);
 	}
 	null = 0;
-	for(new i = 1; i <= TOTALSHOPS; i++) if(strcmp(WorkshopInfo[i][wOwner],stringg,false) == 0) null = i;
-	if(null != 0)
+	for (new i = 1; i <= TOTALSHOPS; i++) if (strcmp(WorkshopInfo[i][wOwner], stringg, false) == 0) null = i;
+	if (null != 0)
 	{
-		strmid(WorkshopInfo[null][wOwner],"None",0,strlen("None"),MAX_PLAYER_NAME);
-		strmid(WorkshopInfo[null][wDeputy1],"None",0,strlen("None"),MAX_PLAYER_NAME);
-		strmid(WorkshopInfo[null][wDeputy2],"None",0,strlen("None"),MAX_PLAYER_NAME);
-		strmid(WorkshopInfo[null][wDeputy3],"None",0,strlen("None"),MAX_PLAYER_NAME);
-		strmid(WorkshopInfo[null][wMechanic1],"None",0,strlen("None"),MAX_PLAYER_NAME);
-		strmid(WorkshopInfo[null][wMechanic2],"None",0,strlen("None"),MAX_PLAYER_NAME);
-		strmid(WorkshopInfo[null][wMechanic3],"None",0,strlen("None"),MAX_PLAYER_NAME);
-		strmid(WorkshopInfo[null][wMechanic4],"None",0,strlen("None"),MAX_PLAYER_NAME);
-		strmid(WorkshopInfo[null][wMechanic5],"None",0,strlen("None"),MAX_PLAYER_NAME);
+		strmid(WorkshopInfo[null][wOwner], "None", 0, strlen("None"), MAX_PLAYER_NAME);
+		strmid(WorkshopInfo[null][wDeputy1], "None", 0, strlen("None"), MAX_PLAYER_NAME);
+		strmid(WorkshopInfo[null][wDeputy2], "None", 0, strlen("None"), MAX_PLAYER_NAME);
+		strmid(WorkshopInfo[null][wDeputy3], "None", 0, strlen("None"), MAX_PLAYER_NAME);
+		strmid(WorkshopInfo[null][wMechanic1], "None", 0, strlen("None"), MAX_PLAYER_NAME);
+		strmid(WorkshopInfo[null][wMechanic2], "None", 0, strlen("None"), MAX_PLAYER_NAME);
+		strmid(WorkshopInfo[null][wMechanic3], "None", 0, strlen("None"), MAX_PLAYER_NAME);
+		strmid(WorkshopInfo[null][wMechanic4], "None", 0, strlen("None"), MAX_PLAYER_NAME);
+		strmid(WorkshopInfo[null][wMechanic5], "None", 0, strlen("None"), MAX_PLAYER_NAME);
+
 		WorkshopInfo[null][wAuction][0] = 0;
 		WorkshopInfo[null][wAuction][1] = 0;
 		WorkshopInfo[null][wAuction][2] = 0;
@@ -8004,13 +7995,14 @@ publics:DellAccount(playerid, stringg[])
 		WorkshopInfo[null][wZp] = 5;
 	}
 	null = 0;
-	for(new i = 1; i <= TOTALFARM; i++) if(strcmp(FarmInfo[i][fOwner],stringg,false) == 0) null = i;
-	if(null != 0)
+	for (new i = 1; i <= TOTALFARM; i++) if (strcmp(FarmInfo[i][fOwner], stringg, false) == 0) null = i;
+	if (null != 0)
 	{
-		strmid(FarmInfo[null][fOwner],"None",0,strlen("None"),MAX_PLAYER_NAME);
-		strmid(FarmInfo[null][fDeputy_1],"None",0,strlen("None"),MAX_PLAYER_NAME);
-		strmid(FarmInfo[null][fDeputy_2],"None",0,strlen("None"),MAX_PLAYER_NAME);
-		strmid(FarmInfo[null][fDeputy_3],"None",0,strlen("None"),MAX_PLAYER_NAME);
+		strmid(FarmInfo[null][fOwner], "None", 0, strlen("None"), MAX_PLAYER_NAME);
+		strmid(FarmInfo[null][fDeputy_1], "None", 0, strlen("None"), MAX_PLAYER_NAME);
+		strmid(FarmInfo[null][fDeputy_2], "None", 0, strlen("None"), MAX_PLAYER_NAME);
+		strmid(FarmInfo[null][fDeputy_3], "None", 0, strlen("None"), MAX_PLAYER_NAME);
+
 		FarmInfo[null][fAuction][0] = 0;
 		FarmInfo[null][fAuction][1] = 0;
 		FarmInfo[null][fAuction][2] = 0;
@@ -8026,106 +8018,106 @@ publics:DellAccount(playerid, stringg[])
 		FarmInfo[null][fProds_Selling] = 1;
 		FarmInfo[null][fProds_Price] = 21;
 	}
-	format(string, sizeof(string), " Администратор %s удалил аккаунт %s", PTEMP[playerid][pName], stringg);
+	format(string, sizeof (string), " Администратор %s удалил аккаунт %s", PTEMP[playerid][pName], stringg);
 	ABroadCast(COLOR_LIGHTRED,string,7);
 	printf("Администратор %s удалил аккаунт %s",Name(playerid), stringg);
-	mysql_format(DATABASE, QUERY, sizeof(QUERY), "DELETE FROM `"TABLE_ADMIN"` WHERE name = '%s'",stringg);
+	mysql_format(DATABASE, QUERY, sizeof (QUERY), "DELETE FROM `"TABLE_ADMIN"` WHERE name = '%s'", stringg);
 	mysql_function_query(DATABASE, QUERY, false, "", "");
-	mysql_format(DATABASE, QUERY, sizeof(QUERY), "DELETE FROM `"TABLE_CARS"` WHERE owner = '%s'",stringg);
+	mysql_format(DATABASE, QUERY, sizeof (QUERY), "DELETE FROM `"TABLE_CARS"` WHERE owner = '%s'", stringg);
 	mysql_function_query(DATABASE, QUERY, false, "", "");
-	mysql_format(DATABASE, QUERY, sizeof(QUERY), "DELETE FROM `"TABLE_ACCOUNTS"` WHERE name = '%s'",stringg);
+	mysql_format(DATABASE, QUERY, sizeof (QUERY), "DELETE FROM `"TABLE_ACCOUNTS"` WHERE name = '%s'", stringg);
 	return mysql_function_query(DATABASE, QUERY, false, "", "");
 }
 HGet(playerid)
 {
 	new house = 0;
-	for(new i = 1; i <= TotalHouse;i++)
+	for (new i = 1; i <= TotalHouse;i++)
 	{
-		if(strcmp(HouseInfo[i][hOwner],PTEMP[playerid][pName],false) == 0 && strcmp(HouseInfo[i][hOwner],"None",true) != 0) house++, PTEMP[playerid][pPHouseKey] = i;
+		if (strcmp(HouseInfo[i][hOwner], PTEMP[playerid][pName], false) == 0 && strcmp(HouseInfo[i][hOwner], "None", true) != 0) house++, PTEMP[playerid][pPHouseKey] = i;
 	}
 	return house;
 }
 BGet(playerid)
 {
 	new house = 0;
-	for(new i = 1; i <= TotalBizz;i++)
+	for (new i = 1; i <= TotalBizz;i++)
 	{
-		if(strcmp(BizzInfo[i][bOwner],PTEMP[playerid][pName],false) == 0 && strcmp(BizzInfo[i][bOwner],"None",true) != 0) house++, PTEMP[playerid][pPBizzKey] = i;
+		if (strcmp(BizzInfo[i][bOwner], PTEMP[playerid][pName], false) == 0 && strcmp(BizzInfo[i][bOwner], "None", true) != 0) house++, PTEMP[playerid][pPBizzKey] = i;
 	}
 	return house;
 }
 WGet(playerid)
 {
 	new house = 0;
-	for(new i = 1; i <= TOTALSHOPS;i++)
+	for (new i = 1; i <= TOTALSHOPS;i++)
 	{
-		if(strcmp(WorkshopInfo[i][wOwner],PTEMP[playerid][pName],false) == 0 && strcmp(WorkshopInfo[i][wOwner],"None",true) != 0) house++, SetPVarInt(playerid, "wShop", i);
+		if (strcmp(WorkshopInfo[i][wOwner], PTEMP[playerid][pName], false) == 0 && strcmp(WorkshopInfo[i][wOwner], "None", true) != 0) house++, SetPVarInt(playerid, "wShop", i);
 	}
 	return house;
 }
 KGet(playerid)
 {
 	new house = 0;
-	for(new i = 1; i <= ALLKVARTIRI; i++)
+	for (new i = 1; i <= ALLKVARTIRI; i++)
 	{
-		if(strcmp(kvartinfo[i][vladelec],PTEMP[playerid][pName],false) == 0 && strcmp(kvartinfo[i][vladelec],"None",true) != 0) house++, PTEMP[playerid][pKvartiraKey] = i;
+		if (strcmp(kvartinfo[i][vladelec], PTEMP[playerid][pName], false) == 0 && strcmp(kvartinfo[i][vladelec], "None", true) != 0) house++, PTEMP[playerid][pKvartiraKey] = i;
 	}
 	return house;
 }
 FGet(playerid)
 {
 	new house = 0;
-	for(new i = 1; i <= TOTALFARM; i++)
+	for (new i = 1; i <= TOTALFARM; i++)
 	{
-		if(strcmp(FarmInfo[i][fOwner],PTEMP[playerid][pName],false) == 0 && strcmp(FarmInfo[i][fOwner],"None",true) != 0) house++, PTEMP[playerid][pPFarmKey] = i;
+		if (strcmp(FarmInfo[i][fOwner], PTEMP[playerid][pName], false) == 0 && strcmp(FarmInfo[i][fOwner], "None", true) != 0) house++, PTEMP[playerid][pPFarmKey] = i;
 	}
 	return house;
 }
 GetKvart()
 {
-	for(new k = 1; k <= ALLKVARTIRI; k++)
+	for (new k = 1; k <= ALLKVARTIRI; k++)
 	{
-		if(!strcmp(kvartinfo[k][vladelec],"None",true)) continue;
-		if(kvartinfo[k][plata] < 100)
+		if (!strcmp(kvartinfo[k][vladelec], "None", true)) continue;
+		if (kvartinfo[k][plata] < 100)
 		{
-			if(GetPlayerID(kvartinfo[k][vladelec]) != INVALID_PLAYER_ID) SetPVarInt(GetPlayerID(kvartinfo[k][vladelec]), "GetKvart", 1);
+			if (GetPlayerID(kvartinfo[k][vladelec]) != INVALID_PLAYER_ID) SetPVarInt(GetPlayerID(kvartinfo[k][vladelec]), "GetKvart", 1);
 			kvartinfo[k][aptek] = 0;
 			kvartinfo[k][lock] = 0;
 			kvartinfo[k][plata] = 0;
 			strmid(kvartinfo[k][vladelec], "None", 0, strlen("None"), 10);
 			updatekvar(k);
 		}
-		else kvartinfo[k][plata]-=100;
+		else kvartinfo[k][plata] -= 100;
 	}
 	return true;
 }
 GetBizz()
 {
-	for(new i = 1; i <= TotalBizz; i++)
+	for (new i = 1; i <= TotalBizz; i++)
 	{
-		if(BizzInfo[i][bStavka] > 0 && strcmp(BizzInfo[i][bOwner],"None",true) == 0 && BizzInfo[i][bTimeStavka] > 0) BizzInfo[i][bTimeStavka]--;
-		if(BizzInfo[i][bTimeStavka] == 0 && BizzInfo[i][bStavka] > 0)
+		if (BizzInfo[i][bStavka] > 0 && strcmp(BizzInfo[i][bOwner], "None", true) == 0 && BizzInfo[i][bTimeStavka] > 0) BizzInfo[i][bTimeStavka]--;
+		if (BizzInfo[i][bTimeStavka] == 0 && BizzInfo[i][bStavka] > 0)
 		{
-			mysql_format(DATABASE,QUERY,256,"SELECT `Name` FROM `"TABLE_ACCOUNTS"` WHERE `Name` = '%s'",BizzInfo[i][bNameStavka]);
-			mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",12,i,"");
+			mysql_format(DATABASE, QUERY, 256, "SELECT `Name` FROM `"TABLE_ACCOUNTS"` WHERE `Name` = '%s'", BizzInfo[i][bNameStavka]);
+			mysql_function_query(DATABASE, QUERY, true, "_MySQL_QUERY", "iis", 12, i, "");
 		}
-		if(strcmp(BizzInfo[i][bOwner],"None",true) != 0) continue;
-		if(BizzInfo[i][bLandTax] < BizzLandTax[i] || BizzInfo[i][bLocked] == 1 && BizzInfo[i][bLockTime] > 12) ClearBizz(i);
+		if (strcmp(BizzInfo[i][bOwner], "None", true) != 0) continue;
+		if (BizzInfo[i][bLandTax] < BizzLandTax[i] || BizzInfo[i][bLocked] == 1 && BizzInfo[i][bLockTime] > 12) ClearBizz(i);
 		else
 		{
-			if(BizzInfo[i][bProducts] <= 0)
+			if (BizzInfo[i][bProducts] <= 0)
 			{
 				BizzInfo[i][bLocked] = 1;
-				if(IsPlayerConnected(GetPlayerID(BizzInfo[i][bOwner])))
+				if (IsPlayerConnected(GetPlayerID(BizzInfo[i][bOwner])))
 				{
-					if(BizzInfo[i][bLockTime] == 0) SetPVarInt(GetPlayerID(BizzInfo[i][bOwner]), "_GetBizz_", 1);
+					if (BizzInfo[i][bLockTime] == 0) SetPVarInt(GetPlayerID(BizzInfo[i][bOwner]), "_GetBizz_", 1);
 				}
 			}
-			if(BizzInfo[i][bLocked] == 1)BizzInfo[i][bLockTime]++;
-			if(BizzInfo[i][bLockTime] > 1 && BizzInfo[i][bLockTime] < 12)if(IsPlayerConnected(GetPlayerID(BizzInfo[i][bOwner]))) SetPVarInt(GetPlayerID(BizzInfo[i][bOwner]), "GetBizz_", 1);
-			if(BizzInfo[i][bMafia] == 6) MafiaBank[0][nYakuza] += 500;
-			if(BizzInfo[i][bMafia] == 14) MafiaBank[0][nRm] += 500;
-			if(BizzInfo[i][bMafia] == 5) MafiaBank[0][nLcn] += 500;
+			if (BizzInfo[i][bLocked] == 1)BizzInfo[i][bLockTime]++;
+			if (BizzInfo[i][bLockTime] > 1 && BizzInfo[i][bLockTime] < 12)if(IsPlayerConnected(GetPlayerID(BizzInfo[i][bOwner]))) SetPVarInt(GetPlayerID(BizzInfo[i][bOwner]), "GetBizz_", 1);
+			if (BizzInfo[i][bMafia] == 6) MafiaBank[0][nYakuza] += 500;
+			if (BizzInfo[i][bMafia] == 14) MafiaBank[0][nRm] += 500;
+			if (BizzInfo[i][bMafia] == 5) MafiaBank[0][nLcn] += 500;
 		}
 	}
 	return true;
@@ -8167,7 +8159,7 @@ GetShop()
 		if(WorkshopInfo[i][wAuction][2] == 0 && WorkshopInfo[i][wAuction][0] > 0)
 		{
 			mysql_format(DATABASE,QUERY,256,"SELECT `Name` FROM `"TABLE_ACCOUNTS"` WHERE `Name` = '%s'",WorkshopInfo[i][wAuctionName]);
-			mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",24,i,"");
+			mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",24,i,"");
 		}
 		if(strcmp("None",WorkshopInfo[i][wOwner],true) == 0) continue;
 		new null = WorkshopInfo[i][wAuction][4];
@@ -8235,7 +8227,7 @@ GetFarm()
 		if(FarmInfo[i][fAuction][2] == 0 && FarmInfo[i][fAuction][0] > 0)
 		{
 			mysql_format(DATABASE,QUERY,256,"SELECT `Name` FROM `"TABLE_ACCOUNTS"` WHERE `Name` = '%s'",FarmInfo[i][fAuctionName]);
-			mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",29,i,"");
+			mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",29,i,"");
 		}
 		if(strcmp("None",FarmInfo[i][fOwner],true) == 0) continue;
 		new null = FarmInfo[i][fAuction][4];

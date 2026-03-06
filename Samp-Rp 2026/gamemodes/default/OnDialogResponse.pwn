@@ -145,7 +145,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         {
             if (!strlen(inputtext)) return ShowPlayerDialogEx(playerid, 2625, DIALOG_STYLE_INPUT, "По приглашению от:", "Введите ник игрока, пригласившего вас на сервер", "Далее", "Пропуск");
             mysql_format(DATABASE, QUERY, 128, "SELECT `Name` FROM `"TABLE_ACCOUNTS"` WHERE `Name` = '%e'",inputtext);
-            mysql_function_query(DATABASE, QUERY, true, "OnMySQL_QUERY", "iis", 3, playerid, inputtext);
+            mysql_function_query(DATABASE, QUERY, true, "_MySQL_QUERY", "iis", 3, playerid, inputtext);
         }
         else strmid(PTEMP[playerid][pDrug], "-", 0, strlen("-"), strlen("-")+5);
         
@@ -4962,7 +4962,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			else if(!IsPlayerConnected(GetPlayerID(FarmInfo[bizselect[playerid]][fAuctionName])) && FarmInfo[bizselect[playerid]][fAuction][1] > 0)
 			{
 				mysql_format(DATABASE, QUERY, sizeof(QUERY), "SELECT `Name` FROM `"TABLE_ACCOUNTS"` WHERE `Name` = '%e'",FarmInfo[bizselect[playerid]][fAuctionName]);
-				mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",30,playerid,"");
+				mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",30,playerid,"");
 			}
 			strmid(FarmInfo[bizselect[playerid]][fAuctionName],PTEMP[playerid][pName], 0, strlen(PTEMP[playerid][pName]), 32);
 			PTEMP[playerid][pBank] -= strval(inputtext);
@@ -4994,7 +4994,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			else if(!IsPlayerConnected(GetPlayerID(WorkshopInfo[bizselect[playerid]][wAuctionName])) && WorkshopInfo[bizselect[playerid]][wAuction][1] > 0)
 			{
 				mysql_format(DATABASE, QUERY, sizeof(QUERY), "SELECT `Name` FROM `"TABLE_ACCOUNTS"` WHERE `Name` = '%e'",WorkshopInfo[bizselect[playerid]][wAuctionName]);
-				mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",23,playerid,"");
+				mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",23,playerid,"");
 			}
 			strmid(WorkshopInfo[bizselect[playerid]][wAuctionName],PTEMP[playerid][pName], 0, strlen(PTEMP[playerid][pName]), 32);
 			PTEMP[playerid][pBank] -= strval(inputtext);
@@ -5035,7 +5035,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			else if(!IsPlayerConnected(GetPlayerID(BizzInfo[bizselect[playerid]][bNameStavka])) && BizzInfo[bizselect[playerid]][bLastStavka] > 0)
 			{
 				mysql_format(DATABASE, QUERY, sizeof(QUERY), "SELECT `Name` FROM `"TABLE_ACCOUNTS"` WHERE `Name` = '%e'",BizzInfo[bizselect[playerid]][bNameStavka]);
-				mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",1,playerid,"");
+				mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",1,playerid,"");
 			}
 			strmid(BizzInfo[bizselect[playerid]][bNameStavka],PTEMP[playerid][pName], 0, strlen(PTEMP[playerid][pName]), 32);
 			PTEMP[playerid][pBank] -= strval(inputtext);
@@ -5603,7 +5603,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			strmid(PTEMP[playerid][pKey],inputtext, 0, strlen(inputtext), 32);
 			mysql_format(DATABASE,QUERY,256,"SELECT * FROM `"TABLE_BAN"` WHERE `Name` = '%s'",PTEMP[playerid][pName]);
 			SetPVarInt(playerid,"time_logged",120);
-			return mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",25,playerid,"");
+			return mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",25,playerid,"");
 		}
 	case 3439:
 		{
@@ -10457,7 +10457,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			if(!GetPVarInt(playerid,"d_code1")) return SetPVarInt(playerid,"d_code1",strval(inputtext)), ShowPlayerDialogEx(playerid,29322,DIALOG_STYLE_INPUT, "Код #2", "===============================\n              Введите код №2\n===============================", "Далее", "Отмена");
 			SetPVarInt(playerid,"d_code2",strval(inputtext));
 			mysql_format(DATABASE,QUERY,256,"SELECT * FROM `"TABLE_DONATE"` WHERE `code_one` = '%i' AND `code_two` = '%i' AND `used` = '0'",GetPVarInt(playerid,"d_code1"), GetPVarInt(playerid,"d_code2"));
-			return mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",27,playerid,"");
+			return mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",27,playerid,"");
 		}
 	case 20012:
 		{
@@ -11839,7 +11839,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				{
 					if(booston == 0) return SCM(playerid,-1," Бонусы отключены");
 					mysql_format(DATABASE,QUERY,256,"SELECT * FROM `boost` WHERE `Text` = 'BoostTime'");
-					return mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",36,playerid,"");
+					return mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",36,playerid,"");
 				}
 			}
 		}

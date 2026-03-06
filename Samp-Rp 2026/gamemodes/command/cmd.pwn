@@ -184,7 +184,7 @@ CMD:boostinfo(playerid)
 {
 	if(booston == 0) return SCM(playerid,-1," Бонусы отключены");
 	mysql_format(DATABASE,QUERY,256,"SELECT * FROM `boost` WHERE `Text` = 'BoostTime'");
-	return mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",36,playerid,"");
+	return mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",36,playerid,"");
 }
 CMD:tawercasino(playerid,params[])
 {
@@ -2326,7 +2326,7 @@ CMD:buyhouse(playerid, params[])
 				house_car[playerid] = -1;
 			}
 			
-			mysql_format(DATABASE,QUERY,256,"SELECT * FROM `"TABLE_CARS"` WHERE `owner` = '%s'",PTEMP[playerid][pName]), mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",33,playerid,"");
+			mysql_format(DATABASE,QUERY,256,"SELECT * FROM `"TABLE_CARS"` WHERE `owner` = '%s'",PTEMP[playerid][pName]), mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",33,playerid,"");
 			BuyHouse(house);
 			SaveMySQL(5,house);
 			PTEMP[playerid][pSpawnChange][0] = 0;
@@ -4373,7 +4373,7 @@ CMD:setnik(playerid, params[])
 	SendClientMessageToAll(COLOR_LIGHTRED,YCMDstr);
 	SCM(playerid,-1," Ник одобрен");
 	mysql_format(DATABASE,QUERY,128,"SELECT `Name` FROM `"TABLE_ACCOUNTS"` WHERE Name= '%s'",WantNickChange[params[0]]);
-	mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",15,params[0],playerid);
+	mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",15,params[0],playerid);
 	printf("Администратор %s одобрил заявку на смену ника: %s >> %s", Name(playerid), Name(params[0]),WantNickChange[params[0]]);
 	return true;
 }
@@ -4388,7 +4388,7 @@ CMD:cname(playerid, params[])
 	SendClientMessageToAll(COLOR_YELLOW,YCMDstr);
 	SCM(playerid,-1," Ник одобрен");
 	mysql_format(DATABASE,QUERY,128,"SELECT `Name` FROM `"TABLE_ACCOUNTS"` WHERE Name= '%s'",WantNickChange[params[0]]);
-	mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",15,params[0],playerid);
+	mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",15,params[0],playerid);
 	printf("[CNAME] Мэр %s одобрил заявку на смену ника: %s >> %s", Name(playerid), Name(params[0]),WantNickChange[params[0]]);
 	return true;
 }
@@ -5653,7 +5653,7 @@ CMD:agetstats(playerid, params[])
 	new name[64];
 	if(sscanf(params, "s[64]", name)) return SCM(playerid, -1, " Введите: /agetstats [ник игрока]");
 	mysql_format(DATABASE,QUERY, 256, "SELECT * FROM `"TABLE_ACCOUNTS"` WHERE `Name` = '%s'",name);
-	mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",16,playerid,name);
+	mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",16,playerid,name);
 	return true;
 }
 CMD:number(playerid, params[])
@@ -8332,9 +8332,9 @@ CMD:addmoderation(playerid, params[])
 	}
 	SendMes(playerid,0x6495EDFF," Вы установили %s %d уровень администрирования",name,params[0]);
 	mysql_format(DATABASE,QUERY, 128, "SELECT * FROM "TABLE_ADMIN" WHERE `name` = '%s'", name);
-	mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",17,params[0],name);
+	mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",17,params[0],name);
 	mysql_format(DATABASE,QUERY, 128, "SELECT * FROM "TABLE_ACCOUNTS" WHERE `name` = '%s'", name);
-	mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",17,params[0],name);
+	mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",17,params[0],name);
 	printf("Администратор %s назначил %s модератором %i уровня", PTEMP[playerid][pName], name, params[0]);
 	return true;
 }
@@ -8408,7 +8408,7 @@ CMD:geton(playerid, params[])
 	if(PTEMP[playerid][pAdmin] < 3 || dostup[playerid] == 0) return true;
 	if(sscanf(params, "s[63]",params[0])) return SCM(playerid,COLOR_GREY, " Введите: /geton [name]");
 	mysql_format(DATABASE,QUERY, 256, "SELECT * FROM `"TABLE_ACCOUNTS"` WHERE `Name` = '%s'",params[0]);
-	mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",18,playerid,params[0]);
+	mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",18,playerid,params[0]);
 	return true;
 }
 CMD:getleader(playerid, params[])
@@ -8417,7 +8417,7 @@ CMD:getleader(playerid, params[])
 	if(PTEMP[playerid][pAdmin] < 4 || dostup[playerid] == 0) return true;
 	if(sscanf(params, "d",params[0])) return SCM(playerid, -1, " Введите: /getleader [номер фракции]");
 	mysql_format(DATABASE,QUERY, 256, "SELECT * FROM `"TABLE_ACCOUNTS"` WHERE `pLeader` = '%i'",params[0]);
-	mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",19,playerid,params[0]);
+	mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",19,playerid,params[0]);
 	return true;
 }
 CMD:makeleader(playerid, params[])
@@ -9976,7 +9976,7 @@ CMD:sban(playerid, params[])
 	{
 		format(YCMDstr, 128, " Администратор %s Забанен. Обратитесь к спец-админу", Name(playerid));
 		mysql_format(DATABASE,QUERY, 128, "SELECT * FROM "TABLE_ADMIN" WHERE `name` = '%s'", Name(playerid));
-		mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",17,0,Name(playerid));
+		mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",17,0,Name(playerid));
 		ABroadCast(COLOR_LIGHTRED,YCMDstr,1);
 		Kick(playerid);
 	}
@@ -10365,7 +10365,7 @@ CMD:warn(playerid, params[])
 	{
 		format(YCMDstr, 128, " Администратор %s Забанен. Обратитесь к спец-админу", Name(playerid));
 		mysql_format(DATABASE,QUERY, 128, "SELECT * FROM "TABLE_ADMIN" WHERE `name` = '%s'", Name(playerid));
-		mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",17,0,Name(playerid));
+		mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",17,0,Name(playerid));
 		ABroadCast(COLOR_LIGHTRED,YCMDstr,1);
 		Kick(playerid);
 	}
@@ -10429,7 +10429,7 @@ CMD:ban(playerid, params[])
 	if(!IsPlayerConnected(params[0])) return SCM(playerid, COLOR_GREY, " Игрок оффлайн!");
 	//if(PTEMP[params[0]][pAdmin] > 6)  return SCM(playerid, COLOR_GREY, " Ошибка. Администратора с данным уровнем забанить невозможно!");
 	//mysql_format(DATABASE,QUERY, 128, "SELECT * FROM "TABLE_ADMIN" WHERE `name` = '%s'", Name(params[0]));
-	//mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",77,0,Name(params[0]));
+	//mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",77,0,Name(params[0]));
 	new ip[15];
 	new year, month,day;
 	new null = 30;
@@ -10445,7 +10445,7 @@ CMD:ban(playerid, params[])
 	{
 		format(YCMDstr, 128, " Администратор %s Забанен. Обратитесь к спец-админу", Name(playerid));
 		mysql_format(DATABASE,QUERY, 128, "SELECT * FROM "TABLE_ADMIN" WHERE `name` = '%s'", Name(playerid));
-		mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",17,0,Name(playerid));
+		mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",17,0,Name(playerid));
 		mysql_format(DATABASE,QUERY, 300, "INSERT INTO `"TABLE_BAN"` (`Text`, `Name`, `NameAdmin`, `Date`, `Unban`, `Reason`) VALUES ('AUTOBAN','%s', '%s', '%i', '%i', 'snyat')",Name(playerid),Name(playerid),gettime(), mktimes(5,0,0,day+null,month,2038));
 		mysql_function_query(DATABASE,QUERY,false,"","");
 		ABroadCast(COLOR_LIGHTRED,YCMDstr,1);
@@ -10519,7 +10519,7 @@ CMD:iban(playerid, params[])
 	{
 		format(YCMDstr, 128, " Администратор %s Забанен. Обратитесь к спец-админу", Name(playerid));
 		mysql_format(DATABASE,QUERY, 128, "SELECT * FROM "TABLE_ADMIN" WHERE `name` = '%s'", Name(playerid));
-		mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",17,0,Name(playerid));
+		mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",17,0,Name(playerid));
 		mysql_format(DATABASE,QUERY, 300, "INSERT INTO `"TABLE_BAN"` (`Text`, `Name`, `NameAdmin`, `Date`, `Unban`, `Reason`) VALUES ('AUTOIBAN','%s', '%s', '%i', '%i', 'snyat')",Name(playerid),Name(playerid),gettime(), mktimes(5,0,0,day,month,2038));
 		mysql_function_query(DATABASE,QUERY,false,"","");
 		ABroadCast(COLOR_LIGHTRED,YCMDstr,1);
@@ -10938,7 +10938,7 @@ CMD:alogin(playerid, params[])
 		ShowPlayerDialogEx(playerid, 1227, DIALOG_STYLE_PASSWORD, "Админ авторизация", "Введите пароль\n\nПароль должен состоять из латинских букв и цифр\n	размером от 6 до 15 символов", "Вход", "Отмена");
 	}
 	mysql_format(DATABASE,QUERY,128,"SELECT * FROM `"TABLE_ADMIN"` WHERE `Name` = '%e'",PTEMP[playerid][pName]);
-	mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",14,playerid,"");
+	mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",14,playerid,"");
 	return true;
 }
 CMD:biz(playerid, params[])
@@ -11558,7 +11558,7 @@ CMD:agetip(playerid, params[])
 	if(PTEMP[playerid][pAdmin] < 4 || dostup[playerid] == 0) return true;
 	if(sscanf(params, "s[42]",params[0])) return	SCM(playerid, -1, " Введите: /agetip [ник]");
 	mysql_format(DATABASE,QUERY, 256, "SELECT * FROM `"TABLE_ACCOUNTS"` WHERE `Name` = '%s'",params[0]);
-	mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",20,playerid,params[0]);
+	mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",20,playerid,params[0]);
 	return true;
 }
 CMD:apgetip(playerid, params[])

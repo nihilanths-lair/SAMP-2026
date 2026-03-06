@@ -15,7 +15,7 @@ publics:PlayerRegister(playerid)
 	PlayerPlaySound(playerid, 1069, 0.0, 0.0, 0.0);
 	SetSpawnInfo(playerid, 0, 0, 0.0, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, 0);
 	mysql_format(DATABASE,QUERY,128,"SELECT * FROM `"TABLE_ACCOUNTS"` WHERE `Name` = '%e'",PTEMP[playerid][pName]);
-	mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",2,playerid,"");
+	mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",2,playerid,"");
 	mysql_format(DATABASE, QUERY, sizeof(QUERY), "DELETE FROM `"TABLE_CARS"` WHERE Name = '%e'" ,PTEMP[playerid][pName]);
 	mysql_function_query(DATABASE,QUERY,false,"","");
 	for(new i=0;i<5;i++)

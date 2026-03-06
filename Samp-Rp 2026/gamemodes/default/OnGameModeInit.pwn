@@ -124,7 +124,6 @@ public OnGameModeInit()
 	for (new i = 0; i < MAX_ROULET; i++) RouletKrupie[i] = INVALID_PLAYER_ID;
 	ShowPlayerMarkers(PLAYER_MARKERS_MODE_GLOBAL);
 	ShowNameTags(1);
-	AntiDeAMX2();
 	SetNameTagDrawDistance(30.0);
 	EnableStuntBonusForAll(0);
 	DisableInteriorEnterExits();
@@ -854,25 +853,25 @@ public OnGameModeInit()
 	mysql_function_query(DATABASE, "SET NAMES cp1251", false, "", "");
 	mysql_function_query(DATABASE, "SET SESSION character_set_server='utf8';", false, "", "");
 	
-	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_HOUSE"`"    , true, "OnMySQL_QUERY", "iis", 11, -1, "");
-	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_BIZZ"`"     , true, "OnMySQL_QUERY", "iis",  6, -1, "");
-	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_WORKSHOPS"`", true, "OnMySQL_QUERY", "iis",  7, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_HOUSE"`"    , true, "_MySQL_QUERY", "iis", 11, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_BIZZ"`"     , true, "_MySQL_QUERY", "iis",  6, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_WORKSHOPS"`", true, "_MySQL_QUERY", "iis",  7, -1, "");
 	// Бонусы
-	mysql_function_query(DATABASE, "SELECT * FROM `boost`", true, "OnMySQL_QUERY", "iis", 34, -1, "");
-	mysql_function_query(DATABASE, "SELECT * FROM `boost`", true, "OnMySQL_QUERY", "iis", 35, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `boost`", true, "_MySQL_QUERY", "iis", 34, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `boost`", true, "_MySQL_QUERY", "iis", 35, -1, "");
 	//===========
-	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_KVARTIRS"`", true, "OnMySQL_QUERY", "iis",  8, -1, "");
-	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_PODEZDS"`" , true, "OnMySQL_QUERY", "iis",  9, -1, "");
-	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_CASINO"`"  , true, "OnMySQL_QUERY", "iis", 10, -1, "");
-	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_OTHERS"`"  , true, "OnMySQL_QUERY", "iis",  0, -1, "");
-	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_ATM"`"     , true, "OnMySQL_QUERY", "iis", 22, -1, "");
-	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_FARM"`"    , true, "OnMySQL_QUERY", "iis", 28, -1, "");
-	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_STALL"`"   , true, "OnMySQL_QUERY", "iis", 31, -1, "");
-	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_GANGZONE"`", true, "OnMySQL_QUERY", "iis", 32, -1, "");
-	mysql_function_query(DATABASE, "SELECT * FROM `grating`"         , true, "OnMySQL_QUERY", "iis", 55, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_KVARTIRS"`", true, "_MySQL_QUERY", "iis",  8, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_PODEZDS"`" , true, "_MySQL_QUERY", "iis",  9, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_CASINO"`"  , true, "_MySQL_QUERY", "iis", 10, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_OTHERS"`"  , true, "_MySQL_QUERY", "iis",  0, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_ATM"`"     , true, "_MySQL_QUERY", "iis", 22, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_FARM"`"    , true, "_MySQL_QUERY", "iis", 28, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_STALL"`"   , true, "_MySQL_QUERY", "iis", 31, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_GANGZONE"`", true, "_MySQL_QUERY", "iis", 32, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `grating`"         , true, "_MySQL_QUERY", "iis", 55, -1, "");
 	// Создание альтернативных команд
 	// Разбан аккаунтов
-	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_BAN"`", true, "OnMySQL_QUERY", "iis", 26, -1, "");
+	mysql_function_query(DATABASE, "SELECT * FROM `"TABLE_BAN"`", true, "_MySQL_QUERY", "iis", 26, -1, "");
 	mysql_function_query(DATABASE, "UPDATE `"TABLE_ACCOUNTS"` SET `progolos` = '0', pMin = '0'", false, "", "");
 
 	if (!strcmp(GetDay(), "Понедельник", true)) mysql_function_query(DATABASE, "UPDATE `"TABLE_ACCOUNTS"` SET pChas = '0'", false, "", "");

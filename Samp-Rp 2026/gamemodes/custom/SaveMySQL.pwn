@@ -314,7 +314,7 @@ SaveMySQL(idx, i = 0)
 		}
 	case 10:
 		{
-			mysql_format(DATABASE,QUERY,256,"SELECT * FROM `"TABLE_CARS"` WHERE `owner` = '%s'",PTEMP[i][pName]), mysql_function_query(DATABASE,QUERY,true,"OnMySQL_QUERY","iis",37,i,"");
+			mysql_format(DATABASE,QUERY,256,"SELECT * FROM `"TABLE_CARS"` WHERE `owner` = '%s'",PTEMP[i][pName]), mysql_function_query(DATABASE,QUERY,true,"_MySQL_QUERY","iis",37,i,"");
 		}
 	}
 	return true;
