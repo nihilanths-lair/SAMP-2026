@@ -406,92 +406,74 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 				DeletePVar(playerid, "BusTime");
 			}
 			if (GetPVarInt(playerid, "rentcar_job") == GetPlayerVehicleID(playerid)) {}
-			else ShowPlayerDialogEx(playerid,9128,DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}500 вирт", "Оплатить", "Отмена");
+			else ShowPlayerDialogEx(playerid, 9128, DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}500 вирт", "Оплатить", "Отмена");
 		}
-		if (newcar >= taxicar[0] && newcar <= taxicar[68])
+
+		if (newcar == taxicar)
 		{
 			if (PTEMP[playerid][pJob] == 4 && PTEMP[playerid][pMember] == 0)
 			{
 				if (GetPVarInt(playerid, "rentcar_job") != newcar)
 				{
-					ShowPlayerDialogEx(playerid,9128,DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}500 вирт", "Оплатить", "Отмена");
+					ShowPlayerDialogEx(playerid, 9128, DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}500 вирт", "Оплатить", "Отмена");
 				}
 			}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Транспорт недоступен! Вы должны устроиться на работу: Таксист");
-				RemovePlayerFromVehicleAC(playerid);
-			}
 		}
-		if (newcar >= taxi5lvlcar[0] && newcar <= taxi5lvlcar[9])
+		if (newcar == taxi5lvlcar)
 		{
 			if (PTEMP[playerid][pJob] == 4 && PTEMP[playerid][pMember] == 0 && PTEMP[playerid][ptaxilvl] >= 5)
 			{
 				if (GetPVarInt(playerid, "rentcar_job") != newcar)
 				{
-					ShowPlayerDialogEx(playerid,9128,DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}500 вирт", "Оплатить", "Отмена");
+					ShowPlayerDialogEx(playerid, 9128, DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}500 вирт", "Оплатить", "Отмена");
 				}
 			}
 			else
 			{
-	  			if (PTEMP[playerid][pJob] != 4)
-				{
-					SCM(playerid, COLOR_GREY, " Транспорт недоступен! Вы должны устроиться на работу: Таксист");
-					RemovePlayerFromVehicleAC(playerid);
-				}
-	  			else if (PTEMP[playerid][ptaxilvl] <= 5)
+	  			if (PTEMP[playerid][ptaxilvl] <= 5)
 				{
 					SCM(playerid, COLOR_GREY, " Для этого транспорта требуется 5 уровень скилла");
 					RemovePlayerFromVehicleAC(playerid);
 				}
 			}
 		}
-		if (newcar >= taxi10lvlcar[0] && newcar <= taxi10lvlcar[10])
+		if (newcar == taxi10lvlcar)
 		{
 			if (PTEMP[playerid][pJob] == 4 && PTEMP[playerid][pMember] == 0 && PTEMP[playerid][ptaxilvl] >= 10)
 			{
 				if (GetPVarInt(playerid, "rentcar_job") != newcar)
 				{
-					ShowPlayerDialogEx(playerid,9128,DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}500 вирт", "Оплатить", "Отмена");
+					ShowPlayerDialogEx(playerid, 9128, DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}500 вирт", "Оплатить", "Отмена");
 				}
 			}
 			else
 			{
-	  			if (PTEMP[playerid][pJob] != 4)
-				{
-					SCM(playerid, COLOR_GREY, " Транспорт недоступен! Вы должны устроиться на работу: Таксист");
-					RemovePlayerFromVehicleAC(playerid);
-				}
-	  			else if (PTEMP[playerid][ptaxilvl] <= 10)
+	  			if (PTEMP[playerid][ptaxilvl] <= 10)
 				{
 					SCM(playerid, COLOR_GREY, " Для этого транспорта требуется 10 уровень скилла");
 					RemovePlayerFromVehicleAC(playerid);
 				}
 			}
 		}
-		if (newcar >= taxi40lvlcar[0] && newcar <= taxi40lvlcar[6])
+		if (newcar == taxi40lvlcar)
 		{
 			if (PTEMP[playerid][pJob] == 4 && PTEMP[playerid][pMember] == 0 && PTEMP[playerid][ptaxilvl] >= 40)
 			{
 				if (GetPVarInt(playerid, "rentcar_job") != newcar)
 				{
-					ShowPlayerDialogEx(playerid,9128,DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}500 вирт", "Оплатить", "Отмена");
+					ShowPlayerDialogEx(playerid, 9128, DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}500 вирт", "Оплатить", "Отмена");
 				}
 			}
 			else
 			{
-	  			if (PTEMP[playerid][pJob] != 4)
-				{
-					SCM(playerid, COLOR_GREY, " Транспорт недоступен! Вы должны устроиться на работу: Таксист");
-					RemovePlayerFromVehicleAC(playerid);
-				}
-	  			else if (PTEMP[playerid][ptaxilvl] <= 40)
+	  			if (PTEMP[playerid][ptaxilvl] <= 40)
 				{
 					SCM(playerid, COLOR_GREY, " Для этого транспорта требуется 40 уровень скилла");
 					RemovePlayerFromVehicleAC(playerid);
 				}
 			}
 		}
+        
 		if (IsABoat(newcar))
 		{
 			if (PTEMP[playerid][pBoatLic] < 1)

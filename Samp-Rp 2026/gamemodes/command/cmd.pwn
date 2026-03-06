@@ -6674,73 +6674,75 @@ CMD:arrest(playerid, params[])
 }
 CMD:fare(playerid, params[])
 {
-	if(!PTEMP[playerid][pLogin] || PTEMP[playerid][pJob] != 4) return true;
-	if(GetPVarInt(playerid,"TaxiDuty") > 0)
+	if (!PTEMP[playerid][pLogin] || PTEMP[playerid][pJob] != 4) return true;
+	if (GetPVarInt(playerid,"TaxiDuty") > 0)
 	{
 		Delete3DTextLabel(JobText3D[GetPVarInt(playerid,"rentcar_job")]);
 		DeletePVar(playerid,"TaxiDuty");
 		return true;
 	}
 	new Veh = GetPlayerVehicleID(playerid);
-	if(Veh != GetPVarInt(playerid,"rentcar_job")) return SCM(playerid,COLOR_GREY," Это не ваш автомобиль");
-	if(GetPlayerState(playerid) != PLAYER_STATE_DRIVER) return SCM(playerid,COLOR_GREY," Вы должны находиться за рулем автомобиля!");
-	if((Veh >= taxicar[0] && Veh <= taxicar[68]) || (Veh >= taxi5lvlcar[0] && Veh <= taxi5lvlcar[9]) || (Veh >= taxi10lvlcar[0] && Veh <= taxi10lvlcar[10]) || (Veh >= taxi40lvlcar[0] && Veh <= taxi40lvlcar[6]))
+	if (Veh != GetPVarInt(playerid,"rentcar_job")) return SCM(playerid,COLOR_GREY," Это не ваш автомобиль");
+	if (GetPlayerState(playerid) != PLAYER_STATE_DRIVER) return SCM(playerid,COLOR_GREY," Вы должны находиться за рулем автомобиля!");
+
+	if (Veh == taxicar || Veh == taxi5lvlcar || Veh == taxi10lvlcar || Veh == taxi40lvlcar)
 	{
-		SetPVarInt(playerid,"TaxiDuty",Veh);
-		JobText3D[Veh] = Create3DTextLabel("<< Бесплатное такси >>", 0xFFFF00FF, 9999.0, 9999.0, 9999.0, 30.0,0,1);
+		SetPVarInt(playerid, "TaxiDuty", Veh);
+		JobText3D[Veh] = Create3DTextLabel("<< Бесплатное такси >>", 0xFFFF00FF, 9999.0, 9999.0, 9999.0, 30.0, 0, 1);
 		Attach3DTextLabelToVehicle(JobText3D[Veh], Veh, 0, 0, 1.5);
 	}
+    
 	return true;
 }
 CMD:inventory(playerid)
 {
-	if(PTEMP[playerid][pLogin] == 0) return true;
+	if (PTEMP[playerid][pLogin] == 0) return true;
 	new strs[32];
  	new frisking[512];
  	format(frisking, sizeof(frisking), "Key\tВещи\tКоличество\n");
-	if(PTEMP[playerid][pDrugs] > 0){
+	if (PTEMP[playerid][pDrugs] > 0){
 	    format(strs, sizeof(strs), "A\tНаркотики\t%i\n",PTEMP[playerid][pDrugs]);
 		strcat(frisking, strs, sizeof(frisking));
  	}
- 	if(PTEMP[playerid][pMats] > 0){
+ 	if (PTEMP[playerid][pMats] > 0){
 	    format(strs, sizeof(strs), "B\tМатериалы\t%i\n",PTEMP[playerid][pMats]);
 		strcat(frisking, strs, sizeof(frisking));
  	}
- 	if(PTEMP[playerid][pDirectory] == 1){
+ 	if (PTEMP[playerid][pDirectory] == 1){
 	    format(strs, sizeof(strs), "C\tТелефонная книга\t%i\n",PTEMP[playerid][pDirectory]);
 		strcat(frisking, strs, sizeof(frisking));
  	}
     format(strs, sizeof(strs), "D\tCD-Player\t%i\n",1);
 	strcat(frisking, strs, sizeof(frisking));
-	if(PTEMP[playerid][pFishes] > 0.0){
+	if (PTEMP[playerid][pFishes] > 0.0){
 	    format(strs, sizeof(strs), "E\tРыба\t%f\n",PTEMP[playerid][pFishes]);
 		strcat(frisking, strs, sizeof(frisking));
  	}
- 	if(PTEMP[playerid][pKeys] > 0){
+ 	if (PTEMP[playerid][pKeys] > 0){
 	    format(strs, sizeof(strs), "F\tКлючи от камеры\t%i\n",PTEMP[playerid][pKeys]);
 		strcat(frisking, strs, sizeof(frisking));
  	}
- 	if(PTEMP[playerid][pMushrooms] > 0){
+ 	if (PTEMP[playerid][pMushrooms] > 0){
 	    format(strs, sizeof(strs), "J\tГрибы\t%i\n",PTEMP[playerid][pMushrooms]);
 		strcat(frisking, strs, sizeof(frisking));
  	}
- 	if(PTEMP[playerid][pCarLic] == 1){
+ 	if (PTEMP[playerid][pCarLic] == 1){
 	    format(strs, sizeof(strs), "K\tВодительские права\t%i\n",PTEMP[playerid][pCarLic]);
 		strcat(frisking, strs, sizeof(frisking));
  	}
- 	if(PTEMP[playerid][pFlyLic] == 1){
+ 	if (PTEMP[playerid][pFlyLic] == 1){
 	    format(strs, sizeof(strs), "L\tЛицензия пилота\t%i\n",PTEMP[playerid][pFlyLic]);
 		strcat(frisking, strs, sizeof(frisking));
  	}
- 	if(PTEMP[playerid][pBoatLic] == 1){
+ 	if (PTEMP[playerid][pBoatLic] == 1){
 	    format(strs, sizeof(strs), "M\tЛицензия на лодки\t%i\n",PTEMP[playerid][pBoatLic]);
 		strcat(frisking, strs, sizeof(frisking));
  	}
- 	if(PTEMP[playerid][pFishLic] == 1){
+ 	if (PTEMP[playerid][pFishLic] == 1){
 	    format(strs, sizeof(strs), "N\tЛицензия на рыболовство\t%i\n",PTEMP[playerid][pFishLic]);
 		strcat(frisking, strs, sizeof(frisking));
  	}
- 	if(PTEMP[playerid][pGunLic] == 1){
+ 	if (PTEMP[playerid][pGunLic] == 1){
 	    format(strs, sizeof(strs), "O\tЛицензия на оружие\t%i\n",PTEMP[playerid][pGunLic]);
 		strcat(frisking, strs, sizeof(frisking));
  	}

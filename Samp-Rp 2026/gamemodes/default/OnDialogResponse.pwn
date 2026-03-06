@@ -5993,52 +5993,55 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			return true;
 		}
 	case 9128:
-		{
-			if(!response) return RemovePlayerFromVehicleAC(playerid), TogglePlayerControllable(playerid, 1);
-			if(PTEMP[playerid][pCash] < 500) return SCM(playerid, COLOR_GRAD2, " У вас нет столько денег!"), RemovePlayerFromVehicleAC(playerid), TogglePlayerControllable(playerid, 1);
-			PTEMP[playerid][pCash]-=500;
-			new carr = GetPlayerVehicleID(playerid);
-			SetPVarInt(playerid,"rentcar_job",GetPlayerVehicleID(playerid));
-			TogglePlayerControllable(playerid, 1);
-			GameTextForPlayer(playerid, "~r~-$500", 5000, 1);
-			GameTextForPlayer(playerid,"~w~YOU HAVE HIRED THE CAR~n~GOOD LUCK ON ROAD", 5000, 3);
-			if(GetPlayerVehicleID(playerid) >= comptruck[0] && GetPlayerVehicleID(playerid) <= comptruck[1])
-			{
-				SendMes(playerid,TEAM_GROVE_COLOR," Зерна в машине: %i / 1000",car_grain[GetPlayerVehicleID(playerid)][0]);
-				SendMes(playerid,TEAM_GROVE_COLOR," Урожая в машине: %i / 1000",car_prods[GetPlayerVehicleID(playerid)][0]);
-				SendMes(playerid,TEAM_GROVE_COLOR," Наркотиков в машине: %i / 1000",car_prods[GetPlayerVehicleID(playerid)][1]);
-				SCM(playerid,-1," (( Команды: /prodmenu ))");
-				SCM(playerid,-1," (( Чтобы закрыть машину, введите /plock ))");
-			}
-			else if(GetPlayerVehicleID(playerid) >= comptruck[2] && GetPlayerVehicleID(playerid) <= comptruck[3])
-			{
-				SendMes(playerid,TEAM_GROVE_COLOR," Топливо: %i / 1000",car_prods[GetPlayerVehicleID(playerid)][1]);
-				SCM(playerid,-1," (( Команды: /prodmenu ))");
-			}
-			else if(GetPlayerVehicleID(playerid) >= comptruck[4] && GetPlayerVehicleID(playerid) <= comptruck[5])
-			{
-				SendMes(playerid,TEAM_GROVE_COLOR," Товары: %i / %i",car_prods[GetPlayerVehicleID(playerid)][2],PTEMP[playerid][pPMGruz]);
-				SendMes(playerid,TEAM_GROVE_COLOR," Еда: %i / %i",car_prods[GetPlayerVehicleID(playerid)][3],PTEMP[playerid][pPMGruz]);
-			}
-			else if(GetPlayerVehicleID(playerid) >= comptruck[6] && GetPlayerVehicleID(playerid) <= comptruck[7])
-			{
-				SendMes(playerid,TEAM_GROVE_COLOR," Товары: %i / %i",car_prods[GetPlayerVehicleID(playerid)][2],PTEMP[playerid][pPMGruz]);
-				SendMes(playerid,TEAM_GROVE_COLOR," Еда: %i / %i",car_prods[GetPlayerVehicleID(playerid)][3],PTEMP[playerid][pPMGruz]);
-			}
-			else if(GetPlayerVehicleID(playerid) >= comptruck[8] && GetPlayerVehicleID(playerid) <= comptruck[9])
-			{
-				SendMes(playerid,TEAM_GROVE_COLOR," Товары: %i / %i",car_prods[GetPlayerVehicleID(playerid)][2],PTEMP[playerid][pPMGruz]);
-				SendMes(playerid,TEAM_GROVE_COLOR," Еда: %i / %i",car_prods[GetPlayerVehicleID(playerid)][3],PTEMP[playerid][pPMGruz]);
-			}
-			else if(GetPlayerVehicleID(playerid) >= mehanik[0] && GetPlayerVehicleID(playerid) <= mehanik[12]) SCM(playerid,COLOR_GREEN," Вы можете чинить и заправлять машины. (( Заправка: /refill / Ремонт: /repair ))"), SCM(playerid,COLOR_GREEN," Вы должны заключить контракт с заправкой. (( Команда: /mcontract ))");
-			else if(GetPlayerVehicleID(playerid) >= buscar[0] && GetPlayerVehicleID(playerid) <= buscar[5]) ShowPlayerDialogEx(playerid,1745,DIALOG_STYLE_MSGBOX," ","Начать работу водителя автобуса?", "Да", "Нет");
-			else if(GetPlayerVehicleID(playerid) >= hotdogcar[0] && GetPlayerVehicleID(playerid) <= hotdogcar[1]) SCM(playerid,COLOR_GREEN," Заключите контракт с закусочной, для торговли едой. (( Подъедьте к закусочной и введите: /hcontract ))");
-			else if(carr >= taxicar[0] && carr <= taxicar[68] || carr >= taxi5lvlcar[0] && carr <= taxi5lvlcar[9] || carr >= taxi10lvlcar[0] && carr <= taxi10lvlcar[10] || carr >= taxi40lvlcar[0] && carr <= taxi40lvlcar[6]) SCM(playerid,COLOR_GREEN," Чтобы начать рабочий день введите /fare");
-			else if(GetPlayerVehicleID(playerid) >= buscar[2] && GetPlayerVehicleID(playerid) <= buscar[3]) ShowPlayerDialogEx(playerid,1745,DIALOG_STYLE_MSGBOX," ","Начать работу водителя автобуса?", "Да", "Нет");
-			else if(GetPlayerVehicleID(playerid) >= buscar[4] && GetPlayerVehicleID(playerid) <= buscar[5]) ShowPlayerDialogEx(playerid,1745,DIALOG_STYLE_MSGBOX," ","Начать работу водителя автобуса?", "Да", "Нет");
-			else ShowPlayerDialogEx(playerid, 163, 2, "Маршрут", "АвтоВокзал LS << >> Автошкола SF\nАвтоВокзал LS << >> АвтоВокзал LV", "Принять", "Отмена");
-			return true;
-		}
+    {
+        if (!response) return RemovePlayerFromVehicleAC(playerid), TogglePlayerControllable(playerid, true);
+
+        if (PTEMP[playerid][pCash] < 500) return SCM(playerid, COLOR_GRAD2, " У вас нет столько денег!"), RemovePlayerFromVehicleAC(playerid), TogglePlayerControllable(playerid, true);
+        PTEMP[playerid][pCash] -= 500;
+        new carr = GetPlayerVehicleID(playerid);
+        SetPVarInt(playerid,"rentcar_job", GetPlayerVehicleID(playerid));
+        TogglePlayerControllable(playerid, 1);
+        GameTextForPlayer(playerid, "~r~-$500", 5000, 1);
+        GameTextForPlayer(playerid,"~w~YOU HAVE HIRED THE CAR~n~GOOD LUCK ON ROAD", 5000, 3);
+        if (GetPlayerVehicleID(playerid) >= comptruck[0] && GetPlayerVehicleID(playerid) <= comptruck[1])
+        {
+            SendMes(playerid,TEAM_GROVE_COLOR," Зерна в машине: %i / 1000", car_grain[GetPlayerVehicleID(playerid)][0]);
+            SendMes(playerid,TEAM_GROVE_COLOR," Урожая в машине: %i / 1000", car_prods[GetPlayerVehicleID(playerid)][0]);
+            SendMes(playerid,TEAM_GROVE_COLOR," Наркотиков в машине: %i / 1000", car_prods[GetPlayerVehicleID(playerid)][1]);
+            SCM(playerid,-1," (( Команды: /prodmenu ))");
+            SCM(playerid,-1," (( Чтобы закрыть машину, введите /plock ))");
+        }
+        else if (GetPlayerVehicleID(playerid) >= comptruck[2] && GetPlayerVehicleID(playerid) <= comptruck[3])
+        {
+            SendMes(playerid,TEAM_GROVE_COLOR," Топливо: %i / 1000",car_prods[GetPlayerVehicleID(playerid)][1]);
+            SCM(playerid,-1," (( Команды: /prodmenu ))");
+        }
+        else if (GetPlayerVehicleID(playerid) >= comptruck[4] && GetPlayerVehicleID(playerid) <= comptruck[5])
+        {
+            SendMes(playerid,TEAM_GROVE_COLOR," Товары: %i / %i",car_prods[GetPlayerVehicleID(playerid)][2],PTEMP[playerid][pPMGruz]);
+            SendMes(playerid,TEAM_GROVE_COLOR," Еда: %i / %i",car_prods[GetPlayerVehicleID(playerid)][3],PTEMP[playerid][pPMGruz]);
+        }
+        else if (GetPlayerVehicleID(playerid) >= comptruck[6] && GetPlayerVehicleID(playerid) <= comptruck[7])
+        {
+            SendMes(playerid,TEAM_GROVE_COLOR," Товары: %i / %i",car_prods[GetPlayerVehicleID(playerid)][2],PTEMP[playerid][pPMGruz]);
+            SendMes(playerid,TEAM_GROVE_COLOR," Еда: %i / %i",car_prods[GetPlayerVehicleID(playerid)][3],PTEMP[playerid][pPMGruz]);
+        }
+        else if (GetPlayerVehicleID(playerid) >= comptruck[8] && GetPlayerVehicleID(playerid) <= comptruck[9])
+        {
+            SendMes(playerid,TEAM_GROVE_COLOR," Товары: %i / %i",car_prods[GetPlayerVehicleID(playerid)][2],PTEMP[playerid][pPMGruz]);
+            SendMes(playerid,TEAM_GROVE_COLOR," Еда: %i / %i",car_prods[GetPlayerVehicleID(playerid)][3],PTEMP[playerid][pPMGruz]);
+        }
+        else if (GetPlayerVehicleID(playerid) >= mehanik[0] && GetPlayerVehicleID(playerid) <= mehanik[12]) SCM(playerid,COLOR_GREEN," Вы можете чинить и заправлять машины. (( Заправка: /refill / Ремонт: /repair ))"), SCM(playerid,COLOR_GREEN," Вы должны заключить контракт с заправкой. (( Команда: /mcontract ))");
+        else if (GetPlayerVehicleID(playerid) >= buscar[0] && GetPlayerVehicleID(playerid) <= buscar[5]) ShowPlayerDialogEx(playerid, 1745, DIALOG_STYLE_MSGBOX," ","Начать работу водителя автобуса?", "Да", "Нет");
+        else if (GetPlayerVehicleID(playerid) >= hotdogcar[0] && GetPlayerVehicleID(playerid) <= hotdogcar[1]) SCM(playerid,COLOR_GREEN," Заключите контракт с закусочной, для торговли едой. (( Подъедьте к закусочной и введите: /hcontract ))");
+
+        else if (carr == taxicar || carr == taxi5lvlcar || carr == taxi10lvlcar || carr == taxi40lvlcar) SCM(playerid, COLOR_GREEN, " Чтобы начать рабочий день введите /fare .");
+        
+        else if (GetPlayerVehicleID(playerid) >= buscar[2] && GetPlayerVehicleID(playerid) <= buscar[3]) ShowPlayerDialogEx(playerid, 1745, DIALOG_STYLE_MSGBOX," ","Начать работу водителя автобуса?", "Да", "Нет");
+        else if (GetPlayerVehicleID(playerid) >= buscar[4] && GetPlayerVehicleID(playerid) <= buscar[5]) ShowPlayerDialogEx(playerid, 1745, DIALOG_STYLE_MSGBOX," ","Начать работу водителя автобуса?", "Да", "Нет");
+        else ShowPlayerDialogEx(playerid, 163, 2, "Маршрут", "АвтоВокзал LS << >> Автошкола SF\nАвтоВокзал LS << >> АвтоВокзал LV", "Принять", "Отмена");
+        return true;
+    }
 	case 3002:
 		{
 			if(!response) return true;

@@ -2135,7 +2135,14 @@ new legalmods[48][22] =
 new comptruck[10];
 new matsfuravagos[1], matsfuragrove[1], matsfuraactek[1], matsfurarifa[1], matsfura[1];
 new lsnewscar[6], lvnewscar[8], lvpdcar[21];//, rentmot[6];
-new liccar[10], hotdogcar[2], taxicar[69],taxi5lvlcar[10],taxi10lvlcar[11],taxi40lvlcar[7], mehanik[13], rentcarvip[9], rentcarsf[7], rentcarls[9], rentcarlv[18], medicsls[10],medicsls1[6], medicslv[9],medicsfc[8];
+new liccar[10], hotdogcar[2];
+
+new taxicar;
+new taxi5lvlcar;
+new taxi10lvlcar;
+new taxi40lvlcar;
+
+new mehanik[13], rentcarvip[9], rentcarsf[7], rentcarls[9], rentcarlv[18], medicsls[10],medicsls1[6], medicslv[9],medicsfc[8];
 new sapdcar[27], fbicar[17],cnncar[5],sfpdcar[29],medmav,mavlic,cnnmav,armycarsf[29], yakcar[15],ruscar[15],govcar[8], lcncar[15], medicssf[15],medicssf1[6], armcar[27], faggio[6], gunscar[NUMBER_OF_ARMYTRUCKS], grovecar[7], ballascar[7], coronoscar[7], vagoscar[7],rifacar[7];
 new arenda[MAX_PLAYERS];
 new lsacar[16], lsacarvert[1];
