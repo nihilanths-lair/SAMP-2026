@@ -580,93 +580,83 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		}
 		if (newcar >= govcar[0] && newcar <= govcar[7])
 		{
-			if (GetPVarInt(playerid,"Fraction_Duty") && PTEMP[playerid][pMember] == 7) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Транспорт принадлежит Мэрии!");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] != 7)
+            {
+                SCM(playerid, COLOR_GREY, " Транспорт принадлежит Мэрии!");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
 		if (newcar >= matsfura[0] && newcar <= matsfura[0])
 		{
-			if (PTEMP[playerid][pLeader] == 12 || PTEMP[playerid][pMember] == 12) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Вы не член The Ballas Gang!");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (PTEMP[playerid][pLeader] == 12 || PTEMP[playerid][pMember] != 12)
+            {
+                SCM(playerid, COLOR_GREY, " Транспорт принадлежит банде фиолетовых!");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
 		if (newcar >= fbicar[0] && newcar <= fbicar[16])
 		{
-			if (GetPVarInt(playerid,"Fraction_Duty") && PTEMP[playerid][pMember] == 2) {}
-			else
-			{
-				SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит FBI");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] != 2)
+            {
+                SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит FBI!");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
 		if (newcar >= sapdcar[0] && newcar <= sapdcar[15])
 		{
-			if (GetPVarInt(playerid,"Fraction_Duty") && PTEMP[playerid][pMember] == 1) {}
-			else
-			{
-				SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит LSPD");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] != 1)
+            {
+                SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит LSPD!");
+                //RemovePlayerFromVehicleAC(playerid);
+            }
 		}
 		if (newcar >= medicsls[0] && newcar <= medicsls[9])
 		{
-			if (GetPVarInt(playerid,"Fraction_Duty") && PTEMP[playerid][pMember] == 4) {}
-			else
-			{
-				SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит МЧС");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] != 4)
+            {
+                SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит МЧС!");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
 		if (newcar >= medicsfc[0] && newcar <= medicsfc[7])
 		{
-			if (GetPVarInt(playerid,"Fraction_Duty") && PTEMP[playerid][pMember] == 4) {}
-			else
-			{
-				SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит МЧС");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] != 4)
+            {
+                SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит МЧС!");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
 		if (newcar >= medicsls1[0] && newcar <= medicsls1[0])
 		{
-			if (GetPVarInt(playerid,"Fraction_Duty") && PTEMP[playerid][pMember] == 4) {}
-			else
-			{
-				SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит МЧС");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] != 4)
+            {
+                SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит МЧС!");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
 		if (newcar >= medicslv[0] && newcar <= medicslv[8])
 		{
-			if (GetPVarInt(playerid,"Fraction_Duty") && PTEMP[playerid][pMember] == 4) {}
-			else
-			{
-				SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит МЧС");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] != 4)
+            {
+                SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит МЧС!");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
 		if (newcar >= medicssf[0] && newcar <= medicssf[13])
 		{
-			if (GetPVarInt(playerid,"Fraction_Duty") && PTEMP[playerid][pMember] == 4) {}
-			else
-			{
-				SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит МЧС");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] != 4)
+            {
+                SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит МЧС!");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
 		if (newcar >= medicssf1[0] && newcar <= medicssf1[5])
 		{
-			if (GetPVarInt(playerid,"Fraction_Duty") && PTEMP[playerid][pMember] == 4) {}
-			else
-			{
-				SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит МЧС");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] != 4)
+            {
+                SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит МЧС!");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
 		if (newcar >= mehanik[0] && newcar <= mehanik[12])
 		{
@@ -674,7 +664,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 			{
 				if (GetPVarInt(playerid, "rentcar_job") != newcar)
 				{
-					ShowPlayerDialogEx(playerid,9128,DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}500 вирт", "Оплатить", "Отмена");
+					ShowPlayerDialogEx(playerid, 9128, DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}500 вирт", "Оплатить", "Отмена");
 				}
 			}
 			else
@@ -683,99 +673,59 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 				RemovePlayerFromVehicleAC(playerid);
 			}
 		}
+        
 		if (newcar >= sfpdcar[0] && newcar <= sfpdcar[15])
 		{
-			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 10) {}
-			else
-			{
-				SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит SFPD");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] != 10)
+            {
+                SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит SFPD!");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
-		if (newcar >= matsfuragrove[0] && newcar <= matsfuragrove[0])
+        if (newcar >= ballascar[0] && newcar <= ballascar[6])
 		{
-			if (PTEMP[playerid][pLeader] == 15 || PTEMP[playerid][pMember] == 15) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Вы не член Grove street!");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (PTEMP[playerid][pLeader] == 12 || PTEMP[playerid][pMember] != 12)
+            {
+                SCM(playerid, COLOR_GREY, " Транспорт принадлежит банде фиолетовых!");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
-		if (newcar >= matsfuraactek[0] && newcar <= matsfuraactek[0])
+        if (newcar >= vagoscar[0] && newcar <= vagoscar[6] || newcar == matsfuravagos[0])
 		{
-			if (PTEMP[playerid][pLeader] == 17 || PTEMP[playerid][pMember] == 17) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Вы не член Varios Los Aztecas!");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (PTEMP[playerid][pLeader] == 13 || PTEMP[playerid][pMember] != 13)
+            {
+                SCM(playerid, COLOR_GREY, " Транспорт принадлежит банде жёлтых!");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
-		if (newcar >= matsfuravagos[0] && newcar <= matsfuravagos[0])
+		if (newcar >= grovecar[0] && newcar <= grovecar[6] || newcar == matsfuragrove[0])
 		{
-			if (PTEMP[playerid][pLeader] == 13 || PTEMP[playerid][pMember] == 13) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Вы не член Vagos!");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (PTEMP[playerid][pLeader] == 15 || PTEMP[playerid][pMember] != 15)
+            {
+                SCM(playerid, COLOR_GREY, " Транспорт принадлежит банде зелёных!");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
-		if (newcar >= matsfurarifa[0] && newcar <= matsfurarifa[0])
+        if (newcar >= coronoscar[0] && newcar <= coronoscar[6] || newcar == matsfuraactek[0])
 		{
-			if (PTEMP[playerid][pLeader] == 18 || PTEMP[playerid][pMember] == 18) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Вы не член Rifa!");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (PTEMP[playerid][pLeader] == 17 || PTEMP[playerid][pMember] != 17)
+            {
+                SCM(playerid, COLOR_GREY, " Транспорт принадлежит банде голубых!");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
-		if (newcar >= ballascar[0] && newcar <= ballascar[6])
+		if (newcar >= rifacar[0] && newcar <= rifacar[6] || newcar == matsfurarifa[0])
 		{
-			if (PTEMP[playerid][pLeader] == 12 || PTEMP[playerid][pMember] == 12) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Вы не член Ballas!");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (PTEMP[playerid][pLeader] == 18 || PTEMP[playerid][pMember] != 18)
+            {
+                SCM(playerid, COLOR_GREY, " Транспорт принадлежит банде бирюзовых!");
+				//RemovePlayerFromVehicleAC(playerid);
+            }
 		}
-		if (newcar >= grovecar[0] && newcar <= grovecar[6])
-		{
-			if (PTEMP[playerid][pLeader] == 15 || PTEMP[playerid][pMember] == 15) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Вы не член Grove street!");
-				RemovePlayerFromVehicleAC(playerid);
-			}
-		}
-		if (newcar >= coronoscar[0] && newcar <= coronoscar[6])
-		{
-			if (PTEMP[playerid][pLeader] == 17 || PTEMP[playerid][pMember] == 17) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Вы не член Varios Los Aztecas!");
-				RemovePlayerFromVehicleAC(playerid);
-			}
-		}
-		if (newcar >= vagoscar[0] && newcar <= vagoscar[6])
-		{
-			if (PTEMP[playerid][pLeader] == 13 || PTEMP[playerid][pMember] == 13) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Вы не член Vagos!");
-				RemovePlayerFromVehicleAC(playerid);
-			}
-		}
-		if (newcar >= rifacar[0] && newcar <= rifacar[6])
-		{
-			if (PTEMP[playerid][pLeader] == 18 || PTEMP[playerid][pMember] == 18) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Вы не член Rifa!");
-				RemovePlayerFromVehicleAC(playerid);
-			}
-		}
+
 		if (newcar >= gunscar[0] && newcar <= gunscar[6])
 		{
-			if (GetPVarInt(playerid,"Fraction_Duty") && PTEMP[playerid][pMember] == 19 || proverkaforma[playerid] == 1) {}
+			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 19 || proverkaforma[playerid] == 1) {}
 			else
 			{
 				SCM(playerid, COLOR_GREY, " Транспорт принадлежит ARMY LV");
@@ -784,7 +734,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		}
 		if (newcar >= lsacar[0] && newcar <= lsacar[15])
 		{
-			if (GetPVarInt(playerid,"Fraction_Duty") && PTEMP[playerid][pMember] == 3 || GetPVarInt(playerid,"Fraction_Duty") && PTEMP[playerid][pMember] == 19 || proverkaforma[playerid] == 1) { }
+			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 3 || GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 19 || proverkaforma[playerid] == 1) { }
 			else
 			{
 				SCM(playerid, COLOR_GREY, " Транспорт принадлежит военным");
@@ -793,19 +743,19 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		}
 		if (PTEMP[playerid][pMember] == 24 && newcar == hamccar[10])
 		{
-		    SendMes(playerid,COLOR_GREEN," Груза в фургоне: %i / 10000",vertmatbilsa[hamccar[10]][0]);
+		    SendMes(playerid, COLOR_GREEN," Груза в фургоне: %i / 10000", vertmatbilsa[hamccar[10]][0]);
 		}
 		else if (PTEMP[playerid][pMember] == 26 && newcar == wmccar[10])
 		{
-		    SendMes(playerid,COLOR_GREEN," Груза в фургоне: %i / 10000",vertmatbilsa[wmccar[10]][0]);
+		    SendMes(playerid, COLOR_GREEN," Груза в фургоне: %i / 10000", vertmatbilsa[wmccar[10]][0]);
 		}
 		else if (PTEMP[playerid][pMember] == 26 && newcar == pmccar[10])
 		{
-		    SendMes(playerid,COLOR_GREEN," Груза в фургоне: %i / 10000",vertmatbilsa[pmccar[10]][0]);
+		    SendMes(playerid, COLOR_GREEN," Груза в фургоне: %i / 10000", vertmatbilsa[pmccar[10]][0]);
 		}
 		if (newcar >= lsacarvert[0] && newcar <= lsacarvert[0])
 		{
-			if (GetPVarInt(playerid,"Fraction_Duty") && PTEMP[playerid][pMember] == 3 || GetPVarInt(playerid,"Fraction_Duty") && PTEMP[playerid][pMember] == 19 || proverkaforma[playerid] == 1)
+			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 3 || GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 19 || proverkaforma[playerid] == 1)
 			{
 				if (VertMatslsa[playerid] == 0) SetPlayerCheckpoint(playerid,-1468.2487,1488.6337,9.8943,14.0);
 				SendMes(playerid,TEAM_GROVE_COLOR," Материалов: %i / 30000",vertmatbilsa[GetPlayerVehicleID(playerid)][0]);
@@ -821,7 +771,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		}
 		if (newcar >= armycarsf[0] && newcar <= armycarsf[23])
 		{
-			if (GetPVarInt(playerid,"Fraction_Duty") && PTEMP[playerid][pMember] == 3 || proverkaforma[playerid] == 1) {}
+			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 3 || proverkaforma[playerid] == 1) {}
 			else
 			{
 				SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит ARMY SF");
