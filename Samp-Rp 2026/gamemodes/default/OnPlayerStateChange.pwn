@@ -230,14 +230,14 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 		{
 			if (newcar >= FarmInfo[i][fSeed_Car][0] && newcar <= FarmInfo[i][fSeed_Car][1])
 			{
-				if (GetPVarInt(playerid,"farm_rank") <= 1 || GetPVarInt(playerid,"farm_id") != i) return RemovePlayerFromVehicleAC(playerid),SCM(playerid, COLOR_GREY, " Вам недоступен данный транспорт");
-				if (Farmcar_works[newcar]) ShowPlayerDialogEx(playerid,1345,DIALOG_STYLE_MSGBOX, " ","{00C8FF}Вы желаете завершить сбор урожая?", "Да", "Нет"),SendMes(playerid, TEAM_GROVE_COLOR," {00AB06}Урожая в машине: %d / 1000",Farmcar_prods[newcar]);
-				else ShowPlayerDialogEx(playerid,1345,DIALOG_STYLE_MSGBOX, " ","{25BB00}Вы желаете начать сбор урожая?", "Да", "Нет"),SendMes(playerid, TEAM_GROVE_COLOR," {00AB06}Урожая в машине: %d / 1000",Farmcar_prods[newcar]);
+				if (GetPVarInt(playerid, "farm_rank") <= 1 || GetPVarInt(playerid, "farm_id") != i) return RemovePlayerFromVehicleAC(playerid),SCM(playerid, COLOR_GREY, " Вам недоступен данный транспорт");
+				if (Farmcar_works[newcar]) ShowPlayerDialogEx(playerid, 1345, DIALOG_STYLE_MSGBOX, " ", "{00C8FF}Вы желаете завершить сбор урожая?", "Да", "Нет"),SendMes(playerid, TEAM_GROVE_COLOR," {00AB06}Урожая в машине: %d / 1000",Farmcar_prods[newcar]);
+				else ShowPlayerDialogEx(playerid, 1345, DIALOG_STYLE_MSGBOX, " ","{25BB00}Вы желаете начать сбор урожая?", "Да", "Нет"),SendMes(playerid, TEAM_GROVE_COLOR," {00AB06}Урожая в машине: %d / 1000",Farmcar_prods[newcar]);
 			}
 			else if (newcar == FarmInfo[i][fCombine])
 			{
-				if (GetPVarInt(playerid,"farm_rank") <= 1 || GetPVarInt(playerid,"farm_id") != i) return RemovePlayerFromVehicleAC(playerid),SCM(playerid, COLOR_GREY, " Вам недоступен данный транспорт");
-				new idx = GetPVarInt(playerid,"farm_id");
+				if (GetPVarInt(playerid, "farm_rank") <= 1 || GetPVarInt(playerid, "farm_id") != i) return RemovePlayerFromVehicleAC(playerid),SCM(playerid, COLOR_GREY, " Вам недоступен данный транспорт");
+				new idx = GetPVarInt(playerid, "farm_id");
 				if (FarmInfo[idx][fGrain_Sown] > 0) return RemovePlayerFromVehicleAC(playerid),SCM(playerid, COLOR_GREY, "На поле ещё есть урожай");
 				if (FarmInfo[idx][fGrain] <= 0) return RemovePlayerFromVehicleAC(playerid),SCM(playerid, COLOR_GREY, "На складе фермы недостаточно зерна");
 				SetPVarInt(playerid, "farm_status", 5);
@@ -295,24 +295,6 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
                      5.0
                     );
 				}}
-			}
-		}
-		if (newcar == mavlic)
-		{
-			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 11) {}
-			else
-			{
-				SCM(playerid,COLOR_GREY, " Вы не школьный инструктор!");
-				RemovePlayerFromVehicleAC(playerid);
-			}
-		}
-		if (newcar >= liccar[0] && newcar <= liccar[9])
-		{
-			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 11 || TakingLesson[playerid] == 1 ) {}
-			else
-			{
-				SCM(playerid,COLOR_GREY, " Вы не школьный инструктор!");
-				RemovePlayerFromVehicleAC(playerid);
 			}
 		}
 		if (newcar >= liccar[0] && newcar <= liccar[9])
@@ -395,7 +377,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 				RemovePlayerFromVehicleAC(playerid);
 				return true;
 			}
-			if (GetPVarInt(playerid, "rentcar_job") == GetPlayerVehicleID(playerid)) SCM(playerid,COLOR_GREEN,"Заключите контракт с закусочной, для торговли едой. (( Подъедьте к закусочной и введите: /hcontract ))");
+			if (GetPVarInt(playerid, "rentcar_job") == GetPlayerVehicleID(playerid)) SCM(playerid, COLOR_GREEN, "Заключите контракт с закусочной, для торговли едой. (( Подъедьте к закусочной и введите: /hcontract ))");
 			else ShowPlayerDialogEx(playerid, 9128, DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}500 вирт", "Оплатить", "Отмена");
 		}
 		if ((newcar >= buscar[0] && newcar <= buscar[1]) || (newcar >= buscar[2] && newcar <= buscar[3]) || (newcar >= buscar[4] && newcar <= buscar[5]) || (newcar >= buscar[6] && newcar <= buscar[7]))
@@ -456,107 +438,16 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 
 		if (IsABoat(newcar))
 		{
-			if (PTEMP[playerid][pBoatLic] < 1)
-			{
-				SCM(playerid, COLOR_GREY, " У вас нет лицензии. Вы не можете управлять данным транспортом");
-				RemovePlayerFromVehicleAC(playerid);
-			}
+			if (PTEMP[playerid][pBoatLic] < 1) SCM(playerid, COLOR_GREY, " У вас нет лицензии. Остерегайтесь копов.");
 		}
 		if (IsAPlane(newcar))
 		{
 			if (PTEMP[playerid][pFlyLic] < 1)
 			{
-				if (TakingLesson[playerid] != 1)
-				{
-					SCM(playerid, COLOR_GREY, " У вас нет лицензии. Вы не можете управлять данным транспортом");
-					RemovePlayerFromVehicleAC(playerid);
-				}
+				if (TakingLesson[playerid] != 1) SCM(playerid, COLOR_GREY, " У вас нет лицензии. Остерегайтесь копов.");
 			}
 		}
         // Прежде чем управлять данным видом транспорта, приобретите лицензию на вождение ?? водительское удостоверение
-		if (newcar >= lsnewscar[0] && newcar <= lsnewscar[5])
-		{
-			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 16) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Вы не работник LS News!");
-				RemovePlayerFromVehicleAC(playerid);
-			}
-		}
-		if (newcar >= lvpdcar[0] && newcar <= lvpdcar[20])
-		{
-			if (!GetPVarInt(playerid, "Fraction_Duty") || PTEMP[playerid][pMember] != 21)
-			{
-				SCM(playerid, COLOR_GREY, " Транспорт принадлежит LVPD");
-				RemovePlayerFromVehicleAC(playerid);
-			}
-		}
-		if (newcar >= hamccar[0] && newcar <= hamccar[10])
-		{
-			if (PTEMP[playerid][pLeader] == 24 || PTEMP[playerid][pMember] != 24)
-            {
-                SCM(playerid, COLOR_GREY, " Транспорт принадлежит Hell's Angels MC");
-				//RemovePlayerFromVehicleAC(playerid);
-            }
-		}
-		if (newcar >= wmccar[0] && newcar <= wmccar[10])
-		{
-			if (PTEMP[playerid][pLeader] == 26 || PTEMP[playerid][pMember] != 26)
-            {
-                SCM(playerid, COLOR_GREY, " Транспорт принадлежит Warlocks MC");
-				//RemovePlayerFromVehicleAC(playerid);
-            }
-		}
-		if (newcar >= pmccar[0] && newcar <= pmccar[10])
-		{
-			if (PTEMP[playerid][pLeader] == 29 || PTEMP[playerid][pMember] != 29)
-            {
-                SCM(playerid, COLOR_GREY, " Транспорт принадлежит Pagans MC");
-				//RemovePlayerFromVehicleAC(playerid);
-            }
-		}
-		if (newcar >= ruscar[0] && newcar <= ruscar[14])
-		{
-			if (PTEMP[playerid][pLeader] == 14 || PTEMP[playerid][pMember] != 14)
-            {
-                SCM(playerid, COLOR_GREY, " Вы не член Русской мафии!");
-				//RemovePlayerFromVehicleAC(playerid);
-            }
-		}
-		if (newcar >= lvnewscar[0] && newcar <= lvnewscar[7])
-		{
-			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 20) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Вы не работник LV News!");
-				RemovePlayerFromVehicleAC(playerid);
-			}
-		}
-		if (newcar >= lcncar[0] && newcar <= lcncar[14])
-		{
-			if (PTEMP[playerid][pLeader] == 5 || PTEMP[playerid][pMember] != 5)
-            {
-                SCM(playerid, COLOR_GREY, " Вы не член La Cosa Nostra!");
-				//RemovePlayerFromVehicleAC(playerid);
-            }
-		}
-		if (newcar >= yakcar[0] && newcar <= yakcar[12])
-		{
-			if (PTEMP[playerid][pLeader] == 6 || PTEMP[playerid][pMember] != 6)
-            {
-                SCM(playerid, COLOR_GREY, " Вы не член Yakuza!");
-				//RemovePlayerFromVehicleAC(playerid);
-            }
-		}
-		if (newcar >= cnncar[0] && newcar <= cnncar[4] || newcar == cnnmav)
-		{
-			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 9) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Вы не член SF News!");
-				RemovePlayerFromVehicleAC(playerid);
-			}
-		}
 		if (newcar >= comptruck[0] && newcar <= comptruck[1])
 		{
 			if (PTEMP[playerid][pJob] == 5)
@@ -578,86 +469,17 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 				}
 				//SCM(playerid, -1, "Для загрузки продуктов, Введите: /load ");
 			}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Транспорт недоступен! Вы должны устроиться на работу: Развозчик продуктов");
-				RemovePlayerFromVehicleAC(playerid);
-			}
-		}
-		if (newcar >= comptruck[2] && newcar <= comptruck[3])
-		{
-			if (PTEMP[playerid][pJob] != 5) return SCM(playerid,COLOR_GREY," Транспорт недоступен! Вы должны устроиться на работу: Развозчик продуктов"), RemovePlayerFromVehicleAC(playerid);
-			if (GetPVarInt(playerid,"rentcar_job") != newcar) ShowPlayerDialogEx(playerid,9128,DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}500 вирт", "Оплатить", "Отмена");
-		}
-		if (newcar >= comptruck[4] && newcar <= comptruck[5])
-		{
-			if (PTEMP[playerid][pJob] != 5) return SCM(playerid,COLOR_GREY," Транспорт недоступен! Вы должны устроиться на работу: Развозчик продуктов"), RemovePlayerFromVehicleAC(playerid);
-			if (GetPVarInt(playerid,"rentcar_job") != newcar) ShowPlayerDialogEx(playerid,9128,DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}500 вирт", "Оплатить", "Отмена");
-		}
-		if (newcar >= comptruck[6] && newcar <= comptruck[7])
-		{
-			if (PTEMP[playerid][pPSkill] < 4) return SCM(playerid,-1," Автомобиль доступен с 4 уровня развозчика"), RemovePlayerFromVehicleAC(playerid);
-			if (PTEMP[playerid][pJob] != 5) return SCM(playerid,COLOR_GREY," Транспорт недоступен! Вы должны устроиться на работу: Развозчик продуктов"), RemovePlayerFromVehicleAC(playerid);
-			if (GetPVarInt(playerid,"rentcar_job") != newcar) ShowPlayerDialogEx(playerid,9128,DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}500 вирт", "Оплатить", "Отмена");
-		}
-		if (newcar >= comptruck[8] && newcar <= comptruck[9])
-		{
-			if (PTEMP[playerid][pPSkill] < 8) return SCM(playerid,-1," Автомобиль доступен с 8 уровня развозчика"), RemovePlayerFromVehicleAC(playerid);
-			if (PTEMP[playerid][pJob] != 5) return SCM(playerid,COLOR_GREY," Транспорт недоступен! Вы должны устроиться на работу: Развозчик продуктов"), RemovePlayerFromVehicleAC(playerid);
-			if (GetPVarInt(playerid,"rentcar_job") != newcar) ShowPlayerDialogEx(playerid,9128,DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}500 вирт", "Оплатить", "Отмена");
-		}
-		if (newcar >= govcar[0] && newcar <= govcar[7])
-		{
-			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] != 7)
-            {
-                SCM(playerid, COLOR_GREY, " Транспорт принадлежит Мэрии!");
-				//RemovePlayerFromVehicleAC(playerid);
-            }
-		}
-		if (newcar >= matsfura[0] && newcar <= matsfura[0])
-		{
-			if (PTEMP[playerid][pLeader] == 12 || PTEMP[playerid][pMember] != 12)
-            {
-                SCM(playerid, COLOR_GREY, " Транспорт принадлежит банде фиолетовых!");
-				//RemovePlayerFromVehicleAC(playerid);
-            }
-		}
-		if (newcar >= fbicar[0] && newcar <= fbicar[16])
-		{
-			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] != 2)
-            {
-                SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит FBI!");
-				//RemovePlayerFromVehicleAC(playerid);
-            }
-		}
-		if (newcar >= sapdcar[0] && newcar <= sapdcar[15])
-		{
-			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] != 1)
-            {
-                SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит LSPD!");
-                //RemovePlayerFromVehicleAC(playerid);
-            }
 		}
 		if (
-         newcar >= medicsls[0] && newcar <= medicsls[9]
-         ||
-         newcar >= medicsfc[0] && newcar <= medicsfc[7]
-         ||
-         newcar >= medicsls1[0] && newcar <= medicsls1[0]
-         ||
-         newcar >= medicslv[0] && newcar <= medicslv[8]
-         ||
-         newcar >= medicssf[0] && newcar <= medicssf[13]
-         ||
-         newcar >= medicssf1[0] && newcar <= medicssf1[5]
+            newcar >= comptruck[2] && newcar <= comptruck[3]
+            ||
+            newcar >= comptruck[4] && newcar <= comptruck[5]
+            ||
+            newcar >= comptruck[6] && newcar <= comptruck[7]
+            ||
+            newcar >= comptruck[8] && newcar <= comptruck[9]
          )
-		{
-			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] != 4)
-            {
-                SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит МЧС!");
-				//RemovePlayerFromVehicleAC(playerid);
-            }
-		}
+         if (GetPVarInt(playerid, "rentcar_job") != newcar) ShowPlayerDialogEx(playerid, 9128, DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}500 вирт", "Оплатить", "Отмена");
 
 		if (newcar >= mehanik[0] && newcar <= mehanik[12])
 		{
@@ -668,83 +490,11 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 					ShowPlayerDialogEx(playerid, 9128, DIALOG_STYLE_MSGBOX, "Аренда транспорта", "Стоимость аренды: {FFFF00}500 вирт", "Оплатить", "Отмена");
 				}
 			}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Транспорт недоступен! Вы должны устроиться на работу: Механик");
-				RemovePlayerFromVehicleAC(playerid);
-			}
 		}
 
-		if (newcar >= sfpdcar[0] && newcar <= sfpdcar[15])
-		{
-			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] != 10)
-            {
-                SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит SFPD!");
-				//RemovePlayerFromVehicleAC(playerid);
-            }
-		}
-        if (newcar >= ballascar[0] && newcar <= ballascar[6])
-		{
-			if (PTEMP[playerid][pLeader] == 12 || PTEMP[playerid][pMember] != 12)
-            {
-                SCM(playerid, COLOR_GREY, " Транспорт принадлежит банде фиолетовых!");
-				//RemovePlayerFromVehicleAC(playerid);
-            }
-		}
-        if (newcar >= vagoscar[0] && newcar <= vagoscar[6] || newcar == matsfuravagos[0])
-		{
-			if (PTEMP[playerid][pLeader] == 13 || PTEMP[playerid][pMember] != 13)
-            {
-                SCM(playerid, COLOR_GREY, " Транспорт принадлежит банде жёлтых!");
-				//RemovePlayerFromVehicleAC(playerid);
-            }
-		}
-		if (newcar >= grovecar[0] && newcar <= grovecar[6] || newcar == matsfuragrove[0])
-		{
-			if (PTEMP[playerid][pLeader] == 15 || PTEMP[playerid][pMember] != 15)
-            {
-                SCM(playerid, COLOR_GREY, " Транспорт принадлежит банде зелёных!");
-				//RemovePlayerFromVehicleAC(playerid);
-            }
-		}
-        if (newcar >= coronoscar[0] && newcar <= coronoscar[6] || newcar == matsfuraactek[0])
-		{
-			if (PTEMP[playerid][pLeader] == 17 || PTEMP[playerid][pMember] != 17)
-            {
-                SCM(playerid, COLOR_GREY, " Транспорт принадлежит банде голубых!");
-				//RemovePlayerFromVehicleAC(playerid);
-            }
-		}
-		if (newcar >= rifacar[0] && newcar <= rifacar[6] || newcar == matsfurarifa[0])
-		{
-			if (PTEMP[playerid][pLeader] == 18 || PTEMP[playerid][pMember] != 18)
-            {
-                SCM(playerid, COLOR_GREY, " Транспорт принадлежит банде бирюзовых!");
-				//RemovePlayerFromVehicleAC(playerid);
-            }
-		}
-
-		if (newcar >= gunscar[0] && newcar <= gunscar[6])
-		{
-			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 19 || proverkaforma[playerid] == 1) {}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Транспорт принадлежит ARMY LV");
-				RemovePlayerFromVehicleAC(playerid);
-			}
-		}
-		if (newcar >= lsacar[0] && newcar <= lsacar[15])
-		{
-			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 3 || GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 19 || proverkaforma[playerid] == 1) { }
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Транспорт принадлежит военным");
-				RemovePlayerFromVehicleAC(playerid);
-			}
-		}
-		if (PTEMP[playerid][pMember] == 24 && newcar == hamccar[10]) SendMes(playerid, COLOR_GREEN," Груза в фургоне: %i / 10000", vertmatbilsa[hamccar[10]][0]);
-		else if (PTEMP[playerid][pMember] == 26 && newcar == wmccar[10]) SendMes(playerid, COLOR_GREEN," Груза в фургоне: %i / 10000", vertmatbilsa[wmccar[10]][0]);
-		else if (PTEMP[playerid][pMember] == 26 && newcar == pmccar[10]) SendMes(playerid, COLOR_GREEN," Груза в фургоне: %i / 10000", vertmatbilsa[pmccar[10]][0]);
+		if (PTEMP[playerid][pMember] == 24 && newcar == hamccar[10]) SendMes(playerid, COLOR_GREEN, " Груза в фургоне: %i / 10000", vertmatbilsa[hamccar[10]][0]);
+		else if (PTEMP[playerid][pMember] == 26 && newcar == wmccar[10]) SendMes(playerid, COLOR_GREEN, " Груза в фургоне: %i / 10000", vertmatbilsa[wmccar[10]][0]);
+		else if (PTEMP[playerid][pMember] == 26 && newcar == pmccar[10]) SendMes(playerid, COLOR_GREEN, " Груза в фургоне: %i / 10000", vertmatbilsa[pmccar[10]][0]);
 		if (newcar >= lsacarvert[0] && newcar <= lsacarvert[0])
 		{
 			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 3 || GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 19 || proverkaforma[playerid] == 1)
@@ -754,20 +504,6 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 				if (VertMatslsa[playerid] == 0) SCM(playerid,COLOR_GREEN, " Миссия по доставке материалов начата, место загрузки / разгрузки помечено на карте");
 				if (VertMatslsa[playerid] == 0) VertMatslsa[playerid] = 1;
 				lsacarvertexit[playerid] = 1;
-			}
-			else
-			{
-				SCM(playerid, COLOR_GREY, " Транспорт принадлежит военным");
-				RemovePlayerFromVehicleAC(playerid);
-			}
-		}
-		if (newcar >= armycarsf[0] && newcar <= armycarsf[23])
-		{
-			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 3 || proverkaforma[playerid] == 1) {}
-			else
-			{
-				SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит ARMY SF");
-				RemovePlayerFromVehicleAC(playerid);
 			}
 		}
 		if (newcar >= armycarsf[24] && newcar <= armycarsf[28])
@@ -780,24 +516,8 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 				if (VertMats[playerid] == 0) SCM(playerid, COLOR_GREEN, " Миссия по доставке материалов начата, место загрузки / разгрузки помечено на карте");
 				return true;
 			}
-			else
-			{
-				SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит ARMY SF");
-				RemovePlayerFromVehicleAC(playerid);
-			}
-		}
-		if (newcar >= armcar[0] && newcar <= armcar[26])
-		{
-			if (GetPVarInt(playerid, "Fraction_Duty") && PTEMP[playerid][pMember] == 19 || proverkaforma[playerid] == 1) {}
-			else
-			{
-				SCM(playerid, COLOR_GRAD1, " Транспорт принадлежит ARMY LV");
-				RemovePlayerFromVehicleAC(playerid);
-			}
 		}
 	}
-
     printf("<-- OnPlayerStateChange(playerid = %d, newstate = %d, oldstate = %d) --<", playerid, newstate, oldstate);
-
 	return true;
 }

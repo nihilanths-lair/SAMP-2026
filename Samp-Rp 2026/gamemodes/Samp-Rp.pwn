@@ -2161,7 +2161,8 @@ new lvpdcar[21];
 new sapdcar[27];
 new sfpdcar[29];
 
-new cnncar[5], medmav, mavlic, cnnmav, armycarsf[29];
+new cnncar[5], medmav;
+new armycarsf[29];
 
 // Транспорт мафий
 new lcncar[15];
